@@ -1,0 +1,22 @@
+<p>
+<h2><%=h @user.name %></h2>
+<i>(<%=h @user.sex %>)</i>
+</p>
+
+<p>
+  <b>Phonenumber:</b>
+  <%=h @user.phonenumber %>
+  <br/>
+  <b>Email:</b>
+  <%=h @user.email %>
+</p>
+
+<p>
+  <b>About me:</b>
+  <br/>
+  <%=h @user.about %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', :back || users_path %>

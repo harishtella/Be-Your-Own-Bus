@@ -1,0 +1,48 @@
+<h1>Rides</h1>
+
+<table>
+  <tr>
+    <th><h1>Leaving from campus</h1></th>
+  </tr>
+
+  <tr>
+    <td><b><i>Name</i></b></td>
+    <td><b><i>Pickup</i></b></td>
+    <td><b><i>Dropoff</i></b></td>
+  </tr>
+
+  <% @rides_from_campus.each do |ride| %>
+  <tr>
+    <td><%=h ride.name %></td>
+    <td><%=h ride.pickup %></td>
+    <td><%=h ride.dropoff %></td>
+    <td>(<%= link_to 'more', ride %>)</td>
+  </tr>
+  <% end %>
+
+  <tr>
+    <th><h1>Going to campus</h1></th>
+  </tr>
+
+  <tr>
+    <td><b><i>Name</i></b></td>
+    <td><b><i>Pickup</i></b></td>
+    <td><b><i>Dropoff</i></b></td>
+  </tr>
+
+  <% @rides_to_campus.each do |ride| %>
+  <tr>
+    <td><%=h ride.name %></td>
+    <td><%=h ride.pickup %></td>
+    <td><%=h ride.dropoff %></td>
+    <td>(<%= link_to 'more', ride %>)</td>
+  </tr>
+  <% end %>
+
+
+</table>
+
+<br />
+
+<%= link_to 'New ride', new_ride_path %> |
+<%= link_to 'Home', :controller => 'byob' %>

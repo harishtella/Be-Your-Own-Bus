@@ -1,0 +1,21 @@
+<h1>Please sign in</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= h user.name %> </td>
+    <td>(<%= link_to "more", user %>)</td>
+
+    <td><%= link_to 'Login', login_user_path(user) %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New user', new_user_path %> |
+<%= link_to 'Home', :controller => 'byob' %>

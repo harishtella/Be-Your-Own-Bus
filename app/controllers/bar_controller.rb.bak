@@ -1,0 +1,4 @@
+class BarController < ApplicationController
+  def foo
+  end
+

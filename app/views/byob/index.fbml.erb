@@ -1,0 +1,27 @@
+
+<fb:fbml>
+
+<%= stylesheet_link_tag 'scaffold' %>
+
+<div style="display: none;">
+<fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
+</div>
+
+
+<h1>BYOB</h1>
+<b>Be Your Own Bus</b>
+
+<p style="color: green">
+<% if flash[:notice] %>
+  <%= flash[:notice] %>
+<% else %> 
+  Welcome <%= @first_name %>. 
+<% end %>
+</p>
+
+
+Looking to...<br/>
+<%= link_to 'View available Rides', :controller => "rides", :action => "index" %>
+| <%= link_to 'Create a Ride', :controller => "rides", :action => "new" %>
+
+<fb:fbml/>

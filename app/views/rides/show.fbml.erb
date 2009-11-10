@@ -1,0 +1,67 @@
+<p>
+  <h1>
+    <%=h @ride.name %>
+  </h1>
+</p>
+
+<p>
+  <% if @ride.tocampus %>
+    This ride is <u>going to campus</u>
+  <% else %>
+    This ride is <u>leaving campus</u>
+  <% end %>
+</p>
+
+<p>
+  <b>Starting info:</b>
+  <br/>
+  Leaving from <%=h @ride.pickup %> at <%=h @ride.pickup_datetime %>.
+  <br/>
+  <b>Ending info:</b>
+  <br/>
+  Going to <%=h @ride.dropoff %> at <%=h @ride.dropoff_datetime %>.
+  <br/>
+</p>
+
+<p>
+  <b>People:</b>
+  <br/>
+  <%= link_to @driver_info['name'], @driver_info['profile_url'] %>
+  <%= link_to image_tag(@driver_info['pic']), @driver_info['profile_url'] %> is driving.
+  <br/>
+  <% if @passengers_info.empty? %>
+    And no one else is along for the ride.<br/>
+  <% else  %>
+    <% @passengers_info.each do |pi| %>
+      <%= link_to pi['name'], pi['profile_url'] %>
+      <%= link_to image_tag(pi['pic']), pi['profile_url'] %>,
+    <% end %>
+    are along for the ride.
+  <% end %>
+</p>
+
+<p>
+  <b>More info:</b>
+  <br/>
+  <%=h @ride.about %>
+</p>
+
+<% if @publish_ride_joined %>
+  <script>
+  Facebook.streamPublish("is going to <%=h @ride.dropoff %> from <%=h @ride.pickup
+  %>",null,null,null,"Tell others about this ride");
+  </script>
+<% end %> 
+<% if @publish_ride_created%>
+  <script>
+  Facebook.streamPublish("is driving to <%=h @ride.dropoff %> from <%=h @ride.pickup
+  %>",null,null,null,"Tell others about this ride");
+  </script>
+<% end %> 
+ 
+
+<%= link_to 'Ride it', join_ride_path(@ride) %> |
+<%= link_to 'Edit', edit_ride_path(@ride) %> |
+<%= link_to 'Destroy', @ride, :confirm => 'Are you sure?', :method => :delete %> |
+<%= link_to 'Back', rides_path %> |
+<%= link_to 'Home', :controller => "byob" %>
