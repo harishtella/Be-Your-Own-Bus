@@ -2,6 +2,7 @@
 <fb:fbml>
 
 <%= stylesheet_link_tag 'scaffold' %>
+<%= stylesheet_link_tag 'byob_style' %>
 
 <div style="display: none;">
 <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
@@ -19,9 +20,27 @@
 <% end %>
 </p>
 
+<div id="home_choices">
+  <div id="home_choices_view">
+  <div class="home_choice_inside">
+  <%= link_to image_tag("bob.png"), :controller => "rides", :action => "index" %><br/>
+  <%= link_to 'View available Rides', {:controller => "rides", :action =>
+  "index"}, :id => "home_choices_view" %>
+  </div>
+  </div>
 
-Looking to...<br/>
-<%= link_to 'View available Rides', :controller => "rides", :action => "index" %>
-| <%= link_to 'Create a Ride', :controller => "rides", :action => "new" %>
+  <div id="home_choices_byoblogo">
+  <div class="home_choice_inside">
+  <%= image_tag "byob.png" %>
+  </div>
+  </div>
+
+  <div id="home_choices_create">
+  <div class="home_choice_inside">
+  <%= link_to image_tag ("tom.png"), :controller => "rides", :action => "new" %><br/>
+  <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => "home_choices_create" %>
+  </div>
+  </div>
+</div>
 
 <fb:fbml/>

@@ -1,0 +1,36 @@
+div#home_choices {
+	text-align:center;
+	position:relative;
+	width:650px;
+	height:300px;
+}
+.home_choice_inside {
+    text-align:center;
+    position:relative;
+}
+div#home_choices_view {
+	position:absolute;
+	left:0px;
+	width:160px;
+	top:25px
+}
+a#home_choices_view{
+ color: #2E2E2E; }
+a#home_choices_view:visited { color: #2E2E2E; }
+div#home_choices_byoblogo {
+	position:absolute;
+	top:-40px;
+	left:189px;
+	width:210px;
+	border-color:#d4dae8;
+	border-width:2px;
+}
+div#home_choices_create {
+	position:absolute;
+	top:25px;
+	right:0px;
+	width:160px;
+}
+a#home_choices_create {
+ color: #2E2E2E; }
+a#home_choices_create:visited { color: #2E2E2E; }
