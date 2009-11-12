@@ -1,0 +1,79 @@
+/*********
+ ** CALENDAR CSS
+ *********/
+ 
+.fb_calendar_container {
+	position: absolute; 
+    border: 1px solid #646464; 
+    padding: 4px; 
+    background-color: #ffffff; 
+    font-family: tahoma,verdana,helvetica; 
+    font-size: 11px; 
+    text-align: center; 
+    color: #000000; 
+    width: 180px; 
+    left: 0px;
+    top:0px; 
+    z-index: 999;
+}
+.fb_calendar_container table { 
+    font-family: tahoma,verdana,helvetica; 
+    font-size: 11px; 
+    text-align: center; 
+    }
+.fb_calendar_header { 
+    height: 20px; 
+    width: 100%; 
+}
+.fb_calendar_body { 
+    margin: auto; 
+    overflow: hidden; 
+    height: 139px; 
+    position: relative; 
+    width: 170px; 
+}
+.fb_calendar_day_diff_month { 
+    padding: 0px 2px; 
+    cursor: pointer; 
+    height: 17px; 
+    text-align: right; 
+    width: 18px; 
+    color: #666666; 
+}
+.fb_calendar_day { 
+    padding: 0px 2px; 
+    cursor: pointer; 
+    height: 17px; 
+    text-align: right; 
+    width: 18px; 
+}
+.fb_calendar_day_hover { 
+    padding: 0px 2px; 
+    cursor: pointer; 
+    height: 17px; 
+    text-align: right; 
+    width: 18px; 
+    background-color: #dddddd; 
+}
+.fb_calendar_title { 
+    font-weight: bold; 
+    white-space: nowrap;
+}
+.fb_calendar_lrgicons { 
+    font-size: 14px; 
+}
+
+/** input fields styling **/
+.monthselect, .yearselect, .dayselect {
+	margin-right:2px;
+}
+
+.monthselect, .yearselect, .hourselect, .minuteselect {
+	margin-left: 5px;	
+}
+.calendarImg {
+	width: 16px;
+	height: 14px;
+	margin-left:4px;
+	margin-right:5px;
+}

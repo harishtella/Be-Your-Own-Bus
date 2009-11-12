@@ -1,0 +1,64 @@
+<% require 'generator'
+   require 'date'%>
+<%= hidden_field_tag(element_name, datetime_set, {:id => element_name}) %>
+
+<% month_names = Date::ABBR_MONTHNAMES[1,12]
+month_options = ""
+
+SyncEnumerator.new( (1..12), month_names).each do |option|
+  month_options += "<option value=\"#{option[0]}\"> #{option[1]}</option>"
+end %>
+<% month_attrib = {:class => "monthselect", 
+  :id => "Month_" + element_name,
+  :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');"} %>
+<%= select_tag("Month_" + element_name, month_options, month_attrib) %> 
+
+<% day_options = ""
+(1..31).each do |k|
+  day_options += "<option value=\"#{k}\"> #{k}</option>" 
+end %>
+<% day_attrib = {:class => "dayselect", 
+  :id => "Day_" + element_name,
+  :onchange => "setDateTime('#{element_name}');"} %>
+<%= select_tag("Day_" + element_name, day_options, day_attrib) %> 
+
+<% year_options = ""
+(2009..2011).each do |k|
+  year_options += "<option value=\"#{k}\"> #{k}</option>"
+end %>
+<% year_attrib = {:class => "yearselect", 
+  :id => "Year_" + element_name,
+  :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');"} %>
+<%= select_tag("Year_" + element_name, year_options, year_attrib) %> 
+
+<%= image_tag("calendar.gif", 
+  {:onclick => "var Cal = startCal(true); Cal.show(this,'#{element_name}',
+  'divCalender'); return true;", :id => "StartDate", :style => "cursor:
+  pointer", :class => "calendarImg"}) %>
+
+ at 
+
+<% hour_options = ""
+(1..12).each do |k|
+  hour_options += "<option value=\"#{k}\"> #{k}</option>"
+end %>
+<% hour_attrib = {:class => "hourselect", 
+  :id => "Hour_" + element_name,
+  :onchange => "setDateTime('#{element_name}');"} %>
+<%= select_tag("Hour_" + element_name, hour_options, hour_attrib) %> 
+:
+<% minute_options = ""
+(0..59).select {|x| (x % 5) == 0 }.each do |k|
+  minute_options += "<option value=\"%02d\"> %02d</option>" % [k,k]
+end %>
+<% minute_attrib = {:class => "minuteselect", 
+  :id => "Minute_" + element_name,
+  :onchange => "setDateTime('#{element_name}');"} %>
+<%= select_tag("Minute_" + element_name, minute_options, minute_attrib) %> 
+
+<% ampm_options = "<option value=\"pm\">pm</option><option value=\"am\">am</option>"
+ ampm_attrib = { :onchange => "setDateTime('#{element_name}');",
+ :id => "Ampm_" + element_name} %>
+<%= select_tag("Ampm_" + element_name, ampm_options, ampm_attrib) %> 
+
+

@@ -15,11 +15,13 @@
 <p>
   <b>Starting info:</b>
   <br/>
-  Leaving from <%=h @ride.pickup %> at <%=h @ride.pickup_datetime %>.
+  Leaving from <%=h @ride.pickup %> <br/> 
+  <%=h @ride_pickup_datetime_formatted %>.
   <br/>
   <b>Ending info:</b>
   <br/>
-  Going to <%=h @ride.dropoff %> at <%=h @ride.dropoff_datetime %>.
+  Going to <%=h @ride.dropoff %> <br/>
+  <%=h @ride_dropoff_datetime_formatted %>.
   <br/>
 </p>
 
@@ -27,10 +29,10 @@
   <b>People:</b>
   <br/>
 
-  <%= if (@driver_info['name'] and @driver_info['profile_url']) %>
+  <% if (@driver_info['name'] and @driver_info['profile_url']) %>
     <%= link_to @driver_info['name'], @driver_info['profile_url'] %>
   <% end %>
-  <%= if (@driver_info['pic'] and @driver_info['profile_url']) %>
+  <% if (@driver_info['pic'] and @driver_info['profile_url']) %>
     <%= link_to image_tag(@driver_info['pic']), @driver_info['profile_url'] %> is driving.
   <% end %>
   <br/>
@@ -38,10 +40,10 @@
     And no one else is along for the ride.<br/>
   <% else  %>
     <% @passengers_info.each do |pi| %>
-      <%= if (pi['name'] and pi['profile_url']) %>
+      <% if (pi['name'] and pi['profile_url']) %>
         <%= link_to pi['name'], pi['profile_url'] %>
       <% end %>
-      <%= if (pi['pic'] and pi['profile_url']) %>
+      <% if (pi['pic'] and pi['profile_url']) %>
         <%= link_to image_tag(pi['pic']), pi['profile_url'] %>,
       <% end %>
     <% end %>

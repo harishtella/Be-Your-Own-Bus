@@ -1,7 +1,6 @@
-class RidesController < ApplicationController
+require 'date' 
 
-  # GET /rides
-  # GET /rides.xml
+class RidesController < ApplicationController # GET /rides # GET /rides.xml
   def index
     @rides = Ride.all
     @rides_from_campus = Ride.find(:all, :conditions => { :tocampus => false})
@@ -16,9 +15,15 @@ class RidesController < ApplicationController
   # GET /rides/1.xml
   def show
     @publish_ride_joined = session[:publish_ride_joined]
+    @publish_ride_created = session[:publish_ride_created]
     session[:publish_ride_joined] = nil
+    session[:publish_ride_created] = nil
 
     @ride = Ride.find(params[:id])
+
+    datetime_format_string = "%l:%M %p on %A, %b %e, %Y"
+    @ride_dropoff_datetime_formatted = @ride.dropoff_datetime.strftime(datetime_format_string)  
+    @ride_pickup_datetime_formatted = @ride.pickup_datetime.strftime(datetime_format_string)
     
     @driver = @ride.driver.user 
     @driver_fb = Facebooker::User.new(@driver.facebook_id.to_s)
@@ -59,8 +64,9 @@ class RidesController < ApplicationController
   def create
     @ride = Ride.new(params[:ride])
     @ride.driver = @current_user.driver 
-    
+
     @current_user_fb = facebook_session.user
+
     respond_to do |format|
       if @ride.save
         #RidePublisher.deliver_publish_stream(@current_user_fb,@current_user_fb,{:message => "foo"})
