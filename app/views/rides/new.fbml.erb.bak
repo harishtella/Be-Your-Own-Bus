@@ -23,7 +23,8 @@
   <p>
     <%= f.label :pickup_datetime, "Starting Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
-    {:element_name => "ride[pickup_datetime]", :datetime_set => "something"} %> 
+    {:element_name => "ride[pickup_datetime]", :current_datetime =>
+    @current_datetime} %> 
   </p>
   <p>
     <%= f.label :dropoff, "Ending Place" %><br />
@@ -32,7 +33,8 @@
   <p>
     <%= f.label :dropoff_datetime, "Ending Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
-    {:element_name => "ride[dropoff_datetime]", :datetime_set => "something"} %> 
+    {:element_name => "ride[dropoff_datetime]", :current_datetime =>
+    @current_datetime} %> 
   </p>
   <p>
     <%= f.label :about %><br />

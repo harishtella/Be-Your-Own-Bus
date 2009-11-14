@@ -1,4 +1,12 @@
 require 'date' 
+require 'rubygems'
+require 'activesupport'
+
+class Time 
+  def round (seconds = 60) 
+    Time.at((self.to_f / seconds).round * seconds) 
+  end
+end
 
 class RidesController < ApplicationController # GET /rides # GET /rides.xml
   def index
@@ -25,6 +33,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     @ride_dropoff_datetime_formatted = @ride.dropoff_datetime.strftime(datetime_format_string)  
     @ride_pickup_datetime_formatted = @ride.pickup_datetime.strftime(datetime_format_string)
     
+    
     @driver = @ride.driver.user 
     @driver_fb = Facebooker::User.new(@driver.facebook_id.to_s)
     @driver_info = {"name" => @driver_fb.name,
@@ -49,14 +58,45 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
   def new
     @ride = Ride.new
 
+    time_now = Time.now.round(5.minutes)
+    @current_datetime = split_up_datetime_for_calender_form(time_now) 
+   
     respond_to do |format|
       format.fbml 
     end
   end
 
+  def split_up_datetime_for_calender_form(datetime)
+    datetime_format_fulldate = "%Y-%m-%d %H:%M:%S"
+    datetime_format_month = "%m"
+    datetime_format_day = "%e"
+    datetime_format_year = "%Y"
+    datetime_format_hour = "%l"
+    datetime_format_min = "%M"
+    datetime_format_ampm = "%p"
+
+    split_datetime = {}
+    split_datetime[:fulldate] = datetime.strftime(datetime_format_fulldate)
+    split_datetime[:month] =
+    datetime.strftime(datetime_format_month).to_i
+    split_datetime[:day] = datetime.strftime(datetime_format_day).to_i
+    split_datetime[:year] = datetime.strftime(datetime_format_year).to_i
+    split_datetime[:hour] = datetime.strftime(datetime_format_hour).to_i
+    split_datetime[:min] = datetime.strftime(datetime_format_min).to_i
+    split_datetime[:ampm] = datetime.strftime(datetime_format_ampm)
+    
+    return split_datetime 
+  end
+
+
   # GET /rides/1/edit
   def edit
     @ride = Ride.find(params[:id])
+    @pickup_datetime = split_up_datetime_for_calender_form(@ride.pickup_datetime)
+    @dropoff_datetime = split_up_datetime_for_calender_form(@ride.dropoff_datetime)
+    puts "!!!!!!!!!!!!!!!!!!!!!!"
+    puts @pickup_datetime.inspect
+
   end
 
   # POST /rides
