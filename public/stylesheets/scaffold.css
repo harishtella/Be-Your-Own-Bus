@@ -16,17 +16,24 @@ a { color: #3b5998; }
 a:visited { color: #3b5998; }
 a:hover { text-decoration:underline }
 
+.validation-error{
+  padding: 2px;
+  border: 2px solid #FF4040;
+  background-color: #f0f0f0;
+}
+
+
 .fieldWithErrors {
   padding: 2px;
-  background-color: red;
+  background-color: #FF4040;
   display: table;
+  text-decoration:bold 
 }
 
 #errorExplanation {
   width: 400px;
-  border: 2px solid red;
+  border: 2px solid #FF4040;
   padding: 7px;
-  padding-bottom: 12px;
   margin-bottom: 20px;
   background-color: #f0f0f0;
 }
@@ -37,18 +44,6 @@ a:hover { text-decoration:underline }
   padding: 5px 5px 5px 15px;
   font-size: 12px;
   margin: -7px;
-  background-color: #c00;
+  background-color: #FF4040;
   color: #fff;
 }
-
-#errorExplanation p {
-  color: #333;
-  margin-bottom: 0;
-  padding: 5px;
-}
-
-#errorExplanation ul li {
-  font-size: 12px;
-  list-style: square;
-}
-

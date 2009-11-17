@@ -13,10 +13,9 @@
 
   <% @rides_from_campus.each do |ride| %>
   <tr>
-    <td><%=h ride.name %></td>
+    <td><%= link_to ride.name, ride %></td>
     <td><%=h ride.pickup %></td>
     <td><%=h ride.dropoff %></td>
-    <td>(<%= link_to 'more', ride %>)</td>
   </tr>
   <% end %>
 
@@ -32,10 +31,9 @@
 
   <% @rides_to_campus.each do |ride| %>
   <tr>
-    <td><%=h ride.name %></td>
+    <td><%= link_to ride.name, ride %></td>
     <td><%=h ride.pickup %></td>
     <td><%=h ride.dropoff %></td>
-    <td>(<%= link_to 'more', ride %>)</td>
   </tr>
   <% end %>
 

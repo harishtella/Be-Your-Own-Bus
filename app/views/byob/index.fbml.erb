@@ -12,12 +12,9 @@
 <h1>BYOB</h1>
 <b>Be Your Own Bus</b>
 
+<%= facebook_messages %>
 <p style="color: green">
-<% if flash[:notice] %>
-  <%= flash[:notice] %>
-<% else %> 
-  Welcome <%= @first_name %>. 
-<% end %>
+Welcome <%= @first_name %>. 
 </p>
 
 <div id="home_choices">
@@ -37,7 +34,7 @@
 
   <div id="home_choices_create">
   <div class="home_choice_inside">
-  <%= link_to image_tag ("tom.png"), :controller => "rides", :action => "new" %><br/>
+  <%= link_to image_tag("tom.png"), :controller => "rides", :action => "new" %><br/>
   <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => "home_choices_create" %>
   </div>
   </div>

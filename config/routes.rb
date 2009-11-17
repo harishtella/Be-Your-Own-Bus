@@ -1,7 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "byob"
-  map.resources :rides, :member => { :join => :get} 
+  map.resources :rides, :member => { :join => :get, :kick => :get, :leave =>
+  :get} 
   map.resources :users, :member => { :login => :get} 
   # The priority is based upon order of creation: first created -> highest priority.
 

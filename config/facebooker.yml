@@ -26,7 +26,7 @@ test:
   api_key: 91ccefcd5e7d5201afe11818f5af5c5d 
   secret_key: 4ec789f14d6dfe662aff4e827fc7d781 
   canvas_page_name: beyourownbus
-  callback_url: http://www.harishtella.info:80
+  callback_url: http://www.harishtella.info
   set_asset_host_to_callback_url: true
   tunnel:
     public_host_username: 
@@ -39,7 +39,7 @@ production:
   api_key: 91ccefcd5e7d5201afe11818f5af5c5d 
   secret_key: 4ec789f14d6dfe662aff4e827fc7d781 
   canvas_page_name: beyourownbus
-  callback_url: http://www.harishtella.info:80
+  callback_url: http://www.harishtella.info
   set_asset_host_to_callback_url: true   
   tunnel:
     public_host_username: 

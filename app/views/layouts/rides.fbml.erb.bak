@@ -2,7 +2,8 @@
 <fb:fbml>
 
 <%= stylesheet_link_tag 'scaffold' %>
-<p style="color: green"><%= flash[:notice] %></p>
+<%= stylesheet_link_tag 'rides_style' %>
+<%= facebook_messages %>
 
 <div style="display: none;">
 <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>

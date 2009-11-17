@@ -22,6 +22,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
   # GET /rides/1
   # GET /rides/1.xml
   def show
+
     @publish_ride_joined = session[:publish_ride_joined]
     @publish_ride_created = session[:publish_ride_created]
     session[:publish_ride_joined] = nil
@@ -40,13 +41,20 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     "pic" => @driver_fb.pic_square,
     "profile_url" => @driver_fb.profile_url}
 
+    @user_is_driver = (@driver.facebook_id == current_user.facebook_id)  
+    @user_is_a_passenger = @ride.passengers.collect {|x|
+    (x.user.facebook_id == current_user.facebook_id) }.inject{|a,b| a or b} 
+
     @passengers_info = @ride.passengers.collect do |x| 
       @passenger = x.user
       @passenger_fb = Facebooker::User.new(@passenger.facebook_id.to_s) 
       {"name" => @passenger_fb.name,
         "pic" => @passenger_fb.pic_square,
-        "profile_url" => @passenger_fb.profile_url}
+        "profile_url" => @passenger_fb.profile_url,
+        "passenger_id" => x.id}
     end
+
+
 
     respond_to do |format|
       format.fbml 
@@ -57,9 +65,11 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
   # GET /rides/new.xml
   def new
     @ride = Ride.new
+    @ride.tocampus = false
 
     time_now = Time.now.round(5.minutes)
-    @current_datetime = split_up_datetime_for_calender_form(time_now) 
+    @pickup_datetime_preset = split_up_datetime_for_calender_form(time_now) 
+    @dropoff_datetime_preset = split_up_datetime_for_calender_form(time_now) 
    
     respond_to do |format|
       format.fbml 
@@ -83,7 +93,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     split_datetime[:year] = datetime.strftime(datetime_format_year).to_i
     split_datetime[:hour] = datetime.strftime(datetime_format_hour).to_i
     split_datetime[:min] = datetime.strftime(datetime_format_min).to_i
-    split_datetime[:ampm] = datetime.strftime(datetime_format_ampm)
+    split_datetime[:ampm] = datetime.strftime(datetime_format_ampm).downcase
     
     return split_datetime 
   end
@@ -92,21 +102,32 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
   # GET /rides/1/edit
   def edit
     @ride = Ride.find(params[:id])
-    @pickup_datetime = split_up_datetime_for_calender_form(@ride.pickup_datetime)
-    @dropoff_datetime = split_up_datetime_for_calender_form(@ride.dropoff_datetime)
-    puts "!!!!!!!!!!!!!!!!!!!!!!"
-    puts @pickup_datetime.inspect
-    puts @dropoff_datetime.inspect
+    @pickup_datetime_preset = split_up_datetime_for_calender_form(@ride.pickup_datetime)
+    @dropoff_datetime_preset = split_up_datetime_for_calender_form(@ride.dropoff_datetime)
 
   end
 
   # POST /rides
   # POST /rides.xml
   def create
+
+    ActionView::Base.field_error_proc = Proc.new do |html_tag, instance| 
+      if (html_tag.slice(1,5) == "label")
+        html_tag
+      else 
+        if instance.error_message.kind_of?(Array)  
+          %(#{html_tag}&nbsp;<span class="validation-error">  
+            #{instance.error_message.join(',')}</span>)  
+        else  
+          %(#{html_tag}&nbsp;<span class="validation-error">  
+          #{instance.error_message}</span>)  
+        end 
+      end
+    end 
+
     @ride = Ride.new(params[:ride])
     @ride.driver = @current_user.driver 
-
-    @current_user_fb = facebook_session.user
+    @ride.seats_available = @ride.seats_total
 
     respond_to do |format|
       if @ride.save
@@ -115,6 +136,17 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
         flash[:notice] = 'Ride was successfully created.'
         format.fbml { redirect_to(@ride) }
       else
+        #error_string = ""
+        #@ride.errors.each {|k,v| error_string += "#{k} #{v}<br/>" } 
+        #flash[:error] = error_string
+
+        @pickup_datetime_preset =
+        split_up_datetime_for_calender_form(@ride.pickup_datetime) 
+        @dropoff_datetime_preset =
+        split_up_datetime_for_calender_form(@ride.dropoff_datetime) 
+        @price_preset = if @ride.price then @ride.price.to_s else nil end 
+        @seats_total_preset = if (@ride.seats_total and @ride.seats_total != 0) then @ride.seats_total.to_s else
+        nil end 
         format.fbml { render :action => "new" }
       end
     end
@@ -122,28 +154,65 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
 
   def join 
     @ride = Ride.find(params[:id])
-    @ride.passengers << @current_user.passenger
+    if (@ride.seats_available > 0) 
+      @ride.seats_available -= 1
+      @ride.passengers << @current_user.passenger
+      @ride.save
+      session[:publish_ride_joined] = true
+    else 
+      flash[:error] = "Sorry, there are no seats left on this ride"
+    end
 
     respond_to do |format|
-      if @ride.save
-        session[:publish_ride_joined] = true
         format.fbml { redirect_to(@ride) }
-      else
-        format.fbml { redirect_to(@ride) }
-      end
     end
   end
+
+  def kick
+    @ride = Ride.find(params[:id])
+    @passenger = @ride.passengers.find(params[:passenger_id])
+    @ride.passengers.delete(@passenger)
+    @ride.seats_available += 1
+    @ride.save
+
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
+    end
+  end
+
+  def leave
+    @user_id = @current_user.facebook_id 
+    @ride = Ride.find(params[:id])
+    @passengers = @ride.passengers.select { |p| p.user.facebook_id == @user_id } 
+    
+    unless @passengers.empty?  
+      @ride.passengers.delete(@passengers.pop)
+      @ride.seats_available += 1
+      @ride.save
+    end
+
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
+    end
+  end
+
 
   # PUT /rides/1
   # PUT /rides/1.xml
   def update
     @ride = Ride.find(params[:id])
+    @ride.driver = @current_user.driver 
+
 
     respond_to do |format|
       if @ride.update_attributes(params[:ride])
         flash[:notice] = 'Ride was successfully updated.'
         format.fbml { redirect_to(@ride) }
       else
+        @pickup_datetime_preset =
+        split_up_datetime_for_calender_form(@ride.pickup_datetime) 
+        @dropoff_datetime_preset =
+        split_up_datetime_for_calender_form(@ride.dropoff_datetime) 
         format.fbml { render :action => "edit" }
       end
     end

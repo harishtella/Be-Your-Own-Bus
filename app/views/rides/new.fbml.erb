@@ -1,15 +1,47 @@
 <%= stylesheet_link_tag 'calendar' %>
 <%= javascript_include_tag 'calendar' %>
+<%= javascript_include_tag 'input_prompt_text_helper' %>
+
 <%= render :partial => 'calendar' %>
 
-<h1>Create a new ride</h1>
+<% if @ride.errors.empty? %>
+  <h1>Create a new ride</h1>
+<% else %>
+  <div class="errorExplanation" id="errorExplanation">
+    <h2>Please fix a couple things with your ride.</h2>
+  </div>
+<% end %>
 
-<% form_for(@ride) do |f| %>
-  <%= f.error_messages %>
+<% about_prompt_text = "Enter any additional info here. \n\nFor example: " +
+    "\n  price details/flexibility" + "\n  time/place flexibility" +
+    "\n  just guys or just girls \n  amount of trunk space \n  type of car \n  music " + 
+    "preference \n  etc." %>
+<script> var about_prompt_text = "<%= escape_javascript(about_prompt_text) %>"; </script>
+<% price_prompt_text = @price_preset || "10" %>
+<script> var price_prompt_text = "<%= escape_javascript(price_prompt_text) %>"; </script>
+<% seats_available_prompt_text = @seats_total_preset || "3" %>
+<script> var seats_available_prompt_text = "<%=
+escape_javascript(seats_available_prompt_text) %>"; </script>
+
+<% form_for(@ride, :html=>{:onsubmit =>
+"input_prompt_clear_for_submit('ride_about', about_prompt_text);"}) do |f| %>
+  
 
   <p>
     <%= f.label :name, "Your ride's name" %><br />
     <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :price, "Price: $ " %>
+    <%= f.text_field :price, :size => 3, :onfocus => "input_remove_prompt_text(this, 
+    price_prompt_text);", :value => "#{price_prompt_text}",  :onblur =>
+    "input_add_prompt_text(this, price_prompt_text);" %>
+  </p>
+  <p>
+    <%= f.label :seats_total, "Seats available for other riders: " %>
+    <%= f.text_field :seats_total, :size => 3, :onfocus => "input_remove_prompt_text(this, 
+    seats_available_prompt_text);", :value => "#{seats_available_prompt_text}",  :onblur =>
+    "input_add_prompt_text(this, seats_available_prompt_text);" %>
   </p>
   <p>
     <%= f.label :tocampus, "Does this ride <u>leave</u> or <u>go to</u> campus?" %><br />
@@ -24,7 +56,13 @@
     <%= f.label :pickup_datetime, "Starting Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
     {:element_name => "ride[pickup_datetime]", :current_datetime =>
-    @current_datetime} %> 
+    @pickup_datetime_preset} %> 
+    </br>
+    <% if @ride.errors.on(:pickup_datetime) %>
+      <% @ride.errors.on(:pickup_datetime).each do |e|%>
+        <span class="validation-error"><%= e %></span><br/>
+      <% end %>
+    <% end %>
   </p>
   <p>
     <%= f.label :dropoff, "Ending Place" %><br />
@@ -34,11 +72,21 @@
     <%= f.label :dropoff_datetime, "Ending Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
     {:element_name => "ride[dropoff_datetime]", :current_datetime =>
-    @current_datetime} %> 
+    @dropoff_datetime_preset} %> 
+    </br>
+    <% if @ride.errors.on(:dropoff_datetime) %>
+      <% @ride.errors.on(:dropoff_datetime).each do |e|%>
+        <span class="validation-error"><%= e %></span><br/>
+      <% end %>
+    <% end %>
   </p>
   <p>
     <%= f.label :about %><br />
-    <%= f.text_area :about, :rows => 10 %>
+    
+    <%= f.text_area :about, :rows => 10, :onfocus =>
+    "input_remove_prompt_text(this, about_prompt_text);",
+    :value => "#{about_prompt_text}", :onblur => "input_add_prompt_text(this,
+    about_prompt_text);" %>
   </p>
   <p>
     <%= f.submit 'Create' %>
