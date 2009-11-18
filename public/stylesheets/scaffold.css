@@ -1,5 +1,9 @@
 body { background-color: #fff; color: #333; }
 
+h1 {
+  font-size: 23px;
+}
+
 body, p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size:   13px;
@@ -20,6 +24,12 @@ a:hover { text-decoration:underline }
   padding: 2px;
   border: 2px solid #FF4040;
   background-color: #f0f0f0;
+}
+
+.datetime-errors{
+  line-height: 27px;
+  position: relative;
+  top: -8px;
 }
 
 

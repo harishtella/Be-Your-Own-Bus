@@ -19,22 +19,20 @@ Welcome <%= @first_name %>.
 
 <div id="home_choices">
   <div id="home_choices_view">
-  <div class="home_choice_inside">
   <%= link_to image_tag("bob.png"), :controller => "rides", :action => "index" %><br/>
+  <div id="home_choices_view_link">
   <%= link_to 'View available Rides', {:controller => "rides", :action =>
   "index"}, :id => "home_choices_view" %>
   </div>
   </div>
 
   <div id="home_choices_byoblogo">
-  <div class="home_choice_inside">
   <%= image_tag "byob.png" %>
-  </div>
   </div>
 
   <div id="home_choices_create">
-  <div class="home_choice_inside">
   <%= link_to image_tag("tom.png"), :controller => "rides", :action => "new" %><br/>
+  <div id="home_choices_create_link">
   <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => "home_choices_create" %>
   </div>
   </div>

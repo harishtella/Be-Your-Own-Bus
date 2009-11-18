@@ -10,9 +10,35 @@ end
 
 class RidesController < ApplicationController # GET /rides # GET /rides.xml
   def index
-    @rides = Ride.all
-    @rides_from_campus = Ride.find(:all, :conditions => { :tocampus => false})
-    @rides_to_campus = Ride.find(:all, :conditions => { :tocampus => true})
+    @rides_from_campus = Ride.find(:all, :order => "pickup_datetime ASC", :conditions => { :tocampus => false})
+    @rides_to_campus = Ride.find(:all, :order => "pickup_datetime ASC", :conditions => { :tocampus => true})
+
+    @rides_from_campus_with_dates = []
+    @rides_to_campus_with_dates = []
+
+    index_format = "%b %e @ %l:%M %p"
+  
+    @rides_from_campus.each do |ride| 
+      current_ride = {} 
+      current_ride[:ride_obj] = ride 
+      if ride.pickup_datetime
+        current_ride[:date] = ride.pickup_datetime.strftime(index_format)
+      else 
+        current_ride[:date] = ""
+      end
+      @rides_from_campus_with_dates << current_ride
+    end
+
+    @rides_to_campus.each do |ride| 
+      current_ride = {} 
+      current_ride[:ride_obj] = ride 
+      if ride.pickup_datetime
+        current_ride[:date] = ride.pickup_datetime.strftime(index_format)
+      else 
+        current_ride[:date] = ""
+      end
+      @rides_to_campus_with_dates << current_ride
+    end
 
     respond_to do |format|
       format.fbml 
@@ -34,11 +60,10 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     @ride_dropoff_datetime_formatted = @ride.dropoff_datetime.strftime(datetime_format_string)  
     @ride_pickup_datetime_formatted = @ride.pickup_datetime.strftime(datetime_format_string)
     
-    
     @driver = @ride.driver.user 
     @driver_fb = Facebooker::User.new(@driver.facebook_id.to_s)
     @driver_info = {"name" => @driver_fb.name,
-    "pic" => @driver_fb.pic_square,
+    "pic" => @driver_fb.pic_big,
     "profile_url" => @driver_fb.profile_url}
 
     @user_is_driver = (@driver.facebook_id == current_user.facebook_id)  
@@ -49,7 +74,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
       @passenger = x.user
       @passenger_fb = Facebooker::User.new(@passenger.facebook_id.to_s) 
       {"name" => @passenger_fb.name,
-        "pic" => @passenger_fb.pic_square,
+        "pic" => @passenger_fb.pic_big,
         "profile_url" => @passenger_fb.profile_url,
         "passenger_id" => x.id}
     end
@@ -67,7 +92,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     @ride = Ride.new
     @ride.tocampus = false
 
-    time_now = Time.now.round(5.minutes)
+    time_now = (Time.now.utc - 6.hours).round(5.minutes).utc
     @pickup_datetime_preset = split_up_datetime_for_calender_form(time_now) 
     @dropoff_datetime_preset = split_up_datetime_for_calender_form(time_now) 
    

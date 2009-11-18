@@ -1,46 +1,52 @@
-<h1>Rides</h1>
+<div id="ridepage_header">
+  <h1>Rides</h1>
+</div>
 
+<div id="ridepage_navigation">
+  <%= link_to 'New ride', new_ride_path %> |
+  <%= link_to 'Home', :controller => 'byob' %>
+  <hr/>
+</div>
+
+<div id="rides_from_campus">
+<div id="ridepage_fromcampus_head">Leaving from campus</div>
+<%= image_tag("http://www.beyourownbus.com/byobfbapp/leaving.png") %> 
 <table>
   <tr>
-    <th><h1>Leaving from campus</h1></th>
+    <td><b><i>Ride Name</i></b></td>
+    <td><b><i>Going to</i></b></td>
+    <td><b><i>Leaving on</i></b></td>
   </tr>
 
+  <% @rides_from_campus_with_dates.each do |ride| %>
   <tr>
-    <td><b><i>Name</i></b></td>
-    <td><b><i>Pickup</i></b></td>
-    <td><b><i>Dropoff</i></b></td>
-  </tr>
-
-  <% @rides_from_campus.each do |ride| %>
-  <tr>
-    <td><%= link_to ride.name, ride %></td>
-    <td><%=h ride.pickup %></td>
-    <td><%=h ride.dropoff %></td>
+    <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+    <td><%=h ride[:ride_obj].dropoff %></td>
+    <td><%=h ride[:date] %></td>
   </tr>
   <% end %>
-
-  <tr>
-    <th><h1>Going to campus</h1></th>
-  </tr>
-
-  <tr>
-    <td><b><i>Name</i></b></td>
-    <td><b><i>Pickup</i></b></td>
-    <td><b><i>Dropoff</i></b></td>
-  </tr>
-
-  <% @rides_to_campus.each do |ride| %>
-  <tr>
-    <td><%= link_to ride.name, ride %></td>
-    <td><%=h ride.pickup %></td>
-    <td><%=h ride.dropoff %></td>
-  </tr>
-  <% end %>
-
-
 </table>
+</div>
 
-<br />
+<div id="rides_to_campus">
 
-<%= link_to 'New ride', new_ride_path %> |
-<%= link_to 'Home', :controller => 'byob' %>
+<div id="ridepage_tocampus_head">Going to campus</div>
+<%= image_tag("http://www.beyourownbus.com/byobfbapp/coming.png") %> 
+<table>
+  <tr>
+    <td><b><i>Ride Name</i></b></td>
+    <td><b><i>Going to</i></b></td>
+    <td><b><i>Leaving on</i></b></td>
+  </tr>
+
+  <% @rides_to_campus_with_dates.each do |ride| %>
+  <tr>
+    <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+    <td><%=h ride[:ride_obj].dropoff %></td>
+    <td><%=h ride[:date] %></td>
+  </tr>
+  <% end %>
+</table>
+</div>
+
+
