@@ -1,8 +1,79 @@
-div#ride_passengers {
+/* general html styleing */
+
+h1 { font-size: 23px; }
+
+p, ol, ul, td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+}
+
+a { color: #3b5998; }
+a:visited { color: #3b5998; }
+a:hover { text-decoration:underline }
+
+
+
+/* divs common to ride pages */
+div#rides_title {
+  margin-bottom: 4px;
+}
+
+div#rides_navigation {
+  margin-bottom: 10px;
+}
+
+
+/* divs for ride listing page */
+div#rides_listing_fromcampus_col {
+  float: left;
+  width:380px;
+}
+
+div#rides_listing_tocampus_col {
+  float: right;
+  width:380px;
+}
+
+div#rides_listing_tocampus_title {
+  margin-left: 100px;
+  font-size: 16px;
+}
+
+div#rides_listing_fromcampus_title {
+  margin-left: 85px;
+  font-size: 16px;
+}
+
+
+/*divs for individual ride (show) page */
+
+div#rides_show_driver_box {
+  width: 210px;
+  float:left;
+}
+
+div#rides_show_driver_profile {
+  width:200px;
+  font-size:16px;
+  margin: 0 15px 15px 0;
+  border: 1px solid #999;
+}
+
+div#rides_show_info_box {
+  width: 250px;
+  float:left;
+}
+
+div#rides_show_info {
+  margin-left:15px;
+}
+
+div#rides_show_passengers {
   clear:both;
 }
 
-div#ride_passenger {
+.rides_show_passenger_profile {
   float:left;
   font-size:16px;
   margin: 0 15px 15px 0;
@@ -10,75 +81,23 @@ div#ride_passenger {
   
 }
 
-div#ridepage_data {
-  border: 1px solid #999;
-}
-
-div#ridepage_data_general {
-  width: 250px;
-  float:left;
-}
-
-div#ridepage_data_general_inside {
-  margin-left:15px;
-}
-
-div#ridepage_data_driver {
-  width: 210px;
-  float:left;
-}
-
-.person_caption {
+.rides_show_profile_caption {
   text-align: center;
 }
 
-div#ride_driver {
-  width:200px;
-  font-size:16px;
-  margin: 0 15px 15px 0;
-  border: 1px solid #999;
-}
-
-div#rides_from_campus {
-  float: left;
-  width:380px;
-}
-
-div#rides_to_campus {
-  float: right;
-  width:380px;
-}
-
-div#ridepage_header {
-  margin-bottom: 4px;
-}
-
-div#ridepage_navigation {
-  margin-bottom: 10px;
-}
-
-div#ridepage_tocampus_head {
-  margin-left: 100px;
-  font-size: 16px;
-}
-
-div#ridepage_fromcampus_head {
-  margin-left: 85px;
-  font-size: 16px;
-}
-
-div#about_input {
+/* divs for new/edit ride form */
+div#rides_form_about_input {
   float:left;
   width:300px;
 }
 
-div#about_detail_prompt {
+div#rides_form_about_detail_prompt {
   font-size:14px;
   width:200px;
   float:left;
 }
 
-div#newride_submit {
+div#rides_form_submit {
   margin-top:5px;
   clear:left;
 }

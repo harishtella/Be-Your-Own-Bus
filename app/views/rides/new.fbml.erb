@@ -4,11 +4,11 @@
 
 <%= render :partial => 'calendar' %>
 
-<div id="ridepage_header">
+<div id="rides_title">
     <h1>Create a new ride</h1>
 </div>
 
-<div id="ridepage_navigation">
+<div id="rides_navigation">
   <%= link_to 'Rides Listing', rides_path %> |
   <%= link_to 'Home', :controller => 'byob' %>
   <hr/>
@@ -19,9 +19,6 @@
     <h2>Please fix a couple things with your ride.</h2>
   </div>
 <% end %>
-
-
-
 
 <% price_prompt_text = @price_preset || "10" %>
 <script> var price_prompt_text = "<%= escape_javascript(price_prompt_text) %>"; </script>
@@ -89,14 +86,14 @@ escape_javascript(seats_available_prompt_text) %>"; </script>
     </p>
   <% end %>
 
-  <div id="newride_about">
+  <div id="rides_form_about">
     <p>
       <%= f.label :about %><br />
     </p>
-    <div id="about_input">
+    <div id="rides_form_about_input">
     <%= f.text_area :about, :rows => 10 %>
     </div>
-    <div id="about_detail_prompt">
+    <div id="ride_form_about_detail_prompt">
         Enter any additional info here.<br/>
         For example: <br/> 
         <ul>
@@ -111,7 +108,7 @@ escape_javascript(seats_available_prompt_text) %>"; </script>
     </div>
   </div>
 
-  <div id="newride_submit"> 
+  <div id="rides_form_submit"> 
     <p>
       <%= f.submit 'Create' %>
     </p>

@@ -1,15 +1,15 @@
-<div id="ridepage_header">
+<div id="rides_title">
   <h1>Rides</h1>
 </div>
 
-<div id="ridepage_navigation">
+<div id="rides_navigation">
   <%= link_to 'New ride', new_ride_path %> |
   <%= link_to 'Home', :controller => 'byob' %>
   <hr/>
 </div>
 
-<div id="rides_from_campus">
-<div id="ridepage_fromcampus_head">Leaving from campus</div>
+<div id="rides_listing_fromcampus_col">
+<div id="rides_listing_fromcampus_title">Leaving from campus</div>
 <%= image_tag("http://www.beyourownbus.com/byobfbapp/leaving.png") %> 
 <table>
   <tr>
@@ -28,9 +28,8 @@
 </table>
 </div>
 
-<div id="rides_to_campus">
-
-<div id="ridepage_tocampus_head">Going to campus</div>
+<div id="rides_listing_tocampus_col">
+<div id="rides_listing_tocampus_title">Going to campus</div>
 <%= image_tag("http://www.beyourownbus.com/byobfbapp/coming.png") %> 
 <table>
   <tr>
