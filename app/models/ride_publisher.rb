@@ -7,4 +7,10 @@ class RidePublisher < Facebooker::Rails::Publisher
     message params[:message]
     action_links params[:action_links]
   end
+
+  def ride_notification(recievers, message)
+    send_as :notification
+    recipients recievers   
+    fbml message
+  end
 end

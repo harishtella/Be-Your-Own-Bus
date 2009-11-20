@@ -4,8 +4,8 @@ class User < ActiveRecord::Base
 
   def self.for(facebook_id)
 
-    if User.exists?(facebook_id) 
-      User.find(facebook_id)
+    if User.exists?(:facebook_id => facebook_id) 
+      return User.find_by_facebook_id(facebook_id)
     else
       new_user = User.new()
       new_user.facebook_id = facebook_id

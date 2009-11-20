@@ -1,6 +1,9 @@
 require 'date' 
 require 'rubygems'
 require 'activesupport'
+include ActionView::Helpers::UrlHelper 
+include ActionView::Helpers::TagHelper
+include Facebooker::Rails::Helpers
 
 class Time 
   def round (seconds = 60) 
@@ -74,7 +77,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
       @passenger = x.user
       @passenger_fb = Facebooker::User.new(@passenger.facebook_id.to_s) 
       {"name" => @passenger_fb.name,
-        "pic" => @passenger_fb.pic_big,
+        "pic" => @passenger_fb.pic,
         "profile_url" => @passenger_fb.profile_url,
         "passenger_id" => x.id}
     end
@@ -161,10 +164,6 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
         flash[:notice] = 'Ride was successfully created.'
         format.fbml { redirect_to(@ride) }
       else
-        #error_string = ""
-        #@ride.errors.each {|k,v| error_string += "#{k} #{v}<br/>" } 
-        #flash[:error] = error_string
-
         @pickup_datetime_preset =
         split_up_datetime_for_calender_form(@ride.pickup_datetime) 
         @dropoff_datetime_preset =
@@ -184,6 +183,19 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
       @ride.passengers << @current_user.passenger
       @ride.save
       session[:publish_ride_joined] = true
+   
+      notification_message = ""
+      notification_message += fb_name(@current_user)  
+      notification_message += " joined "
+      notification_message += fb_name(@ride.driver.user,{:possessive => true})
+      notification_message += " ride, " 
+      notification_message += link_to(@ride.name, @ride) + "."
+
+
+      notification_recipients = get_ride_users_exclude(@ride, @current_user)
+      unless notification_recipients == [] 
+        RidePublisher.deliver_ride_notification(notification_recipients, notification_message)
+      end
     else 
       flash[:error] = "Sorry, there are no seats left on this ride"
     end
@@ -196,14 +208,45 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
   def kick
     @ride = Ride.find(params[:id])
     @passenger = @ride.passengers.find(params[:passenger_id])
+
+    notification_message = ""
+    notification_message += fb_name(@current_user)  
+    notification_message += " kicked "
+    notification_message += fb_name(@passenger.user)
+    notification_message += " off " + fb_pronoun(@current_user,{:possessive =>
+    true}) + " ride, "
+    notification_message += link_to(@ride.name, @ride) + "."
+
+    notification_recipients = get_ride_users_exclude(@ride, @current_user)
+    unless notification_recipients == [] 
+      RidePublisher.deliver_ride_notification(notification_recipients,
+      notification_message)
+    end
+
     @ride.passengers.delete(@passenger)
     @ride.seats_available += 1
     @ride.save
-
+    
     respond_to do |format|
         format.fbml { redirect_to(@ride) }
     end
   end
+
+  def get_ride_users_exclude(ride, excluded_user)
+    recievers = [] 
+    unless ride.driver.user == excluded_user 
+      recievers << ride.driver.user
+    end
+
+    ride.passengers.each do |p| 
+      unless p.user == excluded_user
+        recievers << p.user 
+      end
+    end
+
+    return recievers 
+  end
+  
 
   def leave
     @user_id = @current_user.facebook_id 
@@ -214,6 +257,19 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
       @ride.passengers.delete(@passengers.pop)
       @ride.seats_available += 1
       @ride.save
+
+ 
+      notification_message = ""
+      notification_message += fb_name(@current_user)  
+      notification_message += " left the ride, "
+      notification_message += link_to(@ride.name, @ride) + "."
+
+
+      notification_recipients = get_ride_users_exclude(@ride, @current_user)
+      unless notification_recipients == [] 
+        RidePublisher.deliver_ride_notification(notification_recipients,
+        notification_message)
+      end
     end
 
     respond_to do |format|

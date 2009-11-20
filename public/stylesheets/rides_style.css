@@ -49,15 +49,17 @@ div#rides_listing_fromcampus_title {
 /*divs for individual ride (show) page */
 
 div#rides_show_driver_box {
-  width: 210px;
+  width: 200px;
   float:left;
+  margin: 0 15px 15px 0;
 }
 
 div#rides_show_driver_profile {
-  width:200px;
+  text-align:center;
   font-size:16px;
-  margin: 0 15px 15px 0;
+  background-color: #EEE;
   border: 1px solid #999;
+  width:auto;
 }
 
 div#rides_show_info_box {
@@ -75,10 +77,15 @@ div#rides_show_passengers {
 
 .rides_show_passenger_profile {
   float:left;
+  width:100px;
   font-size:16px;
-  margin: 0 15px 15px 0;
+  margin: 0px 15px 15px 0px;
   border: 1px solid #999;
-  
+  background-color: #EEE;
+}
+
+.rides_show_passenger_pic {
+  text-align: center;
 }
 
 .rides_show_profile_caption {
