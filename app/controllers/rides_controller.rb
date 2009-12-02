@@ -58,31 +58,32 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     session[:publish_ride_created] = nil
 
     @ride = Ride.find(params[:id])
+    @comments = @ride.comments
+    @comments.sort! {|x,y| -1 * (x.created_at <=> y.created_at) }
 
     datetime_format_string = "%l:%M %p on %A, %b %e, %Y"
     @ride_dropoff_datetime_formatted = @ride.dropoff_datetime.strftime(datetime_format_string)  
     @ride_pickup_datetime_formatted = @ride.pickup_datetime.strftime(datetime_format_string)
     
     @driver = @ride.driver.user 
-    @driver_fb = Facebooker::User.new(@driver.facebook_id.to_s)
-    @driver_info = {"name" => @driver_fb.name,
-    "pic" => @driver_fb.pic_big,
-    "profile_url" => @driver_fb.profile_url}
+    #@driver_fb = Facebooker::User.new(@driver.facebook_id.to_s)
+    #@driver_info = {"name" => @driver_fb.name,
+    #"pic" => @driver_fb.pic_big,
+    #"profile_url" => @driver_fb.profile_url}
 
     @user_is_driver = (@driver.facebook_id == current_user.facebook_id)  
     @user_is_a_passenger = @ride.passengers.collect {|x|
     (x.user.facebook_id == current_user.facebook_id) }.inject{|a,b| a or b} 
 
     @passengers_info = @ride.passengers.collect do |x| 
-      @passenger = x.user
-      @passenger_fb = Facebooker::User.new(@passenger.facebook_id.to_s) 
-      {"name" => @passenger_fb.name,
-        "pic" => @passenger_fb.pic,
-        "profile_url" => @passenger_fb.profile_url,
+      passenger_user = x.user
+      #@passenger_fb = Facebooker::User.new(@passenger.facebook_id.to_s) 
+      { "user" => passenger_user,
+        #"name" => @passenger_fb.name,
+        #"pic" => @passenger_fb.pic,
+        #"profile_url" => @passenger_fb.profile_url,
         "passenger_id" => x.id}
     end
-
-
 
     respond_to do |format|
       format.fbml 

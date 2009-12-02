@@ -1,3 +1,17 @@
+
+<%# if @publish_ride_joined %>
+<% if false %>
+  <script>
+  Facebook.streamPublish("is going to <%=h @ride.dropoff %> at <%=h @ride_pickup_datetime_formatted %>",null,null,null,"Tell others about this ride");
+  </script>
+<% end %> 
+<%# if @publish_ride_created%>
+<% if false %>
+  <script>
+  Facebook.streamPublish("is driving to <%=h @ride.dropoff %> at <%=h @ride_pickup_datetime_formatted %>",null,null,null,"Tell others about this ride");
+  </script>
+<% end %> 
+
 <div id="rides_title">
   <h1>
     <%=h @ride.name %>
@@ -27,11 +41,13 @@
   <p><b>Driver:</b></p>
   <div id="rides_show_driver_profile">
     <%# if (@driver_info['pic'] and @driver_info['profile_url']) %>
-      <%= link_to image_tag(@driver_info['pic']), @driver_info['profile_url'] %> 
+      <%# link_to image_tag(@driver_info['pic']), @driver_info['profile_url'] %> 
+      <%= fb_profile_pic @driver, :size => "normal" %>
     <%# end %>
     <%# if (@driver_info['name'] and @driver_info['profile_url']) %>
       <div class="rides_show_profile_caption">
-        <%= link_to @driver_info['name'], @driver_info['profile_url'] %>
+        <%# link_to @driver_info['name'], @driver_info['profile_url'] %>
+        <%= fb_name @driver %> 
       </div>
     <%# end %>
   </div>
@@ -39,7 +55,7 @@
 
 
 <div id="rides_show_info_box">
-  <p><b>Details:</b><p>
+  <p><b>Details:</b></p>
   <div id="rides_show_info">
   <p>
     Price: $<%= @ride.price %>
@@ -90,16 +106,19 @@
       <div class="rides_show_passenger_profile">
         <div class="rides_show_passenger_pic"> 
           <%# if (pi['pic'] and pi['profile_url']) %>
-            <%= link_to image_tag(pi['pic']), pi['profile_url'] %>
+            <%# link_to image_tag(pi['pic']), pi['profile_url'] %>
+            <%= fb_profile_pic pi["user"], :size => "small" %>
           <%# end %>
         </div>
         <%# if (pi['name'] and pi['profile_url']) %>
-          <div class="rides_show_profile_caption"><%= link_to pi['name'], pi['profile_url'] %>
-          <% if @user_is_driver %>
-            <br/>
-            (<%= link_to 'kick', kick_ride_path(:id => @ride, :passenger_id =>
-            pi['passenger_id']) %>)
-          <% end %>
+          <div class="rides_show_profile_caption">
+            <%# link_to pi['name'], pi['profile_url'] %>
+            <%= fb_name pi["user"] %>
+            <% if @user_is_driver %>
+              <br/>
+              (<%= link_to 'kick', kick_ride_path(:id => @ride, :passenger_id =>
+              pi['passenger_id']) %>)
+            <% end %>
           </div>
         <%# end %>
       </div>
@@ -107,16 +126,33 @@
   <% end %>
 </div>
 
-<% if @publish_ride_joined %>
-  <script>
-  Facebook.streamPublish("is going to <%=h @ride.dropoff %> at <%=h @ride_pickup_datetime_formatted %>",null,null,null,"Tell others about this ride");
-  </script>
-<% end %> 
-<% if @publish_ride_created%>
-  <script>
-  Facebook.streamPublish("is driving to <%=h @ride.dropoff %> at <%=h @ride_pickup_datetime_formatted %>",null,null,null,"Tell others about this ride");
-  </script>
-<% end %> 
- 
+<div id="rides_wall">
+  <p>
+    <b>Talk:</b>
+  </p>
+  <div id="rides_wall_post_entry_box">
+    <div id="rides_wall_post_entry_form">
+      <% form_for Comment.new do %>
+        <%= text_area_tag :body, nil, :class => 
+        "rides_wall_post_entry_form_text" %> <br/>
+        <%= hidden_field_tag :ride_id,@ride.id %>
+        <div id="rides_wall_fb_button_box">
+          <%= submit_tag 'Say it', :class => "rides_wall_fb_button" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% fb_wall do %>
+    <% for comment in @comments %>
+      <fb:wallpost uid="<%= comment.user.facebook_id %>" t="<%=
+      comment.created_at.to_i%>"> 
+       <%= h(comment.body) %>
+      </fb:wallpost>
+    <% end %>
+  <% end %>
+</div>
+
+
 
 

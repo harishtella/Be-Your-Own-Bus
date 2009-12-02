@@ -10,7 +10,8 @@
 
 <%= facebook_messages %>
 <p style="color: green">
-  Welcome <%= @first_name %>. 
+  Welcome <%= fb_name @current_user, :firstnameonly => true, :linked => false,
+  :useyou => false %>. 
 </p>
 
 <div id="home_choices">
@@ -18,7 +19,7 @@
     <%= link_to image_tag("bob.png"), :controller => "rides", :action => "index" %><br/>
     <div id="home_choices_view_link">
       <%= link_to 'View available Rides', {:controller => "rides", :action =>
-    "index"}, :id => "home_choices_view" %>
+    "index"}, :id => "home_choices_view", :class => "welcome_links" %>
     </div>
   </div>
 
@@ -29,7 +30,8 @@
   <div id="home_choices_create">
     <%= link_to image_tag("tom.png"), :controller => "rides", :action => "new" %><br/>
     <div id="home_choices_create_link">
-      <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => "home_choices_create" %>
+      <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => 
+      "home_choices_create", :class => "welcome_links" %>
     </div>
   </div>
 </div>

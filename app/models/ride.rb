@@ -1,6 +1,7 @@
 class Ride < ActiveRecord::Base
   has_and_belongs_to_many :passengers 
   belongs_to :driver 
+  has_many :comments, :class_name=>"Comment", :foreign_key=>:ride_id
 
   validates_presence_of :name
   validates_presence_of :pickup
@@ -15,6 +16,11 @@ class Ride < ActiveRecord::Base
   validate :pickup_datetime_cant_be_in_the_past, :on => :create
   validate :dropoff_datetime_cant_be_in_the_past, :on => :create
   validate :pickup_datetime_comes_before_dropoff_datetime, :on => :create
+
+  def comment_on_ride(user, body)
+    comments.create!(:user=>user, :body=>body)
+  end
+
 
   def pickup_datetime_cant_be_in_the_past
     

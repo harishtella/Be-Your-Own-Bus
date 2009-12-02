@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_one :driver 
   has_one :passenger
+  has_many :comments
 
   def self.for(facebook_id)
 

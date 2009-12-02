@@ -1,6 +1,6 @@
-a{color: #2E2E2E; }
-a:visited { color: #2E2E2E; }
-a:hover { text-decoration:underline }
+a.welcome_links {color: #2E2E2E; }
+a:visited.welcome_links { color: #2E2E2E; }
+a:hover.welcome_links { text-decoration:underline }
 h1{ font-size: 23px; }
 p{
   font-family: verdana, arial, helvetica, sans-serif;

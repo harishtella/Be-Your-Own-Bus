@@ -63,7 +63,7 @@ div#rides_show_driver_profile {
 }
 
 div#rides_show_info_box {
-  width: 250px;
+  width: 400px;
   float:left;
 }
 
@@ -90,6 +90,47 @@ div#rides_show_passengers {
 
 .rides_show_profile_caption {
   text-align: center;
+}
+
+div#rides_wall {
+  width:400px;
+  text-size: 14px;
+  clear:both;
+}
+
+div#rides_wall_post_entry_box {
+  background-color:#EEE; 
+  border: 1px solid #BBB;
+  border-top: 2px solid #999;
+}
+
+div#rides_wall_post_entry_form {
+  margin-left:8px;
+  margin-right:8px;
+  margin-top:7px;
+}
+
+.rides_wall_post_entry_form_text {
+  border:1px solid #BBB;
+  width: 97%;
+}
+
+
+div#rides_wall_fb_button_box { 
+  text-align: right;
+  margin-top: 4px; 
+  margin-bottom:7px;
+}
+
+.rides_wall_fb_button {
+  background-color: #3b5998;
+  border-color: #d8dfea rgb(14, 31, 91) rgb(14, 31, 91) rgb(216, 223, 234);
+  border-style: solid;
+  border-width: 1px;
+  color: #fff;
+  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+  font-size: 11px;
+  padding: 2px 18px;
 }
 
 /* divs for new/edit ride form */

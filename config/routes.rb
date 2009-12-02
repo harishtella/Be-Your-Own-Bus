@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "byob"
+  map.resources :comments
   map.resources :rides, :member => { :join => :get, :kick => :get, :leave =>
   :get} 
   map.resources :users, :member => { :login => :get} 
