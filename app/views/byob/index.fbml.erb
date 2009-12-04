@@ -5,14 +5,15 @@
 <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
 </div>
 
-<h1>BYOB</h1>
-<b>Be Your Own Bus</b>
-
 <%= facebook_messages %>
-<p style="color: green">
-  Welcome <%= fb_name @current_user, :firstnameonly => true, :linked => false,
-  :useyou => false %>. 
-</p>
+
+<h1>BYOB</h1>
+<h3>Be Your Own Bus</h3>
+<br/>
+<h3 style="color: green">
+  Welcome <%= fb_name @current_user, :firstnameonly => 
+  true, :linked => false, :useyou => false %>. 
+</h3>
 
 <div id="home_choices">
   <div id="home_choices_view">

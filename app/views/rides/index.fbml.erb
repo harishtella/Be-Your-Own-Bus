@@ -1,10 +1,22 @@
 <div id="rides_title">
-  <h1>Rides</h1>
+  <% if @view_past_rides %> 
+    <h1>Old Rides</h1>
+  <% else %>
+    <h1>Rides</h1>
+  <% end %>
 </div>
 
 <div id="rides_navigation">
-  <%= link_to 'New ride', new_ride_path %> |
-  <%= link_to 'Home', :controller => 'byob' %>
+  <%= link_to 'Home', :controller => 'byob' %> |
+
+  <% if @view_past_rides %> 
+    <%= link_to 'Current rides', rides_path %> |
+  <% else %>
+    <%= link_to 'Old rides', rides_path(:view_past_rides => true) %> |
+  <% end %>
+
+
+  <%= link_to 'New ride', new_ride_path %> 
   <hr/>
 </div>
 

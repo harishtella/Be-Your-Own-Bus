@@ -19,20 +19,22 @@
 </div>
 
 <div id="rides_navigation">
-  <% unless @user_is_a_passenger %>
-  <%= link_to 'Ride it', join_ride_path(@ride) %> |
-  <% end %>
-  <% if @user_is_a_passenger %>
-    <%= link_to 'Leave Ride', leave_ride_path(@ride) %> |
-  <% end %>
+  <%= link_to 'Home', :controller => "byob" %> |
+  <%= link_to 'Rides Listing', rides_path %> |
   <% if @user_is_driver %>
     <%= link_to 'Edit', edit_ride_path(@ride) %> |
   <% end %>
   <% if @user_is_driver %>
-  <%= link_to 'Delete', @ride, :confirm => 'Are you sure?', :method => :delete %> |
+    <%= link_to 'Delete', @ride, :confirm => 
+    'Are you sure?', :method => :delete %> |
   <% end %>
-  <%= link_to 'Rides Listing', rides_path %> |
-  <%= link_to 'Home', :controller => "byob" %>
+  <% unless @user_is_a_passenger %>
+    <%= link_to 'Ride it', join_ride_path(@ride) %> 
+  <% end %>
+  <% if @user_is_a_passenger %>
+    <%= link_to 'Leave Ride', leave_ride_path(@ride) %> 
+  <% end %>
+
   <hr/>
 </div>
 
@@ -137,7 +139,7 @@
         "rides_wall_post_entry_form_text" %> <br/>
         <%= hidden_field_tag :ride_id,@ride.id %>
         <div id="rides_wall_fb_button_box">
-          <%= submit_tag 'Say it', :class => "rides_wall_fb_button" %>
+          <%= submit_tag 'Say it', :class => "fb_button" %>
         </div>
       <% end %>
     </div>

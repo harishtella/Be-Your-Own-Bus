@@ -9,8 +9,8 @@
 </div>
 
 <div id="rides_navigation">
-  <%= link_to 'Rides Listing', rides_path %> |
-  <%= link_to 'Home', :controller => 'byob' %>
+  <%= link_to 'Home', :controller => 'byob' %> |
+  <%= link_to 'Rides Listing', rides_path %> 
   <hr/>
 </div>
 
@@ -52,13 +52,13 @@ escape_javascript(seats_available_prompt_text) %>"; </script>
     <%= f.label :pickup, "Starting Place" %><br />
     <%= f.text_field :pickup %>
   </p>
+
   <p>
     <%= f.label :pickup_datetime, "Starting Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
     {:element_name => "ride[pickup_datetime]", :current_datetime =>
     @pickup_datetime_preset} %> 
   </p>
-
   <% if @ride.errors.on(:pickup_datetime) %>
     <p class="datetime-errors">
     <% @ride.errors.on(:pickup_datetime).each do |e|%>
@@ -71,13 +71,13 @@ escape_javascript(seats_available_prompt_text) %>"; </script>
     <%= f.label :dropoff, "Ending Place" %><br />
     <%= f.text_field :dropoff %>
   </p>
+
   <p>
     <%= f.label :dropoff_datetime, "Ending Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
     {:element_name => "ride[dropoff_datetime]", :current_datetime =>
     @dropoff_datetime_preset} %> 
   </p>
-
   <% if @ride.errors.on(:dropoff_datetime) %>
     <p class="datetime-errors">
     <% @ride.errors.on(:dropoff_datetime).each do |e|%>
@@ -87,30 +87,28 @@ escape_javascript(seats_available_prompt_text) %>"; </script>
   <% end %>
 
   <div id="rides_form_about">
-    <p>
-      <%= f.label :about %><br />
-    </p>
+    <%= f.label :about, nil, :class => "input_label" %>
+    <br />
     <div id="rides_form_about_input">
-    <%= f.text_area :about, :rows => 10 %>
+      <%= f.text_area :about, :rows => 10 %>
     </div>
-    <div id="ride_form_about_detail_prompt">
+    <div id="rides_form_about_detail_prompt">
         Enter any additional info here.<br/>
-        For example: <br/> 
-        <ul>
-        <li>price details/flexibility </li>
-        <li>time/place flexibility </li>
-        <li>just guys or just girls </li>    
-        <li>amount of trunk space </li>
-        <li>type of car </li>
-        <li>music preference </li> 
-        <li>etc.</li>
+        <ul type="disc">
+        <li>  • price details/flexibility </li>
+        <li>  • time/place flexibility </li>
+        <li>  • just guys or just girls </li>    
+        <li>  • amount of trunk space </li>
+        <li>  • type of car </li>
+        <li>  • music preference </li> 
+        <li>  • etc.</li>
         </ul>
     </div>
   </div>
 
   <div id="rides_form_submit"> 
     <p>
-      <%= f.submit 'Create' %>
+      <%= f.submit 'Create', :class => "fb_button" %>
     </p>
   </div>
 <% end %>

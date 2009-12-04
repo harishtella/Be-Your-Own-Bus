@@ -279,6 +279,8 @@ function setDateTime(preId)
         if (ampm == "pm") { 
           hour_int = parseInt(hour) + 12;
           hour = hour_int.toString();
+        } else if ( parseInt(hour) == 12 ) {
+          hour = "00";
         }
 	} else {
 		var hour = "00";

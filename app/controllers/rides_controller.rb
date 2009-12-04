@@ -1,20 +1,33 @@
 require 'date' 
 require 'rubygems'
-require 'activesupport'
+require 'active_support'
+require 'ar-extensions'
 include ActionView::Helpers::UrlHelper 
 include ActionView::Helpers::TagHelper
 include Facebooker::Rails::Helpers
 
-class Time 
-  def round (seconds = 60) 
-    Time.at((self.to_f / seconds).round * seconds) 
-  end
-end
 
 class RidesController < ApplicationController # GET /rides # GET /rides.xml
   def index
-    @rides_from_campus = Ride.find(:all, :order => "pickup_datetime ASC", :conditions => { :tocampus => false})
-    @rides_to_campus = Ride.find(:all, :order => "pickup_datetime ASC", :conditions => { :tocampus => true})
+
+    @view_past_rides = params[:view_past_rides]
+    time_now = Time.zone.now.utc
+
+    if @view_past_rides
+      @rides_from_campus = Ride.find(:all, :order => 
+      "pickup_datetime ASC", :conditions => 
+      { :tocampus => false, :pickup_datetime_lt => time_now })
+      @rides_to_campus = Ride.find(:all, :order => 
+      "pickup_datetime ASC", :conditions => 
+      { :tocampus => true, :pickup_datetime_lt => time_now })
+    else 
+      @rides_from_campus = Ride.find(:all, :order => 
+      "pickup_datetime ASC", :conditions => 
+      { :tocampus => false, :pickup_datetime_gte => time_now})
+      @rides_to_campus = Ride.find(:all, :order => 
+      "pickup_datetime ASC", :conditions => 
+      { :tocampus => true, :pickup_datetime_gte => time_now})
+    end
 
     @rides_from_campus_with_dates = []
     @rides_to_campus_with_dates = []
@@ -57,6 +70,7 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     session[:publish_ride_joined] = nil
     session[:publish_ride_created] = nil
 
+    
     @ride = Ride.find(params[:id])
     @comments = @ride.comments
     @comments.sort! {|x,y| -1 * (x.created_at <=> y.created_at) }
@@ -96,7 +110,9 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     @ride = Ride.new
     @ride.tocampus = false
 
-    time_now = (Time.now.utc - 6.hours).round(5.minutes).utc
+    #round time to nearest minute divisible by 5
+    time_now = Time.zone.at((Time.zone.now.to_f / 5.minutes).round * 5.minutes)
+
     @pickup_datetime_preset = split_up_datetime_for_calender_form(time_now) 
     @dropoff_datetime_preset = split_up_datetime_for_calender_form(time_now) 
    

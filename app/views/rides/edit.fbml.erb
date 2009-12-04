@@ -1,13 +1,41 @@
 <%= stylesheet_link_tag 'calendar' %>
 <%= javascript_include_tag 'calendar' %>
+
 <%= render :partial => 'calendar' %>
 
-<% form_for(@ride) do |f| %>
-  <%= f.error_messages %>
 
+<% form_for(@ride) do |f| %>
+
+  <div id="rides_title">
+    <h1>
+      <%= f.label :name, "Editing Ride:", :class => 
+      "rides_form_edit_title_label" %>
+      <%= f.text_field :name, :size => 20, :class => 
+      "rides_form_edit_title_input" %>
+    </h1>
+  </div>
+
+  <div id="rides_navigation">
+  <%= link_to 'Home', :controller => 'byob' %> |
+  <%= link_to 'Rides Listing', rides_path %> |
+  <%= link_to 'Back', @ride %> 
+    <hr/>
+  </div>
+
+  <% unless @ride.errors.empty? %>
+    <div class="errorExplanation" id="errorExplanation">
+      <h2>Please fix a couple things with your ride.</h2>
+    </div>
+  <% end %>
+
+  
   <p>
-    <%= f.label :name, "Editing Ride: " %>
-    <%= f.text_field :name %>
+    <%= f.label :price, "Price: $ " %>
+    <%= f.text_field :price, :size => 3 %>
+  </p>
+  <p>
+    <%= f.label :seats_total, "Seats available for other riders: " %>
+    <%= f.text_field :seats_total, :size => 3 %>
   </p>
   <p>
     <%= f.label :tocampus, "Does this ride <u>leave</u> or <u>go to</u> campus?" %><br />
@@ -18,32 +46,47 @@
     <%= f.label :pickup, "Starting Place" %><br />
     <%= f.text_field :pickup %>
   </p>
+
   <p>
     <%= f.label :pickup_datetime, "Starting Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
     {:element_name => "ride[pickup_datetime]", :current_datetime =>
     @pickup_datetime_preset} %> 
   </p>
+  <% if @ride.errors.on(:pickup_datetime) %>
+    <p class="datetime-errors">
+    <% @ride.errors.on(:pickup_datetime).each do |e|%>
+      <span class="validation-error"><%= e %></span><br/>
+    <% end %>
+    </p>
+  <% end %>
+
   <p>
     <%= f.label :dropoff, "Ending Place" %><br />
     <%= f.text_field :dropoff %>
   </p>
+
   <p>
     <%= f.label :dropoff_datetime, "Ending Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
     {:element_name => "ride[dropoff_datetime]", :current_datetime =>
     @dropoff_datetime_preset} %> 
   </p>
+  <% if @ride.errors.on(:dropoff_datetime) %>
+    <p class="datetime-errors">
+    <% @ride.errors.on(:dropoff_datetime).each do |e|%>
+      <span class="validation-error"><%= e %></span><br/>
+    <% end %>
+    </p>
+  <% end %>
+
   <p>
     <%= f.label :about %><br />
     <%= f.text_area :about, :rows => 10 %>
   </p>
   <p>
-    <%= f.submit 'Update' %>
+    <%= f.submit 'Update', :class => "fb_button" %>
   </p>
 <% end %>
 
 
-<%= link_to 'Back', @ride %> |
-<%= link_to 'Rides Listing', rides_path %> |
-<%= link_to 'Home', :controller => 'byob' %>

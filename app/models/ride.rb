@@ -26,12 +26,12 @@ class Ride < ActiveRecord::Base
     
     errors.add(:pickup_datetime, 
     "can't be in the past unless you have a time machine") if 
-    pickup_datetime.to_datetime < (Time.now - 6.hours)
+    pickup_datetime.to_datetime < Time.zone.now
   end
   def dropoff_datetime_cant_be_in_the_past
     errors.add(:dropoff_datetime, 
     "can't be in the past unless you have a time machine") if 
-    dropoff_datetime.to_datetime < (Time.now - 6.hours)
+    dropoff_datetime.to_datetime < Time.zone.now 
   end
   def pickup_datetime_comes_before_dropoff_datetime
     if pickup_datetime > dropoff_datetime 
