@@ -9,7 +9,7 @@ set :domain, "harishtella.info"
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
 
-set :repository,  "harisht@harishtella.info:/home/harisht/git/byob.git"
+set :repository,  "#{user}@#{domain}:/home/harisht/git/byob.git"
 set :scm, "git"
 
 
@@ -17,6 +17,8 @@ set :use_sudo, false
 set :deploy_to, "/home/#{user}/#{application}"
 set :deploy_via, :checkout
 set :group_writable, false 
+
+default_run_options[:pty] = true
 
 role :app, domain 
 role :web, domain
