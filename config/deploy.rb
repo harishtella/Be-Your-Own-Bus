@@ -1,6 +1,7 @@
 set :application, "byob"
 set :user, "harisht"
 set :domain, "harishtella.info"
+set :ssh_options, {:forward_agent => true} 
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
@@ -11,7 +12,6 @@ set :domain, "harishtella.info"
 
 set :repository,  "#{user}@#{domain}:/home/harisht/git/byob.git"
 set :scm, "git"
-
 
 set :use_sudo, false
 set :deploy_to, "/home/#{user}/#{application}"

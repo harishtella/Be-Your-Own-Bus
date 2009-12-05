@@ -12,7 +12,7 @@ namespace :deploy do
 
   after "deploy:symlink" do
     run "rm -f ~/public_html;ln -s #{deploy_to}/current/public ~/public_html"
-    run "cp ~/environment.rb #{deploy_to}/current/config/environment.rb"
+    run "cp ~/byob_deploy_files/environment.rb #{deploy_to}/current/config/environment.rb"
   end
 end
 
