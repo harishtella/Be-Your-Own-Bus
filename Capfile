@@ -10,7 +10,7 @@ namespace :deploy do
     run "touch #{deploy_to}/current/tmp/restart.txt"
   end
 
-  after :symlink, :roles => :app do
+  after :symlink do
     run "rm -f ~/public_html;ln -s #{deploy_to}/current/public ~/public_html"
     run "cp ~/environoment.rb #{deploy_to}/current/config/environoment.rb"
   end
