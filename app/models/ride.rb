@@ -23,7 +23,6 @@ class Ride < ActiveRecord::Base
 
 
   def pickup_datetime_cant_be_in_the_past
-    
     errors.add(:pickup_datetime, 
     "can't be in the past unless you have a time machine") if 
     pickup_datetime.to_datetime < Time.zone.now

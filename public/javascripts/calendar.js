@@ -276,10 +276,10 @@ function setDateTime(preId)
 	if(document.getElementById('Hour_' + preId)) {
 		var hour	= document.getElementById('Hour_' + preId).getValue();
         var ampm    = document.getElementById('Ampm_' + preId).getValue();
-        if (ampm == "pm") { 
+        if ((ampm == "pm") && (hour != "12")) { 
           hour_int = parseInt(hour) + 12;
           hour = hour_int.toString();
-        } else if ( parseInt(hour) == 12 ) {
+        } else if ((ampm == "am") && (hour == "12")) { 
           hour = "00";
         }
 	} else {
