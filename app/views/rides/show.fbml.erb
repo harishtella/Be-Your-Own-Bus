@@ -12,6 +12,7 @@
   </script>
 <% end %> 
 
+
 <div id="rides_title">
   <h1>
     <%=h @ride.name %>
@@ -29,12 +30,17 @@
     'Are you sure?', :method => :delete %> |
   <% end %>
   <% unless @user_is_a_passenger %>
-    <%= link_to 'Ride it', join_ride_path(@ride) %> 
+    <%= link_to 'Ride it', join_ride_path(@ride) %> |
   <% end %>
   <% if @user_is_a_passenger %>
-    <%= link_to 'Leave Ride', leave_ride_path(@ride) %> 
+    <%= link_to 'Leave Ride', leave_ride_path(@ride) %> | 
   <% end %>
-
+  <% unless @user_is_a_watcher or @user_is_a_passenger %>
+    <%= link_to 'Watch it', watch_ride_path(@ride) %> 
+  <% end %>
+  <% if @user_is_a_watcher %>
+    <%= link_to 'Stop Watching', unwatch_ride_path(@ride) %> 
+  <% end %>
   <hr/>
 </div>
 
@@ -42,16 +48,10 @@
 <div id="rides_show_driver_box">
   <p><b>Driver:</b></p>
   <div id="rides_show_driver_profile">
-    <%# if (@driver_info['pic'] and @driver_info['profile_url']) %>
-      <%# link_to image_tag(@driver_info['pic']), @driver_info['profile_url'] %> 
-      <%= fb_profile_pic @driver, :size => "normal" %>
-    <%# end %>
-    <%# if (@driver_info['name'] and @driver_info['profile_url']) %>
+      <%= fb_profile_pic @ride.driver, :size => "normal" %>
       <div class="rides_show_profile_caption">
-        <%# link_to @driver_info['name'], @driver_info['profile_url'] %>
-        <%= fb_name @driver %> 
+        <%= fb_name @ride.driver %> 
       </div>
-    <%# end %>
   </div>
 </div>
 
@@ -59,70 +59,73 @@
 <div id="rides_show_info_box">
   <p><b>Details:</b></p>
   <div id="rides_show_info">
-  <p>
-    Price: $<%= @ride.price %>
-    <br/>
-    Seats: <%= @ride.seats_available %>/<%= @ride.seats_total %> available
-  </p>
-
-  <p>
-    <% if @ride.tocampus %>
-      This ride is <u>going to the UIUC campus</u>
-    <% else %>
-      This ride is <u>leaving the UIUC campus</u>
-    <% end %>
-  </p>
-
-  <p>
-    <b>Starting info:</b>
-    <br/>
-    Leaving from <%=h @ride.pickup %> <br/> 
-    <%=h @ride_pickup_datetime_formatted %>.
-    <br/>
-    <b>Ending info:</b>
-    <br/>
-    Going to <%=h @ride.dropoff %> <br/>
-    <%=h @ride_dropoff_datetime_formatted %>.
-    <br/>
-  </p>
-
-  <% unless @ride.about == "" %> 
     <p>
-      <b>More info:</b>
+      Price: $<%= @ride.price %>
       <br/>
-      <%=h @ride.about %>
+      Seats: <%= @ride.seats_total - @ride.seats_filled %>/<%= @ride.seats_total %> available
     </p>
-  <% end %>
+
+    <p>
+      <% if @ride.tocampus %>
+        This ride is <u>going to the UIUC campus</u>
+      <% else %>
+        This ride is <u>leaving the UIUC campus</u>
+      <% end %>
+    </p>
+
+    <p>
+      <b>Starting info:</b>
+      <br/>
+      Leaving from <%=h @ride.pickup %> <br/> 
+      <%=h @ride_pickup_datetime_formatted %>.
+      <br/>
+      <b>Ending info:</b>
+      <br/>
+      Going to <%=h @ride.dropoff %> <br/>
+      <%=h @ride_dropoff_datetime_formatted %>.
+      <br/>
+    </p>
+
+    <% unless @ride.about == "" %> 
+      <p>
+        <b>More info:</b>
+        <br/>
+        <%=h @ride.about %>
+      </p>
+    <% end %>
+
+    <% unless @ride.watchers.empty? %>
+      <p>
+      <b>Watchers:</b>
+      <br/>
+      <%= @ride.watchers.map { |watcher| fb_name(watcher) }.join(", ") %>
+      </p>
+    <% end %>
+      
   </div>
 </div>
 
 
 <div id="rides_show_passengers">
-  <% if @passengers_info.empty? %>
+  <% if @ride.riders.empty? %>
     <p>And no one else is along for the ride.</p>
   <% else  %>
     <p>
       <b>Along for the ride:</b>
     </p>
-    <% @passengers_info.each do |pi| %>
+    <% @ride.riders.each do |rider| %>
       <div class="rides_show_passenger_profile">
         <div class="rides_show_passenger_pic"> 
-          <%# if (pi['pic'] and pi['profile_url']) %>
-            <%# link_to image_tag(pi['pic']), pi['profile_url'] %>
-            <%= fb_profile_pic pi["user"], :size => "small" %>
-          <%# end %>
+            <%= fb_profile_pic rider, :size => "small" %>
         </div>
-        <%# if (pi['name'] and pi['profile_url']) %>
           <div class="rides_show_profile_caption">
-            <%# link_to pi['name'], pi['profile_url'] %>
-            <%= fb_name pi["user"] %>
+            <%= fb_name rider %>
             <% if @user_is_driver %>
               <br/>
-              (<%= link_to 'kick', kick_ride_path(:id => @ride, :passenger_id =>
-              pi['passenger_id']) %>)
+              (<%= link_to 'kick', kick_ride_path(:id => @ride, :rider_id =>
+              rider.id) %>)
             <% end %>
           </div>
-        <%# end %>
       </div>
     <% end %>
   <% end %>

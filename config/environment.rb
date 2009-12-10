@@ -41,4 +41,21 @@ Rails::Initializer.run do |config|
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
+
+  config.after_initialize do 
+    ActionView::Base.field_error_proc = Proc.new do |html_tag, instance| 
+      if (html_tag.slice(1,5) == "label")
+        html_tag
+      else 
+        if instance.error_message.kind_of?(Array)  
+          %(#{html_tag}&nbsp;<span class="validation-error">  
+            #{instance.error_message.join(',')}</span>)  
+        else  
+          %(#{html_tag}&nbsp;<span class="validation-error">  
+          #{instance.error_message}</span>)  
+        end 
+      end
+    end 
+  end
+
 end

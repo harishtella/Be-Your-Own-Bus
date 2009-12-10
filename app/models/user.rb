@@ -1,7 +1,10 @@
 class User < ActiveRecord::Base
-  has_one :driver 
-  has_one :passenger
   has_many :comments
+  has_many :rides_driving, :class_name => "Ride" 
+  has_many :riderships 
+  has_many :rides_riding, :source => :ride, :through => :riderships 
+  has_many :watcherships 
+  has_many :rides_watched, :source => :ride, :through => :watcherships 
 
   def self.for(facebook_id)
 
@@ -10,8 +13,6 @@ class User < ActiveRecord::Base
     else
       new_user = User.new()
       new_user.facebook_id = facebook_id
-      new_user.driver = Driver.create()
-      new_user.passenger = Passenger.create()
       new_user.save()
       return new_user
     end

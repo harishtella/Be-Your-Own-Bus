@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091120215119) do
+ActiveRecord::Schema.define(:version => 20091209214401) do
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
@@ -35,24 +35,18 @@ ActiveRecord::Schema.define(:version => 20091120215119) do
 
   add_index "facebook_templates", ["template_name"], :name => "index_facebook_templates_on_template_name", :unique => true
 
-  create_table "passengers", :force => true do |t|
+  create_table "riderships", :force => true do |t|
+    t.integer  "ride_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "passengers_rides", :id => false, :force => true do |t|
-    t.integer "passenger_id", :null => false
-    t.integer "ride_id",      :null => false
-  end
-
-  add_index "passengers_rides", ["passenger_id", "ride_id"], :name => "index_passengers_rides_on_passenger_id_and_ride_id", :unique => true
-
   create_table "rides", :force => true do |t|
     t.string   "name"
     t.string   "pickup"
     t.string   "dropoff"
-    t.boolean  "tocampus"
+    t.boolean  "tocampus",         :default => false
     t.text     "about"
     t.integer  "driver_id"
     t.datetime "created_at"
@@ -61,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20091120215119) do
     t.datetime "dropoff_datetime"
     t.string   "price"
     t.integer  "seats_total"
-    t.integer  "seats_available"
+    t.integer  "seats_filled",     :default => 0
   end
 
   create_table "sessions", :force => true do |t|
@@ -79,6 +73,13 @@ ActiveRecord::Schema.define(:version => 20091120215119) do
     t.datetime "updated_at"
     t.integer  "facebook_id", :limit => 20, :null => false
     t.string   "session_key"
+  end
+
+  create_table "watcherships", :force => true do |t|
+    t.integer  "ride_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

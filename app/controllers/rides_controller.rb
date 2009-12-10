@@ -7,9 +7,8 @@ include ActionView::Helpers::TagHelper
 include Facebooker::Rails::Helpers
 
 
-class RidesController < ApplicationController # GET /rides # GET /rides.xml
+class RidesController < ApplicationController 
   def index
-
     @view_past_rides = params[:view_past_rides]
     time_now = Time.zone.now.utc
 
@@ -31,28 +30,19 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
 
     @rides_from_campus_with_dates = []
     @rides_to_campus_with_dates = []
-
     index_format = "%b %e @ %l:%M %p"
   
     @rides_from_campus.each do |ride| 
       current_ride = {} 
       current_ride[:ride_obj] = ride 
-      if ride.pickup_datetime
-        current_ride[:date] = ride.pickup_datetime.strftime(index_format)
-      else 
-        current_ride[:date] = ""
-      end
+      current_ride[:date] = ride.pickup_datetime.strftime(index_format)
       @rides_from_campus_with_dates << current_ride
     end
 
     @rides_to_campus.each do |ride| 
       current_ride = {} 
       current_ride[:ride_obj] = ride 
-      if ride.pickup_datetime
-        current_ride[:date] = ride.pickup_datetime.strftime(index_format)
-      else 
-        current_ride[:date] = ""
-      end
+      current_ride[:date] = ride.pickup_datetime.strftime(index_format)
       @rides_to_campus_with_dates << current_ride
     end
 
@@ -61,15 +51,11 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     end
   end
 
-  # GET /rides/1
-  # GET /rides/1.xml
   def show
-
     @publish_ride_joined = session[:publish_ride_joined]
     @publish_ride_created = session[:publish_ride_created]
     session[:publish_ride_joined] = nil
     session[:publish_ride_created] = nil
-
     
     @ride = Ride.find(params[:id])
     @comments = @ride.comments
@@ -78,44 +64,13 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     datetime_format_string = "%l:%M %p on %A, %b %e, %Y"
     @ride_dropoff_datetime_formatted = @ride.dropoff_datetime.strftime(datetime_format_string)  
     @ride_pickup_datetime_formatted = @ride.pickup_datetime.strftime(datetime_format_string)
-    
-    @driver = @ride.driver.user 
-    #@driver_fb = Facebooker::User.new(@driver.facebook_id.to_s)
-    #@driver_info = {"name" => @driver_fb.name,
-    #"pic" => @driver_fb.pic_big,
-    #"profile_url" => @driver_fb.profile_url}
 
-    @user_is_driver = (@driver.facebook_id == current_user.facebook_id)  
-    @user_is_a_passenger = @ride.passengers.collect {|x|
-    (x.user.facebook_id == current_user.facebook_id) }.inject{|a,b| a or b} 
+    @user_is_driver = (@ride.driver == @current_user)  
+    @user_is_a_passenger = @ride.riders.collect {|x|
+    x == @current_user }.inject{|a,b| a or b} 
+    @user_is_a_watcher = @ride.watchers.collect {|x|
+    x == @current_user }.inject{|a,b| a or b} 
 
-    @passengers_info = @ride.passengers.collect do |x| 
-      passenger_user = x.user
-      #@passenger_fb = Facebooker::User.new(@passenger.facebook_id.to_s) 
-      { "user" => passenger_user,
-        #"name" => @passenger_fb.name,
-        #"pic" => @passenger_fb.pic,
-        #"profile_url" => @passenger_fb.profile_url,
-        "passenger_id" => x.id}
-    end
-
-    respond_to do |format|
-      format.fbml 
-    end
-  end
-
-  # GET /rides/new
-  # GET /rides/new.xml
-  def new
-    @ride = Ride.new
-    @ride.tocampus = false
-
-    #round time to nearest minute divisible by 5
-    time_now = Time.zone.at((Time.zone.now.to_f / 5.minutes).round * 5.minutes)
-
-    @pickup_datetime_preset = split_up_datetime_for_calender_form(time_now) 
-    @dropoff_datetime_preset = split_up_datetime_for_calender_form(time_now) 
-   
     respond_to do |format|
       format.fbml 
     end
@@ -143,36 +98,29 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     return split_datetime 
   end
 
+  def new
+    @ride = Ride.new
 
-  # GET /rides/1/edit
+    #round time to nearest minute divisible by 5
+    time_now = Time.zone.at((Time.zone.now.to_f / 5.minutes).round * 5.minutes)
+
+    @pickup_datetime_preset = split_up_datetime_for_calender_form(time_now) 
+    @dropoff_datetime_preset = split_up_datetime_for_calender_form(time_now) 
+   
+    respond_to do |format|
+      format.fbml 
+    end
+  end
+
   def edit
     @ride = Ride.find(params[:id])
     @pickup_datetime_preset = split_up_datetime_for_calender_form(@ride.pickup_datetime)
     @dropoff_datetime_preset = split_up_datetime_for_calender_form(@ride.dropoff_datetime)
-
   end
 
-  # POST /rides
-  # POST /rides.xml
   def create
-
-    ActionView::Base.field_error_proc = Proc.new do |html_tag, instance| 
-      if (html_tag.slice(1,5) == "label")
-        html_tag
-      else 
-        if instance.error_message.kind_of?(Array)  
-          %(#{html_tag}&nbsp;<span class="validation-error">  
-            #{instance.error_message.join(',')}</span>)  
-        else  
-          %(#{html_tag}&nbsp;<span class="validation-error">  
-          #{instance.error_message}</span>)  
-        end 
-      end
-    end 
-
     @ride = Ride.new(params[:ride])
-    @ride.driver = @current_user.driver 
-    @ride.seats_available = @ride.seats_total
+    @ride.driver = @current_user
 
     respond_to do |format|
       if @ride.save
@@ -185,122 +133,15 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
         split_up_datetime_for_calender_form(@ride.pickup_datetime) 
         @dropoff_datetime_preset =
         split_up_datetime_for_calender_form(@ride.dropoff_datetime) 
-        @price_preset = if @ride.price then @ride.price.to_s else nil end 
-        @seats_total_preset = if (@ride.seats_total and @ride.seats_total != 0) then @ride.seats_total.to_s else
-        nil end 
+        @price_preset = @ride.price.to_s  
+        @seats_total_preset = @ride.seats_total.to_s 
         format.fbml { render :action => "new" }
       end
     end
   end
 
-  def join 
-    @ride = Ride.find(params[:id])
-    if (@ride.seats_available > 0) 
-      @ride.seats_available -= 1
-      @ride.passengers << @current_user.passenger
-      @ride.save
-      session[:publish_ride_joined] = true
-   
-      notification_message = ""
-      notification_message += fb_name(@current_user)  
-      notification_message += " joined "
-      notification_message += fb_name(@ride.driver.user,{:possessive => true})
-      notification_message += " ride, " 
-      notification_message += link_to(@ride.name, @ride) + "."
-
-
-      notification_recipients = get_ride_users_exclude(@ride, @current_user)
-      unless notification_recipients == [] 
-        RidePublisher.deliver_ride_notification(notification_recipients, notification_message)
-      end
-    else 
-      flash[:error] = "Sorry, there are no seats left on this ride"
-    end
-
-    respond_to do |format|
-        format.fbml { redirect_to(@ride) }
-    end
-  end
-
-  def kick
-    @ride = Ride.find(params[:id])
-    @passenger = @ride.passengers.find(params[:passenger_id])
-
-    notification_message = ""
-    notification_message += fb_name(@current_user)  
-    notification_message += " kicked "
-    notification_message += fb_name(@passenger.user)
-    notification_message += " off " + fb_pronoun(@current_user,{:possessive =>
-    true}) + " ride, "
-    notification_message += link_to(@ride.name, @ride) + "."
-
-    notification_recipients = get_ride_users_exclude(@ride, @current_user)
-    unless notification_recipients == [] 
-      RidePublisher.deliver_ride_notification(notification_recipients,
-      notification_message)
-    end
-
-    @ride.passengers.delete(@passenger)
-    @ride.seats_available += 1
-    @ride.save
-    
-    respond_to do |format|
-        format.fbml { redirect_to(@ride) }
-    end
-  end
-
-  def get_ride_users_exclude(ride, excluded_user)
-    recievers = [] 
-    unless ride.driver.user == excluded_user 
-      recievers << ride.driver.user
-    end
-
-    ride.passengers.each do |p| 
-      unless p.user == excluded_user
-        recievers << p.user 
-      end
-    end
-
-    return recievers 
-  end
-  
-
-  def leave
-    @user_id = @current_user.facebook_id 
-    @ride = Ride.find(params[:id])
-    @passengers = @ride.passengers.select { |p| p.user.facebook_id == @user_id } 
-    
-    unless @passengers.empty?  
-      @ride.passengers.delete(@passengers.pop)
-      @ride.seats_available += 1
-      @ride.save
-
- 
-      notification_message = ""
-      notification_message += fb_name(@current_user)  
-      notification_message += " left the ride, "
-      notification_message += link_to(@ride.name, @ride) + "."
-
-
-      notification_recipients = get_ride_users_exclude(@ride, @current_user)
-      unless notification_recipients == [] 
-        RidePublisher.deliver_ride_notification(notification_recipients,
-        notification_message)
-      end
-    end
-
-    respond_to do |format|
-        format.fbml { redirect_to(@ride) }
-    end
-  end
-
-
-  # PUT /rides/1
-  # PUT /rides/1.xml
   def update
     @ride = Ride.find(params[:id])
-    @ride.driver = @current_user.driver 
-
 
     respond_to do |format|
       if @ride.update_attributes(params[:ride])
@@ -316,14 +157,139 @@ class RidesController < ApplicationController # GET /rides # GET /rides.xml
     end
   end
 
-  # DELETE /rides/1
-  # DELETE /rides/1.xml
   def destroy
     @ride = Ride.find(params[:id])
     @ride.destroy
 
     respond_to do |format|
       format.fbml { redirect_to(rides_url) }
+    end
+  end
+
+  def get_ride_people_excluding(ride, excluded_user)
+    ride_people = [] 
+    unless ride.driver == excluded_user 
+      ride_people << ride.driver
+    end
+
+    ride.riders.each do |r| 
+      unless r == excluded_user
+        ride_people << r 
+      end
+    end
+
+    return ride_people
+  end
+
+  def join 
+    @ride = Ride.find(params[:id], :include => [:driver, :riders, :watchers])
+
+    seats_available = (@ride.seats_total - @ride.seats_filled) > 0
+
+    if (seats_available) 
+      @ride.seats_filled += 1
+      @ride.riders << @current_user
+      if @ride.watchers.exists?(@current_user)
+        @ride.watchers.delete(@current_user)
+      end
+      @ride.save
+      session[:publish_ride_joined] = true
+      flash[:notice] = "You have joined this ride." 
+   
+      notification_message = ""
+      notification_message += fb_name(@current_user)  
+      notification_message += " joined "
+      notification_message += fb_name(@ride.driver,{:possessive => true})
+      notification_message += " ride, " 
+      notification_message += link_to(@ride.name, @ride) + "."
+
+      notification_recipients = get_ride_people_excluding(@ride, @current_user)
+      unless notification_recipients.empty?
+        RidePublisher.deliver_ride_notification(notification_recipients, 
+        notification_message)
+      end
+    else 
+      flash[:error] = "Sorry, there are no seats left on this ride."
+    end
+
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
+    end
+  end
+
+  def kick
+    @ride = Ride.find(params[:id], :include => [:driver, :riders, :watchers])
+    @rider = @ride.riders.find(params[:rider_id])
+
+    @ride.riders.delete(@rider)
+    @ride.seats_filled -= 1
+    @ride.save
+    flash[:notice] = "You have kicked a rider off this ride." 
+
+    notification_message = ""
+    notification_message += fb_name(@current_user)  
+    notification_message += " kicked "
+    notification_message += fb_name(@rider)
+    notification_message += " off " + fb_pronoun(@current_user,{:possessive =>
+    true}) + " ride, "
+    notification_message += link_to(@ride.name, @ride) + "."
+
+    notification_recipients = get_ride_people_excluding(@ride, @current_user)
+    unless notification_recipients.empty? 
+      RidePublisher.deliver_ride_notification(notification_recipients,
+      notification_message)
+    end
+
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
+    end
+  end
+ 
+  def leave
+    @ride = Ride.find(params[:id], :include => [:driver, :riders, :watchers])
+    
+    unless @ride.nil?  
+      @ride.riders.delete(@current_user)
+      @ride.seats_filled -= 1
+      @ride.save
+      flash[:notice] = "You have left this ride." 
+
+      notification_message = ""
+      notification_message += fb_name(@current_user)  
+      notification_message += " left the ride, "
+      notification_message += link_to(@ride.name, @ride) + "."
+
+      notification_recipients = get_ride_people_excluding(@ride, @current_user)
+      unless notification_recipients.empty?
+        RidePublisher.deliver_ride_notification(notification_recipients,
+        notification_message)
+      end
+    end
+
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
+    end
+  end
+
+  def watch
+    @ride = Ride.find(params[:id])
+    @ride.watchers << @current_user
+    @ride.save
+    flash[:notice] = "You are now watching this ride." 
+   
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
+    end
+  end
+
+  def unwatch
+    @ride = Ride.find(params[:id])
+    @ride.watchers.delete(@current_user)
+    @ride.save
+    flash[:notice] = "You have stopped watching this ride." 
+
+    respond_to do |format|
+        format.fbml { redirect_to(@ride) }
     end
   end
 end

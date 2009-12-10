@@ -9,6 +9,10 @@ p{
   line-height: 18px;
 }
 
+div#facebook_messages {
+    margin-bottom: 5px;
+}
+
 div#home_choices {
     margin-top: 35px;
 	position:relative;

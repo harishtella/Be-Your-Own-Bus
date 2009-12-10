@@ -11,8 +11,9 @@ p, ol, td {
   line-height: 18px;
 }
 
-ul, li { 
-
+.info_label {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
 }
 
 .input_label{
@@ -34,6 +35,10 @@ a:hover { text-decoration:underline }
   font-weight: bolder;
   font-size: 16px;
   padding: 2px 18px;
+}
+
+div#facebook_messages {
+    margin-bottom: 5px;
 }
 
 /* divs common to ride pages */
