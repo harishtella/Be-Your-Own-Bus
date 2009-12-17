@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091209214401) do
+ActiveRecord::Schema.define(:version => 20091215021437) do
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
@@ -20,12 +20,6 @@ ActiveRecord::Schema.define(:version => 20091209214401) do
   end
 
   add_index "comments", ["ride_id", "created_at"], :name => "index_comments_on_ride_id_and_created_at"
-
-  create_table "drivers", :force => true do |t|
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "facebook_templates", :force => true do |t|
     t.string "template_name", :null => false
@@ -44,18 +38,18 @@ ActiveRecord::Schema.define(:version => 20091209214401) do
 
   create_table "rides", :force => true do |t|
     t.string   "name"
-    t.string   "pickup"
-    t.string   "dropoff"
-    t.boolean  "tocampus",         :default => false
+    t.boolean  "tocampus",       :default => false
     t.text     "about"
     t.integer  "driver_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "pickup_datetime"
-    t.datetime "dropoff_datetime"
     t.string   "price"
     t.integer  "seats_total"
-    t.integer  "seats_filled",     :default => 0
+    t.integer  "seats_filled",   :default => 0
+    t.boolean  "return_ride",    :default => false
+    t.datetime "start_datetime"
+    t.string   "place"
+    t.integer  "origin_ride_id"
   end
 
   create_table "sessions", :force => true do |t|

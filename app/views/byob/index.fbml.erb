@@ -17,6 +17,49 @@
   true, :linked => false, :useyou => false %>. 
 </h3>
 
+<div id="current_user_rides">
+  <table>
+    <tr>
+      <td><b><i>Ride Name</i></b></td>
+      <td><b><i>Going to</i></b></td>
+      <td><b><i>Leaving on</i></b></td>
+    </tr>
+
+    <tr>
+      <td>Driving:</td>
+    </tr>
+    <% @rides_driving.each do |ride| %>
+    <tr>
+      <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+      <td><%=h ride[:ride_obj].place %></td>
+      <td><%=h ride[:date] %></td>
+    </tr>
+    <% end %>
+
+    <tr>
+      <td>Riding:</td>
+    </tr>
+    <% @rides_riding.each do |ride| %>
+    <tr>
+      <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+      <td><%=h ride[:ride_obj].place %></td>
+      <td><%=h ride[:date] %></td>
+    </tr>
+    <% end %>
+
+    <tr>
+      <td>Watching:</td>
+    </tr>
+    <% @rides_watching.each do |ride| %>
+    <tr>
+      <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+      <td><%=h ride[:ride_obj].place %></td>
+      <td><%=h ride[:date] %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+
 <div id="home_choices">
   <div id="home_choices_view">
     <%= link_to image_tag("bob.png"), :controller => "rides", :action => "index" %><br/>

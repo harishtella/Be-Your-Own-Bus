@@ -11,7 +11,8 @@ SyncEnumerator.new( (1..12), month_names).each do |option|
 end %>
 <% month_attrib = {:class => "monthselect", 
   :id => "Month_" + element_name,
-  :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');"} %>
+  :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');",
+  :disabled => disabled} %>
 <%= select_tag("Month_" + element_name, month_options, month_attrib) %> 
 
 <% day_options = ""
@@ -21,7 +22,8 @@ end %>
 end %>
 <% day_attrib = {:class => "dayselect", 
   :id => "Day_" + element_name,
-  :onchange => "setDateTime('#{element_name}');"} %>
+  :onchange => "setDateTime('#{element_name}');",
+  :disabled => disabled} %>
 <%= select_tag("Day_" + element_name, day_options, day_attrib) %> 
 
 <% year_options = ""
@@ -31,13 +33,17 @@ end %>
 end %>
 <% year_attrib = {:class => "yearselect", 
   :id => "Year_" + element_name,
-  :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');"} %>
+  :onchange => "setDateTime('#{element_name}');
+  setDaysValue('#{element_name}');",
+  :disabled => disabled} %>
 <%= select_tag("Year_" + element_name, year_options, year_attrib) %> 
 
 <%= image_tag("calendar.gif", 
-  {:onclick => "var Cal = startCal(true); Cal.show(this,'#{element_name}',
-  'divCalender'); return true;", :id => "StartDate", :style => "cursor:
-  pointer", :class => "calendarImg"}) %>
+  {:onclick => 
+  "var Cal = startCal(true); Cal.show(this,'#{element_name}',
+  'divCalender'); return true;", :id => "StartCal" + element_name, 
+  :style => "cursor: pointer", :class => "calendarImg", 
+  :disabled => disabled}) %>
 
  at 
 
@@ -48,7 +54,8 @@ end %>
 end %>
 <% hour_attrib = {:class => "hourselect", 
   :id => "Hour_" + element_name,
-  :onchange => "setDateTime('#{element_name}');"} %>
+  :onchange => "setDateTime('#{element_name}');",
+  :disabled => disabled} %>
 <%= select_tag("Hour_" + element_name, hour_options, hour_attrib) %> 
 :
 <% minute_options = ""
@@ -59,7 +66,8 @@ end %>
 end %>
 <% minute_attrib = {:class => "minuteselect", 
   :id => "Minute_" + element_name,
-  :onchange => "setDateTime('#{element_name}');"} %>
+  :onchange => "setDateTime('#{element_name}');",
+  :disabled => disabled} %>
 <%= select_tag("Minute_" + element_name, minute_options, minute_attrib) %> 
 
 <% ampm_strings = ["pm", "am"]
@@ -69,7 +77,8 @@ end %>
     if (k == current_datetime[:ampm]) then " selected " else "" end + ">#{k}</option>"
 end %>
 <% ampm_attrib = { :onchange => "setDateTime('#{element_name}');",
- :id => "Ampm_" + element_name} %>
+ :id => "Ampm_" + element_name, 
+ :disabled => disabled} %>
 <%= select_tag("Ampm_" + element_name, ampm_options, ampm_attrib) %> 
 
 

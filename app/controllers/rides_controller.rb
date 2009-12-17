@@ -14,18 +14,18 @@ class RidesController < ApplicationController
 
     if @view_past_rides
       @rides_from_campus = Ride.find(:all, :order => 
-      "pickup_datetime ASC", :conditions => 
-      { :tocampus => false, :pickup_datetime_lt => time_now })
+      "start_datetime ASC", :conditions => 
+      { :tocampus => false, :start_datetime_lt => time_now })
       @rides_to_campus = Ride.find(:all, :order => 
-      "pickup_datetime ASC", :conditions => 
-      { :tocampus => true, :pickup_datetime_lt => time_now })
+      "start_datetime ASC", :conditions => 
+      { :tocampus => true, :start_datetime_lt => time_now })
     else 
       @rides_from_campus = Ride.find(:all, :order => 
-      "pickup_datetime ASC", :conditions => 
-      { :tocampus => false, :pickup_datetime_gte => time_now})
+      "start_datetime ASC", :conditions => 
+      { :tocampus => false, :start_datetime_gte => time_now})
       @rides_to_campus = Ride.find(:all, :order => 
-      "pickup_datetime ASC", :conditions => 
-      { :tocampus => true, :pickup_datetime_gte => time_now})
+      "start_datetime ASC", :conditions => 
+      { :tocampus => true, :start_datetime_gte => time_now})
     end
 
     @rides_from_campus_with_dates = []
@@ -35,14 +35,14 @@ class RidesController < ApplicationController
     @rides_from_campus.each do |ride| 
       current_ride = {} 
       current_ride[:ride_obj] = ride 
-      current_ride[:date] = ride.pickup_datetime.strftime(index_format)
+      current_ride[:date] = ride.start_datetime.strftime(index_format)
       @rides_from_campus_with_dates << current_ride
     end
 
     @rides_to_campus.each do |ride| 
       current_ride = {} 
       current_ride[:ride_obj] = ride 
-      current_ride[:date] = ride.pickup_datetime.strftime(index_format)
+      current_ride[:date] = ride.start_datetime.strftime(index_format)
       @rides_to_campus_with_dates << current_ride
     end
 
@@ -62,8 +62,7 @@ class RidesController < ApplicationController
     @comments.sort! {|x,y| -1 * (x.created_at <=> y.created_at) }
 
     datetime_format_string = "%l:%M %p on %A, %b %e, %Y"
-    @ride_dropoff_datetime_formatted = @ride.dropoff_datetime.strftime(datetime_format_string)  
-    @ride_pickup_datetime_formatted = @ride.pickup_datetime.strftime(datetime_format_string)
+    @ride_start_datetime_formatted = @ride.start_datetime.strftime(datetime_format_string)
 
     @user_is_driver = (@ride.driver == @current_user)  
     @user_is_a_passenger = @ride.riders.collect {|x|
@@ -100,12 +99,14 @@ class RidesController < ApplicationController
 
   def new
     @ride = Ride.new
+    @return_ride = Ride.new
 
     #round time to nearest minute divisible by 5
     time_now = Time.zone.at((Time.zone.now.to_f / 5.minutes).round * 5.minutes)
 
-    @pickup_datetime_preset = split_up_datetime_for_calender_form(time_now) 
-    @dropoff_datetime_preset = split_up_datetime_for_calender_form(time_now) 
+    @start_datetime_preset = split_up_datetime_for_calender_form(time_now) 
+    @return_datetime_preset = split_up_datetime_for_calender_form(time_now) 
+    @return_ride_desired = false
    
     respond_to do |format|
       format.fbml 
@@ -114,13 +115,31 @@ class RidesController < ApplicationController
 
   def edit
     @ride = Ride.find(params[:id])
-    @pickup_datetime_preset = split_up_datetime_for_calender_form(@ride.pickup_datetime)
-    @dropoff_datetime_preset = split_up_datetime_for_calender_form(@ride.dropoff_datetime)
+    @start_datetime_preset = split_up_datetime_for_calender_form(@ride.start_datetime)
   end
 
   def create
     @ride = Ride.new(params[:ride])
     @ride.driver = @current_user
+
+    @return_ride = Ride.new()    
+    @ride.return_ride = @return_ride
+    @return_ride.origin_ride = @ride
+
+    @return_ride_desired = params[:return_ride_desired].to_i.nonzero?
+
+    if @return_ride_desired
+      @return_ride.name = @ride.name + " (return ride)" 
+      @return_ride.driver = @ride.driver
+      @return_ride.price = @ride.price
+      @return_ride.seats_total = @ride.seats_total
+      @return_ride.tocampus = (not @ride.tocampus)
+      @return_ride.place = @ride.place
+      @return_ride.start_datetime = params[:return_ride][:start_datetime]
+      @return_ride.about = @ride.about
+    else 
+      @ride.return_ride = nil
+    end
 
     respond_to do |format|
       if @ride.save
@@ -129,10 +148,14 @@ class RidesController < ApplicationController
         flash[:notice] = 'Ride was successfully created.'
         format.fbml { redirect_to(@ride) }
       else
-        @pickup_datetime_preset =
-        split_up_datetime_for_calender_form(@ride.pickup_datetime) 
-        @dropoff_datetime_preset =
-        split_up_datetime_for_calender_form(@ride.dropoff_datetime) 
+        @start_datetime_preset =
+        split_up_datetime_for_calender_form(@ride.start_datetime) 
+        if @return_ride_desired
+          @return_datetime_preset =
+          split_up_datetime_for_calender_form(@return_ride.start_datetime) 
+        else
+          @return_datetime_preset = @start_datetime_preset
+        end
         @price_preset = @ride.price.to_s  
         @seats_total_preset = @ride.seats_total.to_s 
         format.fbml { render :action => "new" }
@@ -148,10 +171,8 @@ class RidesController < ApplicationController
         flash[:notice] = 'Ride was successfully updated.'
         format.fbml { redirect_to(@ride) }
       else
-        @pickup_datetime_preset =
-        split_up_datetime_for_calender_form(@ride.pickup_datetime) 
-        @dropoff_datetime_preset =
-        split_up_datetime_for_calender_form(@ride.dropoff_datetime) 
+        @start_datetime_preset =
+        split_up_datetime_for_calender_form(@ride.start_datetime) 
         format.fbml { render :action => "edit" }
       end
     end

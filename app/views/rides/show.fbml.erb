@@ -60,6 +60,16 @@
   <p><b>Details:</b></p>
   <div id="rides_show_info">
     <p>
+      <% if @ride.return_ride %>
+        Has a <%= link_to 'return ride', @ride.return_ride %>
+        <br/>
+      <% end %>
+      <% if @ride.origin_ride %>
+        Return ride for <%= link_to @ride.origin_ride.name, 
+        @ride.origin_ride %>
+        <br/>
+      <% end %>
+
       Price: $<%= @ride.price %>
       <br/>
       Seats: <%= @ride.seats_total - @ride.seats_filled %>/<%= @ride.seats_total %> available
@@ -74,16 +84,12 @@
     </p>
 
     <p>
-      <b>Starting info:</b>
-      <br/>
-      Leaving from <%=h @ride.pickup %> <br/> 
-      <%=h @ride_pickup_datetime_formatted %>.
-      <br/>
-      <b>Ending info:</b>
-      <br/>
-      Going to <%=h @ride.dropoff %> <br/>
-      <%=h @ride_dropoff_datetime_formatted %>.
-      <br/>
+      <% if @ride.tocampus %>
+        Leaving from <%=h @ride.place %> <br/>
+      <% else %>
+        Going to <%=h @ride.place %> <br/>
+      <% end %>
+      at <%=h @ride_start_datetime_formatted %>.
     </p>
 
     <% unless @ride.about == "" %> 

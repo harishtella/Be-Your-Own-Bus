@@ -1,10 +1,10 @@
 class User < ActiveRecord::Base
   has_many :comments
-  has_many :rides_driving, :class_name => "Ride" 
+  has_many :rides_driving, :class_name => "Ride", :foreign_key => :driver_id 
   has_many :riderships 
   has_many :rides_riding, :source => :ride, :through => :riderships 
   has_many :watcherships 
-  has_many :rides_watched, :source => :ride, :through => :watcherships 
+  has_many :rides_watching, :source => :ride, :through => :watcherships 
 
   def self.for(facebook_id)
 

@@ -9,6 +9,10 @@ p{
   line-height: 18px;
 }
 
+div#current_user_rides td {
+    font-size: 16px;
+}
+
 div#facebook_messages {
     margin-bottom: 5px;
 }

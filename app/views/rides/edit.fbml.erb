@@ -43,38 +43,20 @@
     <%= f.radio_button :tocampus, true %>Goes to campus
   </p>
   <p>
-    <%= f.label :pickup, "Starting Place" %><br />
-    <%= f.text_field :pickup %>
+    <%= f.label :place, "Place" %><br />
+    <%= f.text_field :place %>
   </p>
 
   <p>
-    <%= f.label :pickup_datetime, "Starting Date/Time" %><br />
+    <%= f.label :start_datetime, "Starting Date/Time" %><br />
     <%= render :partial => 'calendar_form', :locals => 
-    {:element_name => "ride[pickup_datetime]", :current_datetime =>
-    @pickup_datetime_preset} %> 
+    {:element_name => "ride[start_datetime]", 
+    :current_datetime => @start_datetime_preset,
+    :disabled => false } %> 
   </p>
-  <% if @ride.errors.on(:pickup_datetime) %>
+  <% if @ride.errors.on(:start_datetime) %>
     <p class="datetime-errors">
-    <% @ride.errors.on(:pickup_datetime).each do |e|%>
-      <span class="validation-error"><%= e %></span><br/>
-    <% end %>
-    </p>
-  <% end %>
-
-  <p>
-    <%= f.label :dropoff, "Ending Place" %><br />
-    <%= f.text_field :dropoff %>
-  </p>
-
-  <p>
-    <%= f.label :dropoff_datetime, "Ending Date/Time" %><br />
-    <%= render :partial => 'calendar_form', :locals => 
-    {:element_name => "ride[dropoff_datetime]", :current_datetime =>
-    @dropoff_datetime_preset} %> 
-  </p>
-  <% if @ride.errors.on(:dropoff_datetime) %>
-    <p class="datetime-errors">
-    <% @ride.errors.on(:dropoff_datetime).each do |e|%>
+    <% @ride.errors.on(:start_datetime).each do |e|%>
       <span class="validation-error"><%= e %></span><br/>
     <% end %>
     </p>

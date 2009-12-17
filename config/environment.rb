@@ -56,6 +56,15 @@ Rails::Initializer.run do |config|
         end 
       end
     end 
-  end
 
+    class String 
+      def to_b
+        if self == "true" 
+          true
+        else
+          false
+        end
+      end
+    end
+  end
 end

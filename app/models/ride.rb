@@ -5,16 +5,17 @@ class Ride < ActiveRecord::Base
   has_many :riders, :source => :user, :through => :riderships 
   has_many :watcherships 
   has_many :watchers, :source => :user, :through => :watcherships 
-
+  belongs_to :origin_ride, :class_name => "Ride"
+  has_one :return_ride, :class_name => "Ride", :foreign_key => 
+  :origin_ride_id
+  
   validates_presence_of :name
-  validates_presence_of :pickup
-  validates_presence_of :dropoff
-  validates_presence_of :pickup_datetime
-  validates_presence_of :dropoff_datetime
-    
-  validates_length_of :name, :maximum=>30
-  validates_length_of :pickup, :maximum=>30
-  validates_length_of :dropoff, :maximum=>30
+  validates_presence_of :place
+  validates_presence_of :start_datetime
+  validates_associated :return_ride 
+  
+  validates_length_of :name, :maximum=>30, :unless=> "origin_ride" 
+  validates_length_of :place, :maximum=>30
 
   validates_numericality_of :price, :greater_than_or_equal_to => 0,
   :message => "include a valid price"
@@ -23,13 +24,20 @@ class Ride < ActiveRecord::Base
   :greater_than_or_equal_to => 1, :message => 
   "must have at least one passenger"
 
-  validate :pickup_datetime_cant_be_in_the_past
-  validate :dropoff_datetime_cant_be_in_the_past
-  validate :pickup_datetime_comes_before_dropoff_datetime
+  validate :start_datetime_cant_be_in_the_past
   validate :seats_total_gte_seats_taken 
+  validate :start_datetime_comes_before_return_datetime, 
+  :unless => "return_ride.nil?"
+  validate :start_datetime_comes_after_origin_datetime,
+  :unless => "origin_ride.nil?"
+
 
   def comment_on_ride(user, body)
     comments.create!(:user=>user, :body=>body)
+  end
+
+  def return_ride?
+    return_ride == true
   end
 
   def seats_total_gte_seats_taken 
@@ -38,23 +46,22 @@ class Ride < ActiveRecord::Base
     seats_total < seats_filled 
   end
 
-  def pickup_datetime_cant_be_in_the_past
-    errors.add(:pickup_datetime, 
+  def start_datetime_cant_be_in_the_past
+    errors.add(:start_datetime, 
     "can't be in the past unless you have a time machine") if 
-    pickup_datetime.to_datetime < Time.zone.now
+    start_datetime.to_datetime < Time.zone.now
   end
   
-  def dropoff_datetime_cant_be_in_the_past
-    errors.add(:dropoff_datetime, 
-    "can't be in the past unless you have a time machine") if 
-    dropoff_datetime.to_datetime < Time.zone.now 
+  def start_datetime_comes_before_return_datetime
+    errors.add(:start_datetime, 
+    "can't be after return ride's starting time") if 
+    start_datetime.to_datetime > return_ride.start_datetime.to_datetime
   end
 
-  def pickup_datetime_comes_before_dropoff_datetime
-    if pickup_datetime > dropoff_datetime 
-      errors.add(:pickup_datetime, "can't be after ending date/time")   
-      errors.add(:dropoff_datetime, "can't be before starting date/time")
-    end
+  def start_datetime_comes_after_origin_datetime
+    errors.add(:start_datetime, 
+    "can't be before origin ride's starting time") if 
+    start_datetime.to_datetime < origin_ride.start_datetime.to_datetime
   end
 
 end
