@@ -12,6 +12,7 @@ set :ssh_options, {:forward_agent => true}
 
 set :repository,  "#{user}@#{domain}:/home/harisht/git/byob.git"
 set :scm, "git"
+set :branch, "new_layout_beta"
 
 set :use_sudo, false
 set :deploy_to, "/home/#{user}/#{application}"
