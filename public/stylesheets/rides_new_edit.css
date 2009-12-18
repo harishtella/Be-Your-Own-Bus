@@ -1,0 +1,46 @@
+/* divs for new/edit ride form */
+div#r_new_bg{
+  background-repeat: no-repeat;
+  height:900px;
+  width:100%;
+  top:0px;
+  visibility: visible;
+  left: 0px;
+}
+
+div#r_new_nav{
+  position: absolute;
+  left: 120px;
+  top: 157px;
+}
+
+div#r_new_content{
+  position: absolute;
+  left: 109px;
+  top: 209px;
+}
+
+div#rides_form_about_input {
+  float:left;
+  width:auto;
+}
+
+div#rides_form_about_detail_prompt {
+  margin-left: 20px;
+  font-size:14px;
+  width:250px;
+  float:left;
+}
+
+div#rides_form_submit {
+  padding-top:1px;
+  clear:left;
+}
+
+.rides_form_edit_title_input {
+  font-size:20px;
+}
+
+.rides_form_edit_title_label {
+  color:black;
+}

@@ -2,9 +2,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "byob"
   map.resources :comments
+  map.index_select 'rides/index_select', :controller => 'rides',
+  :action=>'index_select'
   map.resources :rides, :member => { :join => :get, :kick => :get, :leave =>
   :get, :watch => :get, :unwatch => :get} 
   map.resources :users, :member => { :login => :get} 
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

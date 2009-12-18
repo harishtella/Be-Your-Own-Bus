@@ -1,0 +1,23 @@
+/* divs for ride listing page */
+div#r_index_bg{
+  background-repeat: no-repeat;
+  height:900px;
+  width:100%;
+  top:0px;
+  visibility: visible;
+  left: 0px;
+}
+
+div#r_index_nav{
+  position: absolute;
+  left: 120px;
+  top: 157px;
+}
+
+div#r_index_content{
+  position: absolute;
+  left: 112px;
+  top: 303px;
+}
+
+

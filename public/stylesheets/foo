@@ -1,0 +1,44 @@
+
+style="background-image: url(<%= image_path("new/byobhome.jpg") %>) ;"
+
+AnimationMentor.com
+
+/*
+div#background_temp{
+  background-image: url('http://www.bootsnall.org/tt/tidbits/images/france/Eiffel_Tower_Paris_France.jpg');
+  background-repeat: repeat;
+  height:[u]100%[/u];
+  width:100%;
+  position:absolute;
+  top:0px;
+  visibility: visible;
+  left: 0px;
+}
+*/
+
+div#whole_content{
+  background: #ebebeb;
+}
+
+<div id="home_choices">
+  <div id="home_choices_view">
+    <%= link_to image_tag("bob.png"), :controller => "rides", :action => "index" %><br/>
+    <div id="home_choices_view_link">
+      <%= link_to 'View available Rides', {:controller => "rides", :action =>
+    "index"}, :id => "home_choices_view", :class => "welcome_links" %>
+    </div>
+  </div>
+
+  <div id="home_choices_byoblogo">
+  <%= image_tag "byob.png" %>
+  </div>
+
+  <div id="home_choices_create">
+    <%= link_to image_tag("tom.png"), :controller => "rides", :action => "new" %><br/>
+    <div id="home_choices_create_link">
+      <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => 
+      "home_choices_create", :class => "welcome_links" %>
+    </div>
+  </div>
+</div>
+

@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'rides' %>
+<%= stylesheet_link_tag 'rides_show' %>
 
 <%# if @publish_ride_joined %>
 <% if false %>
@@ -12,158 +14,166 @@
   </script>
 <% end %> 
 
+<div id="r_show_bg" style="background-image: 
+url(<%= image_path("new/rideprofile.jpg") %>) ;">
 
-<div id="rides_title">
-  <h1>
-    <%=h @ride.name %>
-  </h1>
-</div>
-
-<div id="rides_navigation">
-  <%= link_to 'Home', :controller => "byob" %> |
-  <%= link_to 'Rides Listing', rides_path %> |
-  <% if @user_is_driver %>
-    <%= link_to 'Edit', edit_ride_path(@ride) %> |
-  <% end %>
-  <% if @user_is_driver %>
-    <%= link_to 'Delete', @ride, :confirm => 
-    'Are you sure?', :method => :delete %> |
-  <% end %>
-  <% unless @user_is_a_passenger %>
-    <%= link_to 'Ride it', join_ride_path(@ride) %> |
-  <% end %>
-  <% if @user_is_a_passenger %>
-    <%= link_to 'Leave Ride', leave_ride_path(@ride) %> | 
-  <% end %>
-  <% unless @user_is_a_watcher or @user_is_a_passenger %>
-    <%= link_to 'Watch it', watch_ride_path(@ride) %> 
-  <% end %>
-  <% if @user_is_a_watcher %>
-    <%= link_to 'Stop Watching', unwatch_ride_path(@ride) %> 
-  <% end %>
-  <hr/>
-</div>
-
-
-<div id="rides_show_driver_box">
-  <p><b>Driver:</b></p>
-  <div id="rides_show_driver_profile">
-      <%= fb_profile_pic @ride.driver, :size => "normal" %>
-      <div class="rides_show_profile_caption">
-        <%= fb_name @ride.driver %> 
-      </div>
+  <div id="r_show_nav">
+    <%= link_to 'Home', 
+    {:controller => "byob", :action =>"index"}%>
+    <%= link_to 'Rides Listing', index_select_path %>
+    <%= link_to 'Create a Ride', new_ride_path %>
   </div>
-</div>
 
+  <div id="r_show_content">
+    <div id="rides_title">
+      <h1>
+        <%=h @ride.name %>
+      </h1>
+    </div>
 
-<div id="rides_show_info_box">
-  <p><b>Details:</b></p>
-  <div id="rides_show_info">
-    <p>
-      <% if @ride.return_ride %>
-        Has a <%= link_to 'return ride', @ride.return_ride %>
-        <br/>
+    <div id="rides_mini_nav">
+      <% if @user_is_driver %>
+        <%= link_to 'Edit', edit_ride_path(@ride) %> |
       <% end %>
-      <% if @ride.origin_ride %>
-        Return ride for <%= link_to @ride.origin_ride.name, 
-        @ride.origin_ride %>
-        <br/>
+      <% if @user_is_driver %>
+        <%= link_to 'Delete', @ride, :confirm => 
+        'Are you sure?', :method => :delete %> |
       <% end %>
-
-      Price: $<%= @ride.price %>
-      <br/>
-      Seats: <%= @ride.seats_total - @ride.seats_filled %>/<%= @ride.seats_total %> available
-    </p>
-
-    <p>
-      <% if @ride.tocampus %>
-        This ride is <u>going to the UIUC campus</u>
-      <% else %>
-        This ride is <u>leaving the UIUC campus</u>
+      <% unless @user_is_a_passenger %>
+        <%= link_to 'Ride it', join_ride_path(@ride) %> |
       <% end %>
-    </p>
-
-    <p>
-      <% if @ride.tocampus %>
-        Leaving from <%=h @ride.place %> <br/>
-      <% else %>
-        Going to <%=h @ride.place %> <br/>
+      <% if @user_is_a_passenger %>
+        <%= link_to 'Leave Ride', leave_ride_path(@ride) %> | 
       <% end %>
-      at <%=h @ride_start_datetime_formatted %>.
-    </p>
-
-    <% unless @ride.about == "" %> 
-      <p>
-        <b>More info:</b>
-        <br/>
-        <%=h @ride.about %>
-      </p>
-    <% end %>
-
-    <% unless @ride.watchers.empty? %>
-      <p>
-      <b>Watchers:</b>
-      <br/>
-      <%= @ride.watchers.map { |watcher| fb_name(watcher) }.join(", ") %>
-      </p>
-    <% end %>
-      
-  </div>
-</div>
+      <% unless @user_is_a_watcher or @user_is_a_passenger %>
+        <%= link_to 'Watch it', watch_ride_path(@ride) %> 
+      <% end %>
+      <% if @user_is_a_watcher %>
+        <%= link_to 'Stop Watching', unwatch_ride_path(@ride) %> 
+      <% end %>
+      <hr/>
+    </div>
 
 
-<div id="rides_show_passengers">
-  <% if @ride.riders.empty? %>
-    <p>And no one else is along for the ride.</p>
-  <% else  %>
-    <p>
-      <b>Along for the ride:</b>
-    </p>
-    <% @ride.riders.each do |rider| %>
-      <div class="rides_show_passenger_profile">
-        <div class="rides_show_passenger_pic"> 
-            <%= fb_profile_pic rider, :size => "small" %>
-        </div>
+    <div id="rides_show_driver_box">
+      <p><b>Driver:</b></p>
+      <div id="rides_show_driver_profile">
+          <%= fb_profile_pic @ride.driver, :size => "normal" %>
           <div class="rides_show_profile_caption">
-            <%= fb_name rider %>
-            <% if @user_is_driver %>
-              <br/>
-              (<%= link_to 'kick', kick_ride_path(:id => @ride, :rider_id =>
-              rider.id) %>)
-            <% end %>
+            <%= fb_name @ride.driver %> 
           </div>
       </div>
-    <% end %>
-  <% end %>
-</div>
+    </div>
 
-<div id="rides_wall">
-  <p>
-    <b>Talk:</b>
-  </p>
-  <div id="rides_wall_post_entry_box">
-    <div id="rides_wall_post_entry_form">
-      <% form_for Comment.new do %>
-        <%= text_area_tag :body, nil, :class => 
-        "rides_wall_post_entry_form_text" %> <br/>
-        <%= hidden_field_tag :ride_id,@ride.id %>
-        <div id="rides_wall_fb_button_box">
-          <%= submit_tag 'Say it', :class => "fb_button" %>
+
+    <div id="rides_show_info_box">
+      <p><b>Details:</b></p>
+      <div id="rides_show_info">
+        <p>
+          <% if @ride.return_ride %>
+            Has a <%= link_to 'return ride', @ride.return_ride %>
+            <br/>
+          <% end %>
+          <% if @ride.origin_ride %>
+            Return ride for <%= link_to @ride.origin_ride.name, 
+            @ride.origin_ride %>
+            <br/>
+          <% end %>
+
+          Price: $<%= @ride.price %>
+          <br/>
+          Seats: <%= @ride.seats_total - @ride.seats_filled %>/<%= @ride.seats_total %> available
+        </p>
+
+        <p>
+          <% if @ride.tocampus %>
+            This ride is <u>going to the UIUC campus</u>
+          <% else %>
+            This ride is <u>leaving the UIUC campus</u>
+          <% end %>
+        </p>
+
+        <p>
+          <% if @ride.tocampus %>
+            Leaving from <%=h @ride.place %> <br/>
+          <% else %>
+            Going to <%=h @ride.place %> <br/>
+          <% end %>
+          at <%=h @ride_start_datetime_formatted %>.
+        </p>
+
+        <% unless @ride.about == "" %> 
+          <p>
+            <b>More info:</b>
+            <br/>
+            <%=h @ride.about %>
+          </p>
+        <% end %>
+
+        <% unless @ride.watchers.empty? %>
+          <p>
+          <b>Watchers:</b>
+          <br/>
+          <%= @ride.watchers.map { |watcher| fb_name(watcher) }.join(", ") %>
+          </p>
+        <% end %>
+          
+      </div>
+    </div>
+
+
+    <div id="rides_show_passengers">
+      <% if @ride.riders.empty? %>
+        <p>And no one else is along for the ride.</p>
+      <% else  %>
+        <p>
+          <b>Along for the ride:</b>
+        </p>
+        <% @ride.riders.each do |rider| %>
+          <div class="rides_show_passenger_profile">
+            <div class="rides_show_passenger_pic"> 
+                <%= fb_profile_pic rider, :size => "small" %>
+            </div>
+              <div class="rides_show_profile_caption">
+                <%= fb_name rider %>
+                <% if @user_is_driver %>
+                  <br/>
+                  (<%= link_to 'kick', kick_ride_path(:id => @ride, :rider_id =>
+                  rider.id) %>)
+                <% end %>
+              </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div id="rides_wall">
+      <p>
+        <b>Talk:</b>
+      </p>
+      <div id="rides_wall_post_entry_box">
+        <div id="rides_wall_post_entry_form">
+          <% form_for Comment.new do %>
+            <%= text_area_tag :body, nil, :class => 
+            "rides_wall_post_entry_form_text" %> <br/>
+            <%= hidden_field_tag :ride_id,@ride.id %>
+            <div id="rides_wall_fb_button_box">
+              <%= submit_tag 'Say it', :class => "fb_button" %>
+            </div>
+          <% end %>
         </div>
+      </div>
+
+      <% fb_wall do %>
+        <% for comment in @comments %>
+          <fb:wallpost uid="<%= comment.user.facebook_id %>" t="<%=
+          comment.created_at.to_i%>"> 
+           <%= h(comment.body) %>
+          </fb:wallpost>
+        <% end %>
       <% end %>
     </div>
   </div>
-
-  <% fb_wall do %>
-    <% for comment in @comments %>
-      <fb:wallpost uid="<%= comment.user.facebook_id %>" t="<%=
-      comment.created_at.to_i%>"> 
-       <%= h(comment.body) %>
-      </fb:wallpost>
-    <% end %>
-  <% end %>
 </div>
-
-
 
 

@@ -1,60 +1,42 @@
-<div id="rides_title">
-  <% if @view_past_rides %> 
-    <h1>Old Rides</h1>
-  <% else %>
-    <h1>Rides</h1>
-  <% end %>
+<%= stylesheet_link_tag 'rides' %>
+<%= stylesheet_link_tag 'rides_index' %>
+
+<div id="r_index_bg" style="background-image: 
+url(<%= image_path(@background_image) %>) ;">
+
+  <div id="r_index_nav">
+    <%= link_to 'Home', 
+    {:controller => "byob", :action =>"index"}%>
+    <%= link_to 'Rides Listing', index_select_path %>
+    <%= link_to 'Create a Ride', new_ride_path %>
+  </div>
+
+  <div id="r_index_content">
+    <div id="rides_mini_nav">
+      <% if @view_past_rides %> 
+        <%= link_to 'View Current rides', rides_path %> 
+      <% else %>
+        <%= link_to 'View Old rides', 
+        rides_path(:view_past_rides => true) %> 
+      <% end %>
+      <hr/>
+    </div>
+
+    <table>
+      <tr>
+        <td><b><i>Ride Name</i></b></td>
+        <td><b><i>Going to</i></b></td>
+        <td><b><i>Leaving on</i></b></td>
+      </tr>
+
+      <% @rides_with_dates.each do |ride| %>
+      <tr>
+        <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+        <td><%=h ride[:ride_obj].place %></td>
+        <td><%=h ride[:date] %></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
 </div>
-
-<div id="rides_navigation">
-  <%= link_to 'Home', :controller => 'byob' %> |
-  <% if @view_past_rides %> 
-    <%= link_to 'Current rides', rides_path %> |
-  <% else %>
-    <%= link_to 'Old rides', rides_path(:view_past_rides => true) %> |
-  <% end %>
-  <%= link_to 'New ride', new_ride_path %> 
-  <hr/>
-</div>
-
-<div id="rides_listing_fromcampus_col">
-<div id="rides_listing_fromcampus_title">Leaving from campus</div>
-<%= image_tag("leaving.jpg") %> 
-<table>
-  <tr>
-    <td><b><i>Ride Name</i></b></td>
-    <td><b><i>Going to</i></b></td>
-    <td><b><i>Leaving on</i></b></td>
-  </tr>
-
-  <% @rides_from_campus_with_dates.each do |ride| %>
-  <tr>
-    <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-    <td><%=h ride[:ride_obj].place %></td>
-    <td><%=h ride[:date] %></td>
-  </tr>
-  <% end %>
-</table>
-</div>
-
-<div id="rides_listing_tocampus_col">
-<div id="rides_listing_tocampus_title">Going to campus</div>
-<%= image_tag("coming.jpg") %> 
-<table>
-  <tr>
-    <td><b><i>Ride Name</i></b></td>
-    <td><b><i>Coming from</i></b></td>
-    <td><b><i>Leaving on</i></b></td>
-  </tr>
-
-  <% @rides_to_campus_with_dates.each do |ride| %>
-  <tr>
-    <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-    <td><%=h ride[:ride_obj].place %></td>
-    <td><%=h ride[:date] %></td>
-  </tr>
-  <% end %>
-</table>
-</div>
-
 

@@ -8,7 +8,7 @@ include Facebooker::Rails::Helpers
 
 
 class RidesController < ApplicationController 
-  def index
+  def old_index
     @view_past_rides = params[:view_past_rides]
     time_now = Time.zone.now.utc
 
@@ -44,6 +44,58 @@ class RidesController < ApplicationController
       current_ride[:ride_obj] = ride 
       current_ride[:date] = ride.start_datetime.strftime(index_format)
       @rides_to_campus_with_dates << current_ride
+    end
+
+    respond_to do |format|
+      format.fbml 
+    end
+  end
+
+  def index
+    @view_past_rides = params[:view_past_rides]
+    @tocampus = params[:tocampus] 
+    time_now = Time.zone.now.utc
+    index_format = "%b %e @ %l:%M %p"
+    @rides_with_dates = []
+
+    if @tocampus 
+      @background_image = "new/ridelistingto.jpg"
+    else 
+      @background_image = "new/ridelistingfrom.jpg"
+    end
+
+    if @tocampus
+      if @view_past_rides
+        @rides = Ride.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => true, :start_datetime_lt => time_now })
+      else 
+        @rides = Ride.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => true, :start_datetime_gte => time_now})
+      end
+      @rides.each do |ride| 
+        current_ride = {} 
+        current_ride[:ride_obj] = ride 
+        current_ride[:date] = ride.start_datetime.strftime(index_format)
+        @rides_with_dates << current_ride
+      end
+    else 
+      if @view_past_rides
+        @rides = Ride.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => false, :start_datetime_lt => time_now })
+      else 
+        @rides = Ride.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => false, :start_datetime_gte => time_now})
+      end
+      @rides.each do |ride| 
+        current_ride = {} 
+        current_ride[:ride_obj] = ride 
+        current_ride[:date] = ride.start_datetime.strftime(index_format)
+        @rides_with_dates << current_ride
+      end
     end
 
     respond_to do |format|

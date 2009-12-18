@@ -9,6 +9,27 @@ p{
   line-height: 18px;
 }
 
+div#byob_home_bg{
+  background-repeat: no-repeat;
+  height:900px;
+  width:100%;
+  top:0px;
+  visibility: visible;
+  left: 0px;
+}
+
+div#byob_home_nav{
+  position: absolute;
+  left: 120px;
+  top: 151px;
+}
+
+div#byob_home_content{
+  position: absolute;
+  left: 120px;
+  top: 276px;
+}
+
 div#current_user_rides td {
     font-size: 16px;
 }

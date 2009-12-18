@@ -1,83 +1,74 @@
 <fb:fbml>
 <%= stylesheet_link_tag 'byob_style' %>
 
-<div style="display: none;">
-<fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
-</div>
+<div id="byob_home_bg" style="background-image: 
+url(<%= image_path("new/byobhome.jpg") %>) ;">
 
-<div id="facebook_messages">
-  <%= facebook_messages %>
-</div>
+  <div id="byob_home_nav">
+    <%= link_to 'Home', 
+    {:controller => "byob", :action =>"index"}%>
+    <%= link_to 'Rides Listing', index_select_path %>
+    <%= link_to 'Create a Ride', new_ride_path %>
+  </div>
 
-<h1>BYOB</h1>
-<h3>Be Your Own Bus</h3>
-<br/>
-<h3 style="color: green">
-  Welcome <%= fb_name @current_user, :firstnameonly => 
-  true, :linked => false, :useyou => false %>. 
-</h3>
-
-<div id="current_user_rides">
-  <table>
-    <tr>
-      <td><b><i>Ride Name</i></b></td>
-      <td><b><i>Going to</i></b></td>
-      <td><b><i>Leaving on</i></b></td>
-    </tr>
-
-    <tr>
-      <td>Driving:</td>
-    </tr>
-    <% @rides_driving.each do |ride| %>
-    <tr>
-      <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-      <td><%=h ride[:ride_obj].place %></td>
-      <td><%=h ride[:date] %></td>
-    </tr>
-    <% end %>
-
-    <tr>
-      <td>Riding:</td>
-    </tr>
-    <% @rides_riding.each do |ride| %>
-    <tr>
-      <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-      <td><%=h ride[:ride_obj].place %></td>
-      <td><%=h ride[:date] %></td>
-    </tr>
-    <% end %>
-
-    <tr>
-      <td>Watching:</td>
-    </tr>
-    <% @rides_watching.each do |ride| %>
-    <tr>
-      <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-      <td><%=h ride[:ride_obj].place %></td>
-      <td><%=h ride[:date] %></td>
-    </tr>
-    <% end %>
-  </table>
-</div>
-
-<div id="home_choices">
-  <div id="home_choices_view">
-    <%= link_to image_tag("bob.png"), :controller => "rides", :action => "index" %><br/>
-    <div id="home_choices_view_link">
-      <%= link_to 'View available Rides', {:controller => "rides", :action =>
-    "index"}, :id => "home_choices_view", :class => "welcome_links" %>
+  <div id="byob_home_content">
+    <div style="display: none;">
+    <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
     </div>
-  </div>
 
-  <div id="home_choices_byoblogo">
-  <%= image_tag "byob.png" %>
-  </div>
+    <div id="facebook_messages">
+      <%= facebook_messages %>
+    </div>
 
-  <div id="home_choices_create">
-    <%= link_to image_tag("tom.png"), :controller => "rides", :action => "new" %><br/>
-    <div id="home_choices_create_link">
-      <%= link_to 'Create a Ride', {:controller => "rides", :action => "new"}, :id => 
-      "home_choices_create", :class => "welcome_links" %>
+    <h1>BYOB</h1>
+    <h3>Be Your Own Bus</h3>
+    <br/>
+    <h3 style="color: green">
+      Welcome <%= fb_name @current_user, :firstnameonly => 
+      true, :linked => false, :useyou => false %>. 
+    </h3>
+
+    <div id="current_user_rides">
+      <table>
+        <tr>
+          <td><b><i>Ride Name</i></b></td>
+          <td><b><i>Going to</i></b></td>
+          <td><b><i>Leaving on</i></b></td>
+        </tr>
+
+        <tr>
+          <td>Driving:</td>
+        </tr>
+        <% @rides_driving.each do |ride| %>
+        <tr>
+          <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+          <td><%=h ride[:ride_obj].place %></td>
+          <td><%=h ride[:date] %></td>
+        </tr>
+        <% end %>
+
+        <tr>
+          <td>Riding:</td>
+        </tr>
+        <% @rides_riding.each do |ride| %>
+        <tr>
+          <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+          <td><%=h ride[:ride_obj].place %></td>
+          <td><%=h ride[:date] %></td>
+        </tr>
+        <% end %>
+
+        <tr>
+          <td>Watching:</td>
+        </tr>
+        <% @rides_watching.each do |ride| %>
+        <tr>
+          <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
+          <td><%=h ride[:ride_obj].place %></td>
+          <td><%=h ride[:date] %></td>
+        </tr>
+        <% end %>
+      </table>
     </div>
   </div>
 </div>
