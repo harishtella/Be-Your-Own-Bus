@@ -20,6 +20,12 @@ div#r_show_content{
   top: 237px;
 }
 
+
+div#r_show_fb_msg {
+    margin-bottom: 5px;
+    width: 582px;
+}
+
 div#rides_show_driver_box {
   width: 200px;
   float:left;

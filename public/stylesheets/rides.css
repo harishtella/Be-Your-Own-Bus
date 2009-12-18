@@ -37,10 +37,6 @@ a:hover { text-decoration:underline }
   padding: 2px 18px;
 }
 
-div#facebook_messages {
-    margin-bottom: 5px;
-}
-
 /* divs common to ride pages */
 div#rides_title {
   margin-bottom: 4px;
