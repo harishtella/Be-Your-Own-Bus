@@ -1,3 +1,4 @@
+<%= stylesheet_link_tag 'rides_new_edit' %>
 <%= stylesheet_link_tag 'calendar' %>
 <%= javascript_include_tag 'calendar' %>
 
@@ -5,7 +6,7 @@
 
 
 <% form_for(@ride) do |f| %>
-
+<div id ="page_content">
   <div id="rides_title">
     <h1>
       <%= f.label :name, "Editing Ride:", :class => 
@@ -15,10 +16,8 @@
     </h1>
   </div>
 
-  <div id="rides_navigation">
-  <%= link_to 'Home', :controller => 'byob' %> |
-  <%= link_to 'Rides Listing', rides_path %> |
-  <%= link_to 'Back', @ride %> 
+  <div id="rides_mini_nav">
+    <%= link_to 'Back to ride', @ride %> 
     <hr/>
   </div>
 
@@ -70,5 +69,5 @@
     <%= f.submit 'Update', :class => "fb_button" %>
   </p>
 <% end %>
-
+</div>
 

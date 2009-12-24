@@ -5,120 +5,125 @@
 <%= javascript_include_tag 'input_prompt_text_helper' %>
 <%= javascript_include_tag 'return_ride_date_enabler' %>
 
-<div id="r_new_bg" style="background-image: 
-url(<%= image_path("new/createride.jpg") %>) ;">
+<% @place_options = ['Tinley Park', 'Westmont', 'Oakbrook'] %>
 
-  <div id="r_new_nav">
-    <%= link_to 'Home', 
-    {:controller => "byob", :action =>"index"}%>
-    <%= link_to 'Rides Listing', index_select_path %>
-    <%= link_to 'Create a Ride', new_ride_path %>
-  </div>
+<div id="page_content"> 
+  <%= render :partial => 'calendar' %>
 
-  <div id="r_new_content">
-    <%= render :partial => 'calendar' %>
+  <% unless @ride.errors.empty? %>
+    <div class="errorExplanation" id="errorExplanation">
+      <h2>Please fix a couple things with your ride.</h2>
+    </div>
+  <% end %>
 
-    <% unless @ride.errors.empty? %>
-      <div class="errorExplanation" id="errorExplanation">
-        <h2>Please fix a couple things with your ride.</h2>
-      </div>
+  <% price_prompt_text = @price_preset || "10" %>
+  <script> var price_prompt_text = "<%= escape_javascript(price_prompt_text) %>"; </script>
+  <% seats_available_prompt_text = @seats_total_preset || "3" %>
+  <script> var seats_available_prompt_text = "<%=
+  escape_javascript(seats_available_prompt_text) %>"; </script>
+
+
+  <% form_for(@ride) do |f| %>
+    <p>
+      <%= f.label :name, "Your ride's name" %><br />
+      <%= f.text_field :name %>
+    </p>
+    <p>
+      <%= f.label :price, "Price: $ " %>
+      <%= f.text_field :price, :size => 3, :onfocus => "input_remove_prompt_text(this, 
+      price_prompt_text);", :value => "#{price_prompt_text}",  :onblur =>
+      "input_add_prompt_text(this, price_prompt_text);" %>
+    </p>
+    <p>
+      <%= f.label :seats_total, "Seats available for other riders: " %>
+      <%= f.text_field :seats_total, :size => 3, :onfocus => "input_remove_prompt_text(this, 
+      seats_available_prompt_text);", :value => "#{seats_available_prompt_text}",  :onblur =>
+      "input_add_prompt_text(this, seats_available_prompt_text);" %>
+    </p>
+    <p>
+      <%= f.label :tocampus, "Does this ride <u>leave</u> or <u>go to</u> the UIUC campus?" %><br />
+      <%= f.radio_button :tocampus, false %>Leaves campus
+      <%= f.radio_button :tocampus, true %>Goes to campus
+    </p>
+
+    <p>
+      <%= f.label :place, "Place" %><br />
+      <fb:fbml version="1.1"> 
+        <fb:typeahead-input name="ride[place]" autocomplete="off">  
+          <% @place_options.each do |place| %>
+            <fb:typeahead-option><%= place %></fb:typeahead-option>  
+          <% end %>
+        </fb:typeahead-input> 
+      </fb:fbml>
+      <br/>
+      <span class="helper_text">
+        click in and press down for options 
+      </span>
+    </p>
+
+    <p>
+      <%= f.label :start_datetime, "Starting Date/Time" %><br />
+      <%= render :partial => 'calendar_form', :locals => 
+      {:element_name => "ride[start_datetime]", 
+      :current_datetime => @start_datetime_preset,
+      :disabled => false} %> 
+    </p>
+    <% if @ride.errors.on(:start_datetime) %>
+      <p class="datetime-errors">
+      <% @ride.errors.on(:start_datetime).each do |e|%>
+        <span class="validation-error"><%= e %></span><br/>
+      <% end %>
+      </p>
     <% end %>
 
-    <% price_prompt_text = @price_preset || "10" %>
-    <script> var price_prompt_text = "<%= escape_javascript(price_prompt_text) %>"; </script>
-    <% seats_available_prompt_text = @seats_total_preset || "3" %>
-    <script> var seats_available_prompt_text = "<%=
-    escape_javascript(seats_available_prompt_text) %>"; </script>
-
-    <% form_for(@ride) do |f| %>
-      <p>
-        <%= f.label :name, "Your ride's name" %><br />
-        <%= f.text_field :name %>
-      </p>
-      <p>
-        <%= f.label :price, "Price: $ " %>
-        <%= f.text_field :price, :size => 3, :onfocus => "input_remove_prompt_text(this, 
-        price_prompt_text);", :value => "#{price_prompt_text}",  :onblur =>
-        "input_add_prompt_text(this, price_prompt_text);" %>
-      </p>
-      <p>
-        <%= f.label :seats_total, "Seats available for other riders: " %>
-        <%= f.text_field :seats_total, :size => 3, :onfocus => "input_remove_prompt_text(this, 
-        seats_available_prompt_text);", :value => "#{seats_available_prompt_text}",  :onblur =>
-        "input_add_prompt_text(this, seats_available_prompt_text);" %>
-      </p>
-      <p>
-        <%= f.label :tocampus, "Does this ride <u>leave</u> or <u>go to</u> the UIUC campus?" %><br />
-        <%= f.radio_button :tocampus, false %>Leaves campus
-        <%= f.radio_button :tocampus, true %>Goes to campus
-      </p>
-      <p>
-        <%= f.label :place, "Place" %><br />
-        <%= f.text_field :place %>
-      </p>
-
-      <p>
-        <%= f.label :start_datetime, "Starting Date/Time" %><br />
-        <%= render :partial => 'calendar_form', :locals => 
-        {:element_name => "ride[start_datetime]", 
-        :current_datetime => @start_datetime_preset,
-        :disabled => false} %> 
-      </p>
-      <% if @ride.errors.on(:start_datetime) %>
+    <p>
+      <%= label :return_ride_desired, 
+      "Will there be a return trip?" %><br />
+      <%= check_box_tag :return_ride_desired, 1, @return_ride_desired, 
+      {:onClick =>
+      "return_ride_date_enabler(this, 'return_ride[start_datetime]')"} %>
+      yes, on    
+      <%= render :partial => 'calendar_form', :locals => 
+      {:element_name => "return_ride[start_datetime]", 
+      :current_datetime => @return_datetime_preset, 
+      :disabled => (not @return_ride_desired)} %>
+    </p>
+    <% unless @ride.return_ride.nil? %>
+      <% if @ride.return_ride.errors.on(:start_datetime) %>
         <p class="datetime-errors">
-        <% @ride.errors.on(:start_datetime).each do |e|%>
+        <% @ride.return_ride.errors.on(:start_datetime).each do |e|%>
           <span class="validation-error"><%= e %></span><br/>
         <% end %>
         </p>
       <% end %>
-
-      <p>
-        <%= label :return_ride_desired, 
-        "Will there be a return trip?" %><br />
-        <%= check_box_tag :return_ride_desired, 1, @return_ride_desired, 
-        {:onClick =>
-        "return_ride_date_enabler(this, 'return_ride[start_datetime]')"} %>
-        yes, on    
-        <%= render :partial => 'calendar_form', :locals => 
-        {:element_name => "return_ride[start_datetime]", 
-        :current_datetime => @return_datetime_preset, 
-        :disabled => (not @return_ride_desired)} %>
-      </p>
-      <% unless @ride.return_ride.nil? %>
-        <% if @ride.return_ride.errors.on(:start_datetime) %>
-          <p class="datetime-errors">
-          <% @ride.return_ride.errors.on(:start_datetime).each do |e|%>
-            <span class="validation-error"><%= e %></span><br/>
-          <% end %>
-          </p>
-        <% end %>
-      <% end %>
-
-      <div id="rides_form_about">
-        <%= f.label :about, nil, :class => "input_label" %>
-        <br />
-        <div id="rides_form_about_input">
-          <%= f.text_area :about, :rows => 10 %>
-        </div>
-        <div id="rides_form_about_detail_prompt">
-            Enter any additional info here.<br/>
-            <ul type="disc">
-            <li>  • price details/flexibility </li>
-            <li>  • time/place flexibility </li>
-            <li>  • just guys or just girls </li>    
-            <li>  • amount of trunk space </li>
-            <li>  • type of car </li>
-            <li>  • music preference </li> 
-            <li>  • etc.</li>
-            </ul>
-        </div>
-      </div>
-
-      <div id="rides_form_submit"> 
-        <p>
-          <%= f.submit 'Create', :class => "fb_button" %>
-        </p>
-      </div>
     <% end %>
-  </div>
+
+    <div id="rides_form_about">
+      <%= f.label :about, nil, :class => "input_label" %>
+      <br />
+      <div id="rides_form_about_input">
+        <%= f.text_area :about, :rows => 10 %>
+      </div>
+      <div id="rides_form_about_detail_prompt">
+        <span class="about_text">
+          Enter any additional info here.<br/>
+          <ul type="disc">
+          <li>  • price details/flexibility </li>
+          <li>  • time/place flexibility </li>
+          <li>  • just guys or just girls </li>    
+          <li>  • amount of trunk space </li>
+          <li>  • type of car </li>
+          <li>  • music preference </li> 
+          <li>  • etc.</li>
+          </ul>
+        </span>
+      </div>
+    </div>
+
+    <div id="rides_form_submit"> 
+      <p>
+        <%= f.submit 'Create', :class => "fb_button" %>
+      </p>
+    </div>
+  <% end %>
 </div>

@@ -2,13 +2,38 @@
 <fb:fbml>
 
 <%= stylesheet_link_tag 'errors' %>
-<%= stylesheet_link_tag 'rides_style' %>
-
+<%= stylesheet_link_tag 'rides' %>
 
 <div style="display: none;">
 <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
 </div>
 
-<%= yield %>
+<div id="byob_graphics">
+  <div id="graphic_1"><%= image_tag 'layout/roller logo.png' %></div>  
+  <div id="graphic_2"><%= image_tag 'layout/boylogo.png' %></div>
+  <div id="graphic_3"><%= image_tag 'layout/carlogo.png' %></div>
+</div>
+
+<div id="byob_home_nav">
+  <%= link_to image_tag('layout/home1.png'), 
+  {:controller => "byob", :action =>"index"}%>
+  
+  <%= link_to (if @create_a_ride then image_tag('layout/ridelisting1.png') else 
+  image_tag('layout/ridelisting2.png') end), index_select_path %>
+  <%= link_to (if @create_a_ride then image_tag('layout/createride2.png') else
+  image_tag('layout/createride1.png') end), new_ride_path %>
+</div>
+
+<div id="byob_home_bg" style="background-image: 
+  url(<%= image_path('layout/background_mid.png') %>) ;">
+  <div id="bg_top">
+    <%= image_tag 'layout/background_top.png' %> 
+  </div>
+  <%= yield %>
+  <div id="bg_bot">
+    <%= image_tag 'layout/background_bot.png' %> 
+  </div>
+</div>
+ 
 
 <fb:fbml/>

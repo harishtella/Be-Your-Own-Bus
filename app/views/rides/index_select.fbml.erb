@@ -1,21 +1,20 @@
-<%= stylesheet_link_tag 'rides' %>
 <%= stylesheet_link_tag 'rides_index_select' %>
 
-<div id="r_index_select_bg" style="background-image: 
-url(<%= image_path("new/ridelisting.jpg") %>) ;">
+<div id="page_content">
 
-  <div id="r_index_select_nav">
-    <%= link_to 'Home', 
-    {:controller => "byob", :action =>"index"}%>
-    <%= link_to 'Rides Listing', index_select_path %>
-    <%= link_to 'Create a Ride', new_ride_path %>
+  <div id="leavecomeimg">
+    <div id="leaveimg">
+      <%= link_to image_tag('layout/leavelogo.png'), 
+      rides_path(:tocampus => false, :view_past_rides => false) %>
+    </div>
+    <div id="comeimg">
+      <%= link_to image_tag('layout/comelogo.png'), 
+      rides_path(:tocampus => true, :view_past_rides => false) %>
+    </div>
   </div>
 
-  <div id="r_index_select_content">
-    <%= link_to 'From Campus', 
-    rides_path(:tocampus => false, :view_past_rides => false) %>
-    <%= link_to 'To Campus', 
-    rides_path(:tocampus => true, :view_past_rides => false) %>
+  <div id="fromtobanner">
+    <%= image_tag('layout/fromtobanner.jpg') %>
   </div>
 </div>
 

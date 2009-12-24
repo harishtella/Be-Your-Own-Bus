@@ -38,6 +38,14 @@ a:hover { text-decoration:underline }
 }
 
 /* divs common to ride pages */
+
+div#page_content {
+  top: -40px;
+  left: 90px;
+  position: relative;
+  width: 574px;
+}
+
 div#rides_title {
   margin-bottom: 4px;
 }
@@ -47,5 +55,60 @@ div#rides_mini_nav {
   font-size: 15px;
 }
 
+div#byob_graphics{
+  left: 75px;
+  height: 106px;
+  width: 530px;
+  position:relative;
+}
+
+div#graphic_1{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 200px;
+}
+
+div#graphic_2{
+  position: absolute;
+  left: 125px;
+  top: 0px;
+  width: 100px;
+}
+
+div#graphic_3{
+  position: absolute;
+  right: 50px;
+  top: 0px;
+  width: 100px;
+}
+
+div#byob_home_nav{
+  left: 70px;
+  position: relative;
+  width: 615px;
+  height: 60px;
+}
 
 
+div#byob_home_bg{
+  position: relative;
+  background-repeat: repeat-y;
+  background-position: 50%;
+  height:100%;
+  width:100%;
+  visibility: visible;
+  top: 19px;
+}
+
+div#bg_top{
+  position: relative;
+  top: -35px;
+  left: 57px;
+}
+
+div#bg_bot{
+  position: relative;
+  bottom: -9px;
+  left: 57px;
+}

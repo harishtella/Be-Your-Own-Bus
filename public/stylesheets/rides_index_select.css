@@ -1,21 +1,25 @@
-div#r_index_select_bg{
-background-repeat: no-repeat;
-height:900px;
-width:100%;
-top:0px;
-visibility: visible;
-left: 0px;
+
+div#fromtobanner{
+  position: relative;
+  left: -70px;
 }
 
-div#r_index_select_nav{
-position: absolute;
-left: 120px;
-top: 157px;
+div#leavecomeimg{
+  position: relative; 
+  height: 145px;
+  width: 525px;
+  left: 32px;
 }
 
-div#r_index_select_content{
-position: absolute;
-left: 320px;
-top: 356px;
+div#leaveimg{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+div#comeimg{
+  position: absolute;
+  top: 0px;
+  left: 225px;
 }
 

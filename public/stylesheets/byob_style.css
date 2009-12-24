@@ -9,26 +9,82 @@ p{
   line-height: 18px;
 }
 
-div#byob_home_bg{
-  background-repeat: no-repeat;
-  height:900px;
-  width:100%;
-  top:0px;
-  visibility: visible;
+div#byob_graphics{
+  left: 75px;
+  height: 106px;
+  width: 530px;
+  position:relative;
+}
+
+div#graphic_1{
+  position: absolute;
   left: 0px;
+  top: 0px;
+  width: 200px;
+}
+
+div#graphic_2{
+  position: absolute;
+  left: 125px;
+  top: 0px;
+  width: 100px;
+}
+
+div#graphic_3{
+  position: absolute;
+  right: 50px;
+  top: 0px;
+  width: 100px;
 }
 
 div#byob_home_nav{
-  position: absolute;
-  left: 120px;
-  top: 151px;
+  left: 72px;
+  position: relative;
+  width: 615px;
+  height: 60px;
 }
 
-div#byob_home_content{
-  position: absolute;
-  left: 120px;
-  top: 276px;
+
+div#byob_home_bg{
+  position: relative;
+  background-repeat: repeat-y;
+  background-position: 50%;
+  height:100%;
+  width:100%;
+  visibility: visible;
+  top: 19px;
 }
+
+div#bg_top{
+  position: relative;
+  top: -35px;
+  left: 57px;
+}
+
+div#bg_bot{
+  position: relative;
+  bottom: -9px;
+  left: 57px;
+}
+
+.rides_banner_your{
+  left: -74px;
+  position: relative;
+}
+
+.rides_banner_watched{
+  left: -70px;
+  position: relative;
+}
+
+
+div#byob_home_content{
+  top: -40px;
+  left: 90px;
+  position: relative;
+}
+
+
 
 div#current_user_rides td {
     font-size: 16px;

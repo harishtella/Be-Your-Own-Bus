@@ -1,19 +1,30 @@
 <fb:fbml>
 <%= stylesheet_link_tag 'byob_style' %>
 
-<div id="byob_home_bg" style="background-image: 
-url(<%= image_path("new/byobhome.jpg") %>) ;">
+<div id="byob_graphics">
+  <div id="graphic_1"><%= image_tag 'layout/roller logo.png' %></div>  
+  <div id="graphic_2"><%= image_tag 'layout/boylogo.png' %></div>
+  <div id="graphic_3"><%= image_tag 'layout/carlogo.png' %></div>
+</div>
 
-  <div id="byob_home_nav">
-    <%= link_to 'Home', 
-    {:controller => "byob", :action =>"index"}%>
-    <%= link_to 'Rides Listing', index_select_path %>
-    <%= link_to 'Create a Ride', new_ride_path %>
+<div id="byob_home_nav">
+  <%= link_to image_tag('layout/home2.png'), 
+  {:controller => "byob", :action =>"index"}%>
+  <%= link_to image_tag('layout/ridelisting1.png'), index_select_path %>
+  <%= link_to image_tag('layout/createride1.png'), new_ride_path %>
+</div>
+
+<div id="byob_home_bg" style="background-image: 
+  url(<%= image_path('layout/background_mid.png') %>) ;">
+
+  <div id="bg_top">
+    <%= image_tag 'layout/background_top.png' %> 
   </div>
 
   <div id="byob_home_content">
+
     <div style="display: none;">
-    <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
+      <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
     </div>
 
     <div id="r_show_fb_msg">
@@ -29,48 +40,71 @@ url(<%= image_path("new/byobhome.jpg") %>) ;">
     </h3>
 
     <div id="current_user_rides">
-      <table>
-        <tr>
-          <td><b><i>Ride Name</i></b></td>
-          <td><b><i>Going to</i></b></td>
-          <td><b><i>Leaving on</i></b></td>
-        </tr>
 
-        <tr>
-          <td>Driving:</td>
-        </tr>
+    <div class="rides_banner_your">
+      <%= image_tag 'layout/yourrides.png' %> 
+    </div>
+    
+      <table>
         <% @rides_driving.each do |ride| %>
         <tr>
-          <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-          <td><%=h ride[:ride_obj].place %></td>
-          <td><%=h ride[:date] %></td>
+          <td>Driving <%= link_to ride[:ride_obj].name, 
+          ride[:ride_obj] %></td>
+          <td>
+            <%= if ride[:ride_obj].tocampus then 
+            " coming from " else " going to " end %> 
+            <u>
+              <%=h ride[:ride_obj].place %>
+            </u>
+          </td>
+          <td> on <u><%=h ride[:date] %></u></td>
         </tr>
         <% end %>
 
-        <tr>
-          <td>Riding:</td>
-        </tr>
         <% @rides_riding.each do |ride| %>
         <tr>
-          <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-          <td><%=h ride[:ride_obj].place %></td>
-          <td><%=h ride[:date] %></td>
+          <td>Riding <%= link_to ride[:ride_obj].name, 
+          ride[:ride_obj] %></td>
+          <td>
+            <%= if ride[:ride_obj].tocampus then 
+            " coming from " else " going to " end %>
+            <u>
+              <%=h ride[:ride_obj].place %>
+            </u>
+          </td>
+          <td> on <u><%=h ride[:date] %></u></td>
         </tr>
         <% end %>
+      </table>
 
-        <tr>
-          <td>Watching:</td>
-        </tr>
+    <div class="rides_banner_watched">
+      <%= image_tag 'layout/watchedridesbanners.png' %> 
+    </div>
+
+      <table>
         <% @rides_watching.each do |ride| %>
         <tr>
-          <td><%= link_to ride[:ride_obj].name, ride[:ride_obj] %></td>
-          <td><%=h ride[:ride_obj].place %></td>
-          <td><%=h ride[:date] %></td>
+          <td>Watching <%= link_to ride[:ride_obj].name, 
+          ride[:ride_obj] %></td>
+          <td>
+            <%= if ride[:ride_obj].tocampus then 
+            " coming from " else " going to " end %>
+            <u>
+              <%=h ride[:ride_obj].place %>
+            </u>
+          </td>
+          <td> on <u><%=h ride[:date] %></u></td>
         </tr>
         <% end %>
       </table>
     </div>
   </div>
+  
+  <div id="bg_bot">
+    <%= image_tag 'layout/background_bot.png' %> 
+  </div>
+
 </div>
+
 
 <fb:fbml/>

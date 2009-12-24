@@ -8,49 +8,6 @@ include Facebooker::Rails::Helpers
 
 
 class RidesController < ApplicationController 
-  def old_index
-    @view_past_rides = params[:view_past_rides]
-    time_now = Time.zone.now.utc
-
-    if @view_past_rides
-      @rides_from_campus = Ride.find(:all, :order => 
-      "start_datetime ASC", :conditions => 
-      { :tocampus => false, :start_datetime_lt => time_now })
-      @rides_to_campus = Ride.find(:all, :order => 
-      "start_datetime ASC", :conditions => 
-      { :tocampus => true, :start_datetime_lt => time_now })
-    else 
-      @rides_from_campus = Ride.find(:all, :order => 
-      "start_datetime ASC", :conditions => 
-      { :tocampus => false, :start_datetime_gte => time_now})
-      @rides_to_campus = Ride.find(:all, :order => 
-      "start_datetime ASC", :conditions => 
-      { :tocampus => true, :start_datetime_gte => time_now})
-    end
-
-    @rides_from_campus_with_dates = []
-    @rides_to_campus_with_dates = []
-    index_format = "%b %e @ %l:%M %p"
-  
-    @rides_from_campus.each do |ride| 
-      current_ride = {} 
-      current_ride[:ride_obj] = ride 
-      current_ride[:date] = ride.start_datetime.strftime(index_format)
-      @rides_from_campus_with_dates << current_ride
-    end
-
-    @rides_to_campus.each do |ride| 
-      current_ride = {} 
-      current_ride[:ride_obj] = ride 
-      current_ride[:date] = ride.start_datetime.strftime(index_format)
-      @rides_to_campus_with_dates << current_ride
-    end
-
-    respond_to do |format|
-      format.fbml 
-    end
-  end
-
   def index
     @view_past_rides = params[:view_past_rides]
     @tocampus = params[:tocampus] 
@@ -122,6 +79,14 @@ class RidesController < ApplicationController
     @user_is_a_watcher = @ride.watchers.collect {|x|
     x == @current_user }.inject{|a,b| a or b} 
 
+    @map = Mapstraction.new("map_div",:google)
+    @map.control_init(:small => true)
+    @map.center_zoom_init([75.5,-42.56],4)
+    @map.marker_init(Marker.new([75.6,-42.467],:label => "Ride", 
+    :info_bubble => "Info! Info!", :icon => "/images/home1.png"))
+
+
+
     respond_to do |format|
       format.fbml 
     end
@@ -159,7 +124,8 @@ class RidesController < ApplicationController
     @start_datetime_preset = split_up_datetime_for_calender_form(time_now) 
     @return_datetime_preset = split_up_datetime_for_calender_form(time_now) 
     @return_ride_desired = false
-   
+    @create_a_ride = true
+
     respond_to do |format|
       format.fbml 
     end
@@ -210,6 +176,7 @@ class RidesController < ApplicationController
         end
         @price_preset = @ride.price.to_s  
         @seats_total_preset = @ride.seats_total.to_s 
+        @create_a_ride = true
         format.fbml { render :action => "new" }
       end
     end

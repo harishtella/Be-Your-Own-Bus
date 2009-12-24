@@ -1,4 +1,12 @@
 /*divs for individual ride (show) page */
+
+div#top_banner{
+  position: relative;
+  left: -69px;
+  top: -20px;
+  height: 39px;
+}
+
 div#r_show_bg{
   background-repeat: no-repeat;
   height:1500px;
@@ -41,7 +49,7 @@ div#rides_show_driver_profile {
 }
 
 div#rides_show_info_box {
-  width: 400px;
+  width: 358px;
   float:left;
 }
 

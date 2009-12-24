@@ -1,4 +1,17 @@
 /* divs for new/edit ride form */
+.inputtext{
+  font-size: 13px;
+  color: black;
+}
+
+.helper_text{
+  color: #8C8282; 
+}
+
+.about_text{
+ color: #383838;
+}
+
 div#r_new_bg{
   background-repeat: no-repeat;
   height:900px;
@@ -28,7 +41,7 @@ div#rides_form_about_input {
 div#rides_form_about_detail_prompt {
   margin-left: 20px;
   font-size:14px;
-  width:250px;
+  width:216px;
   float:left;
 }
 

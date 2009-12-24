@@ -1,4 +1,19 @@
 /* divs for ride listing page */
+
+div#top_banner{
+  position: relative;
+  left: -72px;
+  top: -20px;
+}
+
+div#side_image{
+  position: relative;
+  left: 343px;
+  top: -49px;
+  width: 100px;
+  height: 61px;
+}
+
 div#r_index_bg{
   background-repeat: no-repeat;
   height:900px;
