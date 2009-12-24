@@ -79,14 +79,6 @@ class RidesController < ApplicationController
     @user_is_a_watcher = @ride.watchers.collect {|x|
     x == @current_user }.inject{|a,b| a or b} 
 
-    @map = Mapstraction.new("map_div",:google)
-    @map.control_init(:small => true)
-    @map.center_zoom_init([75.5,-42.56],4)
-    @map.marker_init(Marker.new([75.6,-42.467],:label => "Ride", 
-    :info_bubble => "Info! Info!", :icon => "/images/home1.png"))
-
-
-
     respond_to do |format|
       format.fbml 
     end
