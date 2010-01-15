@@ -17,7 +17,7 @@
   </div>
 
   <div id="rides_mini_nav">
-    <%= link_to 'Back to ride', @ride %> 
+    <%= link_to 'Back to ride', @ride, :class => "fb_button"  %> 
     <hr/>
   </div>
 
@@ -68,6 +68,11 @@
   <p>
     <%= f.submit 'Update', :class => "fb_button" %>
   </p>
+  <p>
+    <%= link_to 'Delete this ride', @ride, :confirm => 
+    'Are you sure?', :method => :delete, :class => "fb_button_danger"  %> 
+  </p>
+
 <% end %>
 </div>
 

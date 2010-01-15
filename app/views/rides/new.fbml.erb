@@ -7,6 +7,32 @@
 
 <% @place_options = ['Tinley Park', 'Westmont', 'Oakbrook'] %>
 
+<fb:js-string var="dis"> 
+  Something something
+  <a href="www.google.com">goog</a>
+</fb:js-string>
+
+<script>
+  function disclaimer_prompt(){
+    var disclaimer = new Dialog(Dialog.DIALOG_POP);
+    disclaimer.setStyle({'heigth': '300px'});
+    disclaimer.onconfirm = submit_form;
+    disclaimer.showChoice("Please read carefully", 
+      "<%= escape_javascript(RidesController.byob_disclaimer) %>",
+      button_confirm = "Agree", button_cancel = "Cancel");
+  }
+  function submit_form(){
+    ride_form = document.getElementById("new_ride").submit();	
+  }
+  function disclaimer_prompt2(){
+    var disclaimer = new Dialog(Dialog.DIALOG_POP);
+    disclaimer.setStyle({'heigth': '300px'});
+    disclaimer.showChoice("Please read carefully", 
+      dis,
+      button_confirm = "Agree", button_cancel = "Cancel");
+  }
+</script>
+
 <div id="page_content"> 
   <%= render :partial => 'calendar' %>
 
@@ -25,7 +51,7 @@
 
   <% form_for(@ride) do |f| %>
     <p>
-      <%= f.label :name, "Your ride's name" %><br />
+      <%= f.label :name, "Name your ride" %><br />
       <%= f.text_field :name %>
     </p>
     <p>
@@ -122,8 +148,14 @@
 
     <div id="rides_form_submit"> 
       <p>
-        <%= f.submit 'Create', :class => "fb_button" %>
+        <%= f.submit 'Create', :confirm => "test", :class => "fb_button" %>
       </p>
+
+      <p>
+        <%= link_to_function 'Create w/ Dialog', "disclaimer_prompt()", 
+        :class => "fb_button" %> 
+      </p>
+
     </div>
   <% end %>
 </div>

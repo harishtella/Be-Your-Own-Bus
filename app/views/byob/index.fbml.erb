@@ -44,7 +44,13 @@
     <div class="rides_banner_your">
       <%= image_tag 'layout/yourrides.png' %> 
     </div>
-    
+  
+      <% if @rides_driving.empty? and @rides_riding.empty? %> 
+        <div class="helper_text">
+          Rides that you're driving or riding will show up here.
+        </div>
+      <% end %>
+
       <table>
         <% @rides_driving.each do |ride| %>
         <tr>
@@ -80,6 +86,12 @@
     <div class="rides_banner_watched">
       <%= image_tag 'layout/watchedridesbanners.png' %> 
     </div>
+
+      <% if @rides_watching.empty? %> 
+        <div class="helper_text">
+          Rides that you're watching will show up here.
+        </div>
+      <% end %>
 
       <table>
         <% @rides_watching.each do |ride| %>

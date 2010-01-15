@@ -8,6 +8,33 @@ include Facebooker::Rails::Helpers
 
 
 class RidesController < ApplicationController 
+  def RidesController.byob_disclaimer 
+    @byob_disclaimer
+  end
+  @byob_disclaimer = 'All riders and ride providers must be at least 18 years old to use
+    BeYourOwnBus.com. (Here forth referred to as BYOB) Do not travel with someone
+    you do not trust. By using this service you agree that BYOB is not responsible
+    for your safety, comfort, or successful travel arrangements, or for your
+    belongings, or for any other liability with regard to your use of this website.
+    BYOB encourages riders to confirm ride provider identity, proof of insurance,
+    vehicle condition, and all other information regarding their safety; BYOB is not
+    responsible for providing any such information and does not guarantee the
+    accuracy of information provided. All correspondence through this site will be
+    monitored. We respect your privacy, and will not distribute member information
+    without your permission (except in response to verified requests from law
+    enforcement or emergency services). Postings using this service must follow the
+    given format and be polite in tone. BYOB reserves the right to remove repeat
+    postings, and postings that are offensive, defamatory or discriminative.
+    Contacting other users and making postings are permitted only for personal use
+    for the purpose of arranging a ride. In no case may emails be sent to members
+    promoting a website or otherwise promoting a public or private venture or
+    service. If any single part of this agreement is legally held to be invalid, the
+    remainder of the agreement shall remain in force. All material in this site is
+    ©2010. This Terms of Service / User Agreement may be modified at any time
+    without notice (except that we will never distribute member information for
+    commercial purposes). The user agrees to observe updates and amendments to these
+    Terms of Service as a condition for continued use of this web site.' 
+
   def index
     @view_past_rides = params[:view_past_rides]
     @tocampus = params[:tocampus] 
@@ -194,7 +221,7 @@ class RidesController < ApplicationController
     @ride.destroy
 
     respond_to do |format|
-      format.fbml { redirect_to(rides_url) }
+      format.fbml { redirect_to(:controller => "byob", :action =>"index") }
     end
   end
 
