@@ -1,12 +1,20 @@
 class ByobController < ApplicationController
 
   def index
-    @rides_driving = @current_user.rides_driving
-    @rides_riding = @current_user.rides_riding
-    @rides_watching = @current_user.rides_watching
 
+    time_now = Time.zone.now.utc
     datetime_format = "%b %e @ %l:%M %p"
- 
+
+    @rides_driving = @current_user.rides_driving.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => false, :start_datetime_gte => time_now})
+    @rides_riding = @current_user.rides_riding.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => false, :start_datetime_gte => time_now})
+    @rides_watching = @current_user.rides_watching.find(:all, :order => 
+        "start_datetime ASC", :conditions => 
+        { :tocampus => false, :start_datetime_gte => time_now})
+
     @rides_driving.collect! do |ride| 
       current_ride = {} 
       current_ride[:ride_obj] = ride 

@@ -8,6 +8,14 @@ class ApplicationController < ActionController::Base
   ensure_application_is_installed_by_facebook_user
   attr_accessor :current_user
   before_filter :set_current_user
+
+  def ApplicationController.fb_base_url
+    @fb_base_url
+  end
+  @fb_base_url = "http://apps.facebook.com"
+
+
+
   
   def set_current_user
     self.current_user = User.for(facebook_session.user.to_i)

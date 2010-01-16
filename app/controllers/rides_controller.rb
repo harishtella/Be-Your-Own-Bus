@@ -88,11 +88,6 @@ class RidesController < ApplicationController
   end
 
   def show
-    @publish_ride_joined = session[:publish_ride_joined]
-    @publish_ride_created = session[:publish_ride_created]
-    session[:publish_ride_joined] = nil
-    session[:publish_ride_created] = nil
-    
     @ride = Ride.find(params[:id])
     @comments = @ride.comments
     @comments.sort! {|x,y| -1 * (x.created_at <=> y.created_at) }
@@ -181,7 +176,6 @@ class RidesController < ApplicationController
     respond_to do |format|
       if @ride.save
         #RidePublisher.deliver_publish_stream(@current_user_fb,@current_user_fb,{:message => "foo"})
-        session[:publish_ride_created] = true
         flash[:notice] = 'Ride was successfully created.'
         format.fbml { redirect_to(@ride) }
       else
@@ -252,7 +246,6 @@ class RidesController < ApplicationController
         @ride.watchers.delete(@current_user)
       end
       @ride.save
-      session[:publish_ride_joined] = true
       flash[:notice] = "You have joined this ride." 
    
       notification_message = ""

@@ -1,23 +1,31 @@
 <%= stylesheet_link_tag 'rides' %>
 <%= stylesheet_link_tag 'rides_show' %>
 
-<% if @publish_ride_joined %>
-  <script>
-  Facebook.streamPublish("is going to <%=h @ride.place %> at <%=h @ride_start_datetime_formatted %>",null,null,null,"Tell others about this ride");
-  </script>
-<% end %> 
-<% if @publish_ride_created%>
-  <script>
-  Facebook.streamPublish("is driving to <%=h @ride.place %> at <%=h @ride_start_datetime_formatted %>",null,null,null,"Tell others about this ride");
-  </script>
-<% end %> 
-
 <fb:js-string var="dis"> 
   Something something
   <a href="www.google.com">goog</a>
 </fb:js-string>
 
 <script>
+  function share_on_wall(){
+    var msg = "is <%= if @ride.tocampus then "coming from" else "going to" end %> " +
+    "<%=h @ride.place %> using Be Your Own Bus."
+
+    var attachment = {'name':'Ride: <%= @ride.name %>', 
+    'href':'<%=ApplicationController.fb_base_url + url_for(@ride) %>', 
+    'description':'"<%= @ride.name %>" leaves at ' +
+    '<%=h @ride_start_datetime_formatted %>',
+    'media': 
+    [{'type':'image',
+    'src': '<%= image_path 'layout/carlogo.jpg'%>',
+    'href': '<%=ApplicationController.fb_base_url + url_for(@ride) %>'}]  };
+
+    var links = [{ 'text': 'Be Your Own Bus', 
+    'href': 'http://apps.facebook.com/beyourownbus'}];
+
+    Facebook.streamPublish(msg, attachment, links, null, "Let your friends know");
+  }
+
   function disclaimer_prompt(){
     var disclaimer = new Dialog(Dialog.DIALOG_POP);
     disclaimer.setStyle({'heigth': '300px'});
@@ -69,6 +77,11 @@
         <%= link_to 'Stop Watching', unwatch_ride_path(@ride), :class => "fb_button" %> 
       <% end %>
     <% end %>
+    <% if @user_is_driver or @user_is_a_passenger %>
+      <%= link_to_function 'Share on Wall', "share_on_wall()", 
+      :class => "fb_button" %>
+    <% end %>
+
     <hr/>
   </div>
 
