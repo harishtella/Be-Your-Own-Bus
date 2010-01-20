@@ -5,7 +5,7 @@ class UseFacebookUserId < ActiveRecord::Migration
     remove_column :users, :phonenumber
     remove_column :users, :email
     remove_column :users, :about
-    add_column :users, :facebook_id, :integer, :limit=>20, :null=>false,
+    add_column :users, :facebook_id, :integer, :null=>false,
     :default=>-1
     add_column :users, :session_key, :string
   end
