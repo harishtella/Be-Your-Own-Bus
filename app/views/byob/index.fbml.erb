@@ -1,6 +1,7 @@
 <fb:fbml>
 <%= stylesheet_link_tag 'byob_style' %>
 
+
 <div id="byob_graphics">
   <div id="graphic_1"><%= image_tag 'layout/roller logo.png' %></div>  
   <div id="graphic_2"><%= image_tag 'layout/boylogo.png' %></div>
@@ -8,10 +9,22 @@
 </div>
 
 <div id="byob_home_nav">
-  <%= link_to image_tag('layout/home2.png'), 
+  <%= link_to image_tag('layout/home3.png', :id =>"home_link"), 
   {:controller => "byob", :action =>"index"}%>
-  <%= link_to image_tag('layout/ridelisting1.png'), index_select_path %>
-  <%= link_to image_tag('layout/createride1.png'), new_ride_path %>
+
+  <%= link_to image_tag('layout/ridelisting1.png', :id =>"listing_link",
+  :onmouseover => "document.getElementById('listing_link').setSrc('" +
+  image_path('layout/ridelisting2.png') + "')",
+  :onmouseout => "document.getElementById('listing_link').setSrc('" +
+  image_path('layout/ridelisting1.png') + "')"), 
+  index_select_path %>
+
+  <%= link_to image_tag('layout/createride1.png', :id =>"create_link",
+  :onmouseover => "document.getElementById('create_link').setSrc('" +
+  image_path('layout/createride2.png') + "')",
+  :onmouseout => "document.getElementById('create_link').setSrc('" +
+  image_path('layout/createride1.png') + "')"),
+  new_ride_path %>
 </div>
 
 <div id="byob_home_bg" style="background-image: 

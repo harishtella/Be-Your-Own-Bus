@@ -7,9 +7,18 @@
 </fb:js-string>
 
 <script>
+  function update_status(){
+    var msg = "is <%= if @ride.tocampus then "coming from" else "going to" end %> " +
+    "<%=h @ride.place %> at <%=h @ride_start_datetime_formatted %> " + 
+    "using Be Your Own Bus.";
+
+    Facebook.streamPublish(msg, null, null, null, 
+    "Update your status with your ride", null, true);
+  }
+
   function share_on_wall(){
     var msg = "is <%= if @ride.tocampus then "coming from" else "going to" end %> " +
-    "<%=h @ride.place %> using Be Your Own Bus."
+    "<%=h @ride.place %> using Be Your Own Bus.";
 
     var attachment = {'name':'Ride: <%= @ride.name %>', 
     'href':'<%=ApplicationController.fb_base_url + url_for(@ride) %>', 
@@ -23,7 +32,8 @@
     var links = [{ 'text': 'Be Your Own Bus', 
     'href': 'http://apps.facebook.com/beyourownbus'}];
 
-    Facebook.streamPublish(msg, attachment, links, null, "Let your friends know");
+    Facebook.streamPublish(msg, attachment, links, null, 
+    "Post your ride to your stream", update_status, true);
   }
 
   function disclaimer_prompt(){
@@ -34,10 +44,12 @@
       "<%= escape_javascript(RidesController.byob_disclaimer) %>",
       button_confirm = "Agree", button_cancel = "Cancel");
   }
+  
   function join_ride(){
     document.setLocation("<%= join_ride_path(@ride) %>");	
   }
-  function disclaimer_prompt2(){
+
+  function disclaimer_prompt_using_js_string(){
     var disclaimer = new Dialog(Dialog.DIALOG_POP);
     disclaimer.setStyle({'heigth': '300px'});
     disclaimer.showChoice("Please read carefully", 
@@ -78,7 +90,7 @@
       <% end %>
     <% end %>
     <% if @user_is_driver or @user_is_a_passenger %>
-      <%= link_to_function 'Share on Wall', "share_on_wall()", 
+      <%= link_to_function 'Share on profile', "share_on_wall()", 
       :class => "fb_button" %>
     <% end %>
 

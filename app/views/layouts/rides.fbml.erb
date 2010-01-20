@@ -15,13 +15,33 @@
 </div>
 
 <div id="byob_home_nav">
-  <%= link_to image_tag('layout/home1.png'), 
+  <%= link_to image_tag('layout/home1.png', :id =>"home_link",
+  :onmouseover => "document.getElementById('home_link').setSrc('" +
+  image_path('layout/home2.png') + "')",
+  :onmouseout => "document.getElementById('home_link').setSrc('" +
+  image_path('layout/home1.png') + "')"), 
   {:controller => "byob", :action =>"index"}%>
-  
-  <%= link_to (if @create_a_ride then image_tag('layout/ridelisting1.png') else 
-  image_tag('layout/ridelisting2.png') end), index_select_path %>
-  <%= link_to (if @create_a_ride then image_tag('layout/createride2.png') else
-  image_tag('layout/createride1.png') end), new_ride_path %>
+
+  <%= link_to (if @create_a_ride 
+  image_tag('layout/ridelisting1.png', :id =>"listing_link",
+  :onmouseover => "document.getElementById('listing_link').setSrc('" +
+  image_path('layout/ridelisting2.png') + "')",
+  :onmouseout => "document.getElementById('listing_link').setSrc('" +
+  image_path('layout/ridelisting1.png') + "')") 
+  else image_tag('layout/ridelisting3.png', :id =>"listing_link") 
+  end), 
+  index_select_path %>
+
+  <%= link_to (unless @create_a_ride 
+  image_tag('layout/createride1.png', :id =>"create_link",
+  :onmouseover => "document.getElementById('create_link').setSrc('" +
+  image_path('layout/createride2.png') + "')",
+  :onmouseout => "document.getElementById('create_link').setSrc('" +
+  image_path('layout/createride1.png') + "')") 
+  else image_tag('layout/createride3.png', :id =>"create_link") 
+  end), 
+  new_ride_path %>
+
 </div>
 
 <div id="byob_home_bg" style="background-image: 
