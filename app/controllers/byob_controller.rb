@@ -7,13 +7,13 @@ class ByobController < ApplicationController
 
     @rides_driving = @current_user.rides_driving.find(:all, :order => 
         "start_datetime ASC", :conditions => 
-        { :tocampus => false, :start_datetime_gte => time_now})
+        { :start_datetime_gte => time_now})
     @rides_riding = @current_user.rides_riding.find(:all, :order => 
         "start_datetime ASC", :conditions => 
-        { :tocampus => false, :start_datetime_gte => time_now})
+        { :start_datetime_gte => time_now})
     @rides_watching = @current_user.rides_watching.find(:all, :order => 
         "start_datetime ASC", :conditions => 
-        { :tocampus => false, :start_datetime_gte => time_now})
+        { :start_datetime_gte => time_now})
 
     @rides_driving.collect! do |ride| 
       current_ride = {} 
