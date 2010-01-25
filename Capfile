@@ -4,12 +4,12 @@ load 'config/deploy'
 namespace :deploy do
   task :start, :roles => :app do
     run "rm -rf /home/#{user}/public_html;ln -s #{current_path}/public /home/#{user}/public_html"
-    run "cd #{current_path} && mongrel_rails start -e production -p #{mongrel_port} -d"
+    run "cd ~/script && ./restart_mongrel.sh"
     #run "touch #{deploy_to}/current/tmp/restart.txt"
   end
    
   task :restart, :roles => :app do
-    run "cd #{current_path} && mongrel_rails restart"
+    run "cd ~/script && ./restart_mongrel.sh"
     #run "touch #{deploy_to}/current/tmp/restart.txt"
   end
 
