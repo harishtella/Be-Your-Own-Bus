@@ -155,6 +155,8 @@ module Facebooker
       optional_parameters << "&hide_checkbox=true" if options[:hide_checkbox]
       optional_parameters << "&canvas=true" if options[:canvas]
       optional_parameters << "&fbconnect=true" if options[:fbconnect]
+      optional_parameters << "&return_session=true" if options[:return_session]
+      optional_parameters << "&session_key_only=true" if options[:session_key_only]
       optional_parameters << "&req_perms=#{options[:req_perms]}" if options[:req_perms]
       optional_parameters.join
     end
@@ -206,7 +208,7 @@ module Facebooker
     def secure_with!(session_key, uid = nil, expires = nil, secret_from_session = nil)
       @session_key = session_key
       @uid = uid ? Integer(uid) : post('facebook.users.getLoggedInUser', :session_key => session_key)
-      @expires = Integer(expires)
+      @expires = expires ? Integer(expires) : 0
       @secret_from_session = secret_from_session
     end
 
@@ -707,6 +709,7 @@ module Facebooker
       end
 
       def signature_for(params)
+        params.delete_if { |k,v| v.nil? }
         raw_string = params.inject([]) do |collection, pair|
           collection << pair.map { |x|
             Array === x ? Facebooker.json_encode(x) : x

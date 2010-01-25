@@ -2,7 +2,7 @@ module Facebooker
   module Rails
     module Helpers
       module FbConnect
-
+        include Facebooker::Rails::Helpers::StreamPublish
         def fb_connect_javascript_tag(options = {})
           # accept both Rails and Facebook locale formatting, i.e. "en-US" and "en_US".
           lang = "/#{options[:lang].to_s.gsub('-', '_')}" if options[:lang]
@@ -59,7 +59,7 @@ module Facebooker
             :block_is_within_action_view? : :block_called_from_erb?
 
           if block_given? && send(block_tester, proc)
-            concat(javascript_tag(init_string))
+            versioned_concat(javascript_tag(init_string),proc.binding)
           else
             javascript_tag init_string
           end
@@ -109,11 +109,22 @@ module Facebooker
           link_to_function text, js, *args
         end
 
+        def fb_bookmark_link(text,url,*args)
+          js = update_page do |page|
+            page.call "FB.Connect.showBookmarkDialog",url
+          end
+          link_to_function text, js, *args
+        end
+
         def fb_user_action(action, user_message = nil, prompt = "", callback = nil)
           defaulted_callback = callback || "null"
           update_page do |page|
             page.call("FB.Connect.showFeedDialog",action.template_id,action.data,action.target_ids,action.body_general,nil,page.literal("FB.RequireConnect.promptConnect"),page.literal(defaulted_callback),prompt,user_message.nil? ? nil : {:value=>user_message})
           end
+        end
+        
+        def fb_connect_stream_publish(stream_post,user_message_prompt=nil,callback=nil,auto_publish=false,actor=nil)
+          stream_publish("FB.Connect.streamPublish",stream_post,user_message_prompt,callback,auto_publish,actor)
         end
 
       end

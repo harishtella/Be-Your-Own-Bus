@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   ensure_application_is_installed_by_facebook_user
   attr_accessor :current_user
   before_filter :set_current_user
+  filter_parameter_logging :fb_sig_friends
 
   def ApplicationController.fb_base_url
     @fb_base_url

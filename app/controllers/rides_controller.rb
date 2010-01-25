@@ -6,8 +6,6 @@ include ActionView::Helpers::UrlHelper
 include ActionView::Helpers::TagHelper
 include Facebooker::Rails::Helpers
 
-skip_before_filter :verify_authenticity_token
-
 class RidesController < ApplicationController 
   def RidesController.byob_disclaimer 
     @byob_disclaimer

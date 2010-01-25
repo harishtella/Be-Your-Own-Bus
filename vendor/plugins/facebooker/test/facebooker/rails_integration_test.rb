@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../rails_test_helper')
 
 module FBConnectTestHelpers
   def setup_fb_connect_cookies(params=cookie_hash_for_auth)
-    params.each {|k,v| @request.cookies[ENV['FACEBOOK_API_KEY']+k] = CGI::Cookie.new(ENV['FACEBOOK_API_KEY']+k,v)}
+    params.each {|k,v| @request.cookies[ENV['FACEBOOK_API_KEY']+k] = CGI::Cookie.new(ENV['FACEBOOK_API_KEY']+k,v).first}
   end
 
   def expired_cookie_hash_for_auth
@@ -57,7 +57,7 @@ class ControllerWhichRequiresFacebookAuthentication < NoisyController
     render :text=>url_for(options)
   end
   
-   def named_route_test
+  def named_route_test
     render :text=>comments_url()
   end
   
@@ -883,8 +883,7 @@ class RailsHelperTest < Test::Unit::TestCase
   
   def test_fb_dialog
     @h.expects(:capture).returns("dialog content")
-    @h.fb_dialog( "my_dialog", "1" ) do
-    end
+    @h.fb_dialog( "my_dialog", true ) {}
     assert_equal '<fb:dialog cancel_button="1" id="my_dialog">dialog content</fb:dialog>', @h.output_buffer
   end
   def test_fb_dialog_title
@@ -965,7 +964,7 @@ class RailsHelperTest < Test::Unit::TestCase
     assert_equal("<fb:request-form-submit />",@h.fb_request_form_submit)  
   end   
 
-	def test_fb_request_form_submit_with_uid
+  def test_fb_request_form_submit_with_uid
     assert_equal("<fb:request-form-submit uid=\"123456789\" />",@h.fb_request_form_submit({:uid => "123456789"}))
   end
 
@@ -1099,6 +1098,10 @@ class RailsHelperTest < Test::Unit::TestCase
     assert_equal @h.fb_logout_link("Logout","My URL"),"<a href=\"#\" onclick=\"FB.Connect.logoutAndRedirect(&quot;My URL&quot;);; return false;\">Logout</a>"
   end
 
+  def test_fb_bookmark_link
+    assert_equal @h.fb_bookmark_link("Bookmark","My URL"),"<a href=\"#\" onclick=\"FB.Connect.showBookmarkDialog(&quot;My URL&quot;);; return false;\">Bookmark</a>"
+  end
+
   def test_fb_user_action_with_literal_callback
     action = Facebooker::Rails::Publisher::UserAction.new
     assert_equal "FB.Connect.showFeedDialog(null, null, null, null, null, FB.RequireConnect.promptConnect, function() {alert('hi')}, \"prompt\", #{{"value" => "message"}.to_json});",
@@ -1110,7 +1113,27 @@ class RailsHelperTest < Test::Unit::TestCase
     assert_equal "FB.Connect.showFeedDialog(null, null, null, null, null, FB.RequireConnect.promptConnect, null, \"prompt\", #{{"value" => "message"}.to_json});",
                  @h.fb_user_action(action,"message","prompt")
   end
-
+  
+  def test_fb_connect_stream_publish
+    stream_post = Facebooker::StreamPost.new
+    attachment = Facebooker::Attachment.new
+    attachment.name="name"
+    stream_post.message = "message"
+    stream_post.target="12451752"
+    stream_post.attachment = attachment
+    
+    assert @h.fb_connect_stream_publish(stream_post).match(/FB.Connect\.streamPublish\(\"message\", \{\"name\":\s?\"name\"\}, \[\], \"12451752\", null, null, false, null\);/)
+  end
+  def test_fb_stream_publish
+    stream_post = Facebooker::StreamPost.new
+    attachment = Facebooker::Attachment.new
+    attachment.name="name"
+    stream_post.message = "message"
+    stream_post.target="12451752"
+    stream_post.attachment = attachment
+    
+    assert @h.fb_stream_publish(stream_post).match(/Facebook\.streamPublish\(\"message\", \{\"name\":\s?\"name\"\}, \[\], \"12451752\", null, null, false, null\);/)
+  end
 
   def test_fb_connect_javascript_tag
     silence_warnings do
@@ -1373,8 +1396,8 @@ class RailsUrlHelperExtensionsTest < Test::Unit::TestCase
     @prompt = "Are you sure?"
     @default_title = "Please Confirm"
     @title = "Confirm Request"
-    @style = {:color => 'black', :background => 'white'}
-    @verbose_style = "{background: 'white', color: 'black'}"
+    @style = {:color => 'black'}
+    @verbose_style = "{color: 'black'}"
     @default_okay = "Okay"
     @default_cancel = "Cancel"
     @default_style = "" #"'width','200px'"
