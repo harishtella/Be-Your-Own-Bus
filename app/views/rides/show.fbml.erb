@@ -16,11 +16,11 @@
     "Update your status with your ride", null, true);
   }
 
-  function share_on_wall(){
+  function post_to_stream(){
     var msg = "is <%= if @ride.tocampus then "coming from" else "going to" end %> " +
     "<%=h @ride.place %> using Be Your Own Bus.";
 
-    var attachment = {'name':'Ride: <%= @ride.name %>', 
+    var attachment = {'name':'Check out \"<%= @ride.name %>\"', 
     'href':'<%=ApplicationController.fb_base_url + url_for(@ride) %>', 
     'description':'"<%= @ride.name %>" leaves at ' +
     '<%=h @ride_start_datetime_formatted %>',
@@ -33,7 +33,7 @@
     'href': 'http://apps.facebook.com/beyourownbus'}];
 
     Facebook.streamPublish(msg, attachment, links, null, 
-    "Post your ride to your stream", update_status, true);
+    "Post your ride to your stream", null, true);
   }
 
   function disclaimer_prompt(){
@@ -90,7 +90,7 @@
       <% end %>
     <% end %>
     <% if @user_is_driver or @user_is_a_passenger %>
-      <%= link_to_function 'Share on profile', "share_on_wall()", 
+      <%= link_to_function 'Post to stream', "post_to_stream()", 
       :class => "fb_button" %>
     <% end %>
 

@@ -91,7 +91,7 @@ class RidesController < ApplicationController
     @comments = @ride.comments
     @comments.sort! {|x,y| -1 * (x.created_at <=> y.created_at) }
 
-    datetime_format_string = "%l:%M %p on %A, %b %e, %Y"
+    datetime_format_string = "%l:%M %p on %A, %b %e"
     @ride_start_datetime_formatted = @ride.start_datetime.strftime(datetime_format_string)
 
     @user_is_driver = (@ride.driver == @current_user)  

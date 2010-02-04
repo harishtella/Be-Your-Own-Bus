@@ -1,5 +1,13 @@
 <fb:fbml>
 <%= stylesheet_link_tag 'byob_style' %>
+<style type="text/css">
+<!--
+.style1 {font-size: 18px}
+.style2 {color: #FF8518}
+.style3 {color: #FFFFFF}
+.style5 {color: #0033CC}
+-->
+</style>
 
 
 <div id="byob_graphics">
@@ -43,35 +51,35 @@
     <div id="r_show_fb_msg">
       <%= facebook_messages %>
     </div>
-
-    <h1>BYOB</h1>
-    <h3>Be Your Own Bus</h3>
-    <br/>
-    <h3 style="color: green">
-      Welcome <%= fb_name @current_user, :firstnameonly => 
-      true, :linked => false, :useyou => false %>. 
+      <h1><%= image_tag 'layout/applogo.png' %></h1>
+      <h3>Carpooling UIUC to Anywhere ( <span class="style2">GO ILLINI!</span> )<br/>
     </h3>
+    <h3 style="color: blue">
+      <span class="style5">Welcome <%= fb_name @current_user, :firstnameonly => 
+      true, :linked => false, :useyou => false %></span>.    </h3>
 
     <div id="current_user_rides">
 
     <div class="rides_banner_your">
       <%= image_tag 'layout/yourrides.png' %> 
     </div>
-  
+
       <% if @rides_driving.empty? and @rides_riding.empty? %> 
         <div class="helper_text">
-          Rides that you're driving or riding will show up here.
+          <p>You don't have any rides yet!</p>
+          <p>Save money by joining a cheap ride on &quot;RIDE LISTING&quot;</p>
+          <p>Make money by posting a ride on &quot;CREATE RIDES&quot;</p>
         </div>
       <% end %>
 
       <table>
         <% @rides_driving.each do |ride| %>
         <tr>
-          <td>Driving <%= link_to ride[:ride_obj].name, 
+          <td><%= link_to ride[:ride_obj].name, 
           ride[:ride_obj] %></td>
           <td>
             <%= if ride[:ride_obj].tocampus then 
-            " coming from " else " going to " end %> 
+            " from- " else " to- " end %> 
             <u>
               <%=h ride[:ride_obj].place %>
             </u>
@@ -82,11 +90,11 @@
 
         <% @rides_riding.each do |ride| %>
         <tr>
-          <td>Riding <%= link_to ride[:ride_obj].name, 
+          <td><%= link_to ride[:ride_obj].name, 
           ride[:ride_obj] %></td>
           <td>
             <%= if ride[:ride_obj].tocampus then 
-            " coming from " else " going to " end %>
+            " from- " else " to- " end %>
             <u>
               <%=h ride[:ride_obj].place %>
             </u>
@@ -102,18 +110,20 @@
 
       <% if @rides_watching.empty? %> 
         <div class="helper_text">
-          Rides that you're watching will show up here.
+          <p>You are not watching any rides yet!</p>
+          <p>Save money by joining a cheap ride on &quot;RIDE LISTING&quot;</p>
+          <p>Make money by posting a ride on &quot;CREATE RIDES&quot;</p>
         </div>
       <% end %>
 
       <table>
         <% @rides_watching.each do |ride| %>
         <tr>
-          <td>Watching <%= link_to ride[:ride_obj].name, 
+          <td><%= link_to ride[:ride_obj].name, 
           ride[:ride_obj] %></td>
           <td>
             <%= if ride[:ride_obj].tocampus then 
-            " coming from " else " going to " end %>
+            "  from- " else "  to- " end %>
             <u>
               <%=h ride[:ride_obj].place %>
             </u>
@@ -123,13 +133,59 @@
         <% end %>
       </table>
     </div>
+  
   </div>
+     <%= link_to image_tag('layout/blank.png', :id =>"blank",
+  :onmouseover => "document.getElementById('blank').setSrc('" +
+  image_path('layout/blank.png') + "')",
+  :onmouseout => "document.getElementById('blank').setSrc('" +
+  image_path('layout/blank.png') + "')"),
+  '' %>
+   <%= link_to image_tag('layout/YouTubebw.png', :id =>"Youtube",
+  :onmouseover => "document.getElementById('Youtube').setSrc('" +
+  image_path('layout/YouTube.png') + "')",
+  :onmouseout => "document.getElementById('Youtube').setSrc('" +
+  image_path('layout/YouTubebw.png') + "')"),
+  'http://www.youtube.com/user/BeYourOwnBus' %>
+  
+     <%= link_to image_tag('layout/FaceBookbw.png', :id =>"FaceBook",
+  :onmouseover => "document.getElementById('FaceBook').setSrc('" +
+  image_path('layout/FaceBook.png') + "')",
+  :onmouseout => "document.getElementById('FaceBook').setSrc('" +
+  image_path('layout/FaceBookbw.png') + "')"),
+  'http://www.facebook.com/sharer.php?u=apps.facebook.com%2Fbeyourownbus&t=%3CCarpooling%20made%20easy,%20carpooling%20UIUC%20to%20Anywhere%3E' %>
+       <%= link_to image_tag('layout/StumbleUponbw.png', :id =>"StumbleUpon",
+  :onmouseover => "document.getElementById('StumbleUpon').setSrc('" +
+  image_path('layout/StumbleUpon.png') + "')",
+  :onmouseout => "document.getElementById('StumbleUpon').setSrc('" +
+  image_path('layout/StumbleUponbw.png') + "')"),
+  'http://www.stumbleupon.com/url/www.beyourownbus.com' %>
+    <%= link_to image_tag('layout/Twitterbw.png', :id =>"Twitter",
+  :onmouseover => "document.getElementById('Twitter').setSrc('" +
+  image_path('layout/Twitter.png') + "')",
+  :onmouseout => "document.getElementById('Twitter').setSrc('" +
+  image_path('layout/Twitterbw.png') + "')"),
+  'http://twitter.com/home?status=is carpooling on http://www.BeYourOwnBus.com' %>
+    <%= link_to image_tag('layout/Diggbw.png', :id =>"digg",
+  :onmouseover => "document.getElementById('digg').setSrc('" +
+  image_path('layout/Digg.png') + "')",
+  :onmouseout => "document.getElementById('digg').setSrc('" +
+  image_path('layout/Diggbw.png') + "')"),
+  'http://digg.com/submit?url=http://www.beyourownbus.com' %>
+  <%= link_to image_tag('layout/Deliciousbw.png', :id =>"Delicious",
+  :onmouseover => "document.getElementById('Delicious').setSrc('" +
+  image_path('layout/Delicious.png') + "')",
+  :onmouseout => "document.getElementById('Delicious').setSrc('" +
+  image_path('layout/Deliciousbw.png') + "')"),
+  'http://delicious.com/save?jump=yes&partner=addthis&url=http%3A%2F%2Fwww.www.beyourownbus.com&title=Carpooling made easy | Carpooling uiuc to anywhere,' %>
   
   <div id="bg_bot">
-    <%= image_tag 'layout/background_bot.png' %> 
+    <p align="center"> <span class="style3">----------</span>BYOB Funny math's ads (find them on your 22 CUMTD buses)<a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly1.jpg" target="_blank">Promo 1</a> <a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly2.jpg" target="_blank">Promo 2</a></p>
+    <p align="center"><span class="style3">----------</span><a href="http://www.facebook.com/group.php?gid=46118350909" target="_blank">BYOB Facebook Group</a>, <a href="http://www.facebook.com/apps/application.php?id=152117268807" target="_blank">BYOB Fan Page</a>, <a href="http://www.vimeo.com/8933827" target="_blank">Suggest a Fan Video</a></p>
+    <p align="center"><%= image_tag 'layout/background_bot.png' %> </p>
+
   </div>
 
 </div>
-
 
 <fb:fbml/>
