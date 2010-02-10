@@ -16,7 +16,7 @@
     "Update your status with your ride", null, true);
   }
 
-  function post_to_stream(){
+  function post_to_wall(){
     var msg = "is <%= if @ride.tocampus then "coming from" else "going to" end %> " +
     "<%=h @ride.place %> using Be Your Own Bus.";
 
@@ -65,12 +65,14 @@
   </div>
 
   <div id="rides_title">
-    <h1>
+    <span id="rides_title_name">
       <%=h @ride.name %>
-      <% if @user_is_driver %>
+    </span>
+    <% if @user_is_driver %>
+      <span id="rides_title_edit">
         (<%= link_to 'edit', edit_ride_path(@ride) %>) 
-      <% end %>
-    </h1>
+      </span>
+    <% end %>
   </div>
 
   <div id="rides_mini_nav">
@@ -90,7 +92,7 @@
       <% end %>
     <% end %>
     <% if @user_is_driver or @user_is_a_passenger %>
-      <%= link_to_function 'Post to stream', "post_to_stream()", 
+      <%= link_to_function 'Post to Wall', "post_to_wall()", 
       :class => "fb_button" %>
     <% end %>
 

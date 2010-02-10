@@ -67,6 +67,13 @@ div#page_content {
 div#rides_title {
   margin-bottom: 4px;
 }
+#rides_title_name {
+  font-size: 35px;
+  font-weight: bold;
+}
+#rides_title_edit {
+  font-size: 20px;
+}
 
 div#rides_mini_nav {
   margin-bottom: 10px;
