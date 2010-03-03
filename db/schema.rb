@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091215021437) do
+ActiveRecord::Schema.define(:version => 20100224231743) do
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
@@ -20,6 +20,21 @@ ActiveRecord::Schema.define(:version => 20091215021437) do
   end
 
   add_index "comments", ["ride_id", "created_at"], :name => "index_comments_on_ride_id_and_created_at"
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "facebook_templates", :force => true do |t|
     t.string "template_name", :null => false
@@ -65,8 +80,11 @@ ActiveRecord::Schema.define(:version => 20091215021437) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "facebook_id", :limit => 20, :null => false
+    t.integer  "facebook_id",   :limit => 20,                    :null => false
     t.string   "session_key"
+    t.string   "email"
+    t.boolean  "email_revoked",               :default => false
+    t.string   "name"
   end
 
   create_table "watcherships", :force => true do |t|

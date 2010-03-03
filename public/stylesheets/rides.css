@@ -55,6 +55,12 @@ a.fb_button_danger:visited { color: #fff; }
   font-size: 13px;
 }
 
+/* for flash notices */
+.main_message{
+  font-size: 15px;
+}
+
+
 /* divs common to ride pages */
 
 div#page_content {

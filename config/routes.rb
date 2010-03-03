@@ -1,12 +1,15 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "byob"
-  map.resources :comments
-  map.index_select 'rides/index_select', :controller => 'rides',
-  :action=>'index_select'
-  map.resources :rides, :member => { :join => :get, :kick => :get, :leave =>
-  :get, :watch => :get, :unwatch => :get} 
-  map.resources :users, :member => { :login => :get} 
+  map.resources :rides, :collection => { :index_choice => :get },   
+  :member => { :join => :put, :kick => :put, :leave =>
+  :put, :watch => :put, :unwatch => :put} 
+
+  map.resources :comments, :only => [:create]
+  #map.resources :users, :member => { :login => :get } 
+
+  map.mailings_remove 'users/mailings_remove', :controller => 'users', :action => 'mailings_remove'
+  map.mailings_add 'users/mailings_add', :controller => 'users', :action => 'mailings_add'
   
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -47,6 +50,6 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  #map.connect ':controller/:action/:id'
+  #map.connect ':controller/:action/:id.:format'
 end

@@ -1,0 +1,9 @@
+
+<%= link_to @comment.user.name, "http://www.facebook.com/profile.php?id=" +
+@comment.user.facebook_id.to_s %> 
+commented on your ride, 
+<%= link_to @ride.name, :only_path => false, :controller => 'rides',
+:action => 'show', :id => @ride.id %>.
+<br/>
+<br/>
+"<%= @comment.body %>" 

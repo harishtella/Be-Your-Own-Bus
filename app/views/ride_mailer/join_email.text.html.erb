@@ -1,0 +1,6 @@
+
+<%= link_to @joiner.name, "http://www.facebook.com/profile.php?id=" +
+@joiner.facebook_id.to_s %> 
+joined your ride, 
+<%= link_to @ride.name, :only_path => false, :controller => 'rides',
+:action => 'show', :id => @ride.id %>.

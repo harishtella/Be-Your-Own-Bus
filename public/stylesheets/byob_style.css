@@ -55,6 +55,10 @@ div#byob_home_bg{
   top: 19px;
 }
 
+div#byob_home_fb_msg{
+  width: 575px;
+}
+
 div#bg_top{
   position: relative;
   top: -35px;
@@ -131,5 +135,10 @@ div#home_choices_create_link {
 .helper_text{
   color: #8C8282; 
   font-size: 16px;
+}
+
+/* for flash notices */
+.main_message{
+  font-size: 15px;
 }
 

@@ -1,0 +1,6 @@
+
+<%= link_to @unwatcher.name, "http://www.facebook.com/profile.php?id=" +
+@unwatcher.facebook_id.to_s %> 
+stopped watching your ride, 
+<%= link_to @ride.name, :only_path => false, :controller => 'rides',
+:action => 'show', :id => @ride.id %>.

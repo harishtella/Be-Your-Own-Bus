@@ -30,7 +30,7 @@
   image_path('layout/ridelisting1.png') + "')") 
   else image_tag('layout/ridelisting3.png', :id =>"listing_link") 
   end), 
-  index_select_path %>
+  index_choice_rides_path %>
 
   <%= link_to (unless @create_a_ride 
   image_tag('layout/createride1.png', :id =>"create_link",

@@ -33,7 +33,8 @@ class Ride < ActiveRecord::Base
 
 
   def comment_on_ride(user, body)
-    comments.create!(:user=>user, :body=>body)
+    comment = comments.create!(:user=>user, :body=>body)
+    return comment
   end
 
   def return_ride?

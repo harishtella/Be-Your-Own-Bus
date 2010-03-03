@@ -9,7 +9,6 @@
 -->
 </style>
 
-
 <div id="byob_graphics">
   <div id="graphic_1"><%= image_tag 'layout/roller logo.png' %></div>  
   <div id="graphic_2"><%= image_tag 'layout/boylogo.png' %></div>
@@ -25,7 +24,7 @@
   image_path('layout/ridelisting2.png') + "')",
   :onmouseout => "document.getElementById('listing_link').setSrc('" +
   image_path('layout/ridelisting1.png') + "')"), 
-  index_select_path %>
+  index_choice_rides_path %>
 
   <%= link_to image_tag('layout/createride1.png', :id =>"create_link",
   :onmouseover => "document.getElementById('create_link').setSrc('" +
@@ -48,15 +47,22 @@
       <fb:tabs><fb:tab-item href="#" title="dummy"></fb:tab-item></fb:tabs>
     </div>
 
-    <div id="r_show_fb_msg">
-      <%= facebook_messages %>
-    </div>
-      <h1><%= image_tag 'layout/applogo.png' %></h1>
-      <h3>Carpooling UIUC to Anywhere ( <span class="style2">GO ILLINI!</span> )<br/>
-    </h3>
-    <h3 style="color: blue">
-      <span class="style5">Welcome <%= fb_name @current_user, :firstnameonly => 
-      true, :linked => false, :useyou => false %></span>.    </h3>
+    
+    <h1><%= image_tag 'layout/applogo.png' %></h1>
+
+    <% if flash[:notice].blank? %> 
+      <h3>
+        Carpooling UIUC to Anywhere ( <span class="style2">GO ILLINI!</span> )<br/>
+      </h3>
+      <h3 style="color: blue">
+        <span class="style5">Welcome <%= fb_name @current_user, :firstnameonly => 
+        true, :linked => false, :useyou => false %></span>.    
+      </h3>
+    <% else %>
+      <div id="byob_home_fb_msg">
+        <%= facebook_messages %>
+      </div>
+    <% end %>
 
     <div id="current_user_rides">
 
@@ -180,10 +186,22 @@
   'http://delicious.com/save?jump=yes&partner=addthis&url=http%3A%2F%2Fwww.www.beyourownbus.com&title=Carpooling made easy | Carpooling uiuc to anywhere,' %>
   
   <div id="bg_bot">
-    <p align="center"> <span class="style3">----------</span>BYOB Funny math's ads (find them on your 22 CUMTD buses)<a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly1.jpg" target="_blank">Promo 1</a> <a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly2.jpg" target="_blank">Promo 2</a></p>
-    <p align="center"><span class="style3">----------</span><a href="http://www.facebook.com/group.php?gid=46118350909" target="_blank">BYOB Facebook Group</a>, <a href="http://www.facebook.com/apps/application.php?id=152117268807" target="_blank">BYOB Fan Page</a>, <a href="http://www.vimeo.com/8933827" target="_blank">Suggest a Fan Video</a></p>
+    <p align="center"> 
+    <span class="style3">----------</span>
+    BYOB Funny math's ads (find them on your 22 CUMTD buses)<a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly1.jpg" target="_blank">Promo 1</a> <a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly2.jpg" target="_blank">Promo 2</a></p>
+    
+    <p align="center">
+    <span class="style3">----------</span>
+    <a href="http://www.facebook.com/group.php?gid=46118350909" target="_blank">BYOB Facebook Group</a>, <a href="http://www.facebook.com/apps/application.php?id=152117268807" target="_blank">BYOB Fan Page</a>, <a href="http://www.vimeo.com/8933827" target="_blank">Suggest a Fan Video</a></p>
+    
+    <% if @current_user.email_revoked %>
+      <p align="center">
+      <span class="style3">----------</span>
+        <%= link_to "Turn on email updates", mailings_add_url() %> for a better
+        BYOB experience.
+      </p>
+    <% end %>
     <p align="center"><%= image_tag 'layout/background_bot.png' %> </p>
-
   </div>
 
 </div>

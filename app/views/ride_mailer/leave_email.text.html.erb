@@ -1,0 +1,6 @@
+
+<%= link_to @leaver.name, "http://www.facebook.com/profile.php?id=" +
+@leaver.facebook_id.to_s %> 
+left your ride, 
+<%= link_to @ride.name, :only_path => false, :controller => 'rides',
+:action => 'show', :id => @ride.id %>.

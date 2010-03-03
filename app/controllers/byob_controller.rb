@@ -1,6 +1,12 @@
 class ByobController < ApplicationController
 
   def index
+    #save the users email address and name in the DB
+    user_info = params[:fb_sig_user_info][2..-3].split(",")
+    user_info.collect!{ |x| x.delete!("\"") }
+    @current_user.email = user_info[0]
+    @current_user.name = user_info[1]
+    @current_user.save
 
     time_now = Time.zone.now.utc
     datetime_format = "%b %e @ %l:%M %p"

@@ -1,0 +1,6 @@
+
+<%= link_to @ride.driver.name, "http://www.facebook.com/profile.php?id=" +
+@ride.driver.facebook_id.to_s %> 
+updated the details of your ride, 
+<%= link_to @ride.name, :only_path => false, :controller => 'rides',
+:action => 'show', :id => @ride.id %>.

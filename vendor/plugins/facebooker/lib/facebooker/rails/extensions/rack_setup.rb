@@ -7,8 +7,10 @@ ActionController::Dispatcher.middleware.insert_before(
   Rack::Facebook
 )
 
-ActionController::Dispatcher.middleware.insert_before(
-  ActionController::Base.session_store,
-  Rack::FacebookSession,
-  ActionController::Base.session_options[:key]
-)
+#use this if you aren't using the cookie store and want to use
+# the facebook session key for your session id
+# ActionController::Dispatcher.middleware.insert_before(
+#   ActionController::Base.session_store,
+#   Rack::FacebookSession,
+#   ActionController::Base.session_options[:key]
+# )

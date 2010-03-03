@@ -100,6 +100,11 @@ class RidesController < ApplicationController
     @user_is_a_watcher = @ride.watchers.collect {|x|
     x == @current_user }.inject{|a,b| a or b} 
 
+    # used to make link for sending driver a PM 
+    @message_url = "http://www.facebook.com/message.php?id=" +
+    @ride.driver.facebook_id.to_s + "&subject=" + 
+    "BeYourOwnBus: about your ride \"" + @ride.name + "\""
+
     respond_to do |format|
       format.fbml 
     end
@@ -174,7 +179,6 @@ class RidesController < ApplicationController
 
     respond_to do |format|
       if @ride.save
-        #RidePublisher.deliver_publish_stream(@current_user_fb,@current_user_fb,{:message => "foo"})
         flash[:notice] = 'Ride was successfully created.'
         format.fbml { redirect_to(@ride) }
       else
@@ -200,6 +204,7 @@ class RidesController < ApplicationController
     respond_to do |format|
       if @ride.update_attributes(params[:ride])
         flash[:notice] = 'Ride was successfully updated.'
+        RideMailer.send_later(:deliver_update_email, @ride)
         format.fbml { redirect_to(@ride) }
       else
         @start_datetime_preset =
@@ -211,26 +216,18 @@ class RidesController < ApplicationController
 
   def destroy
     @ride = Ride.find(params[:id])
+
+    @ride_name = @ride.name
+    @driver = @ride.driver
+    @people_to_mail = @ride.watchers | @ride.riders 
     @ride.destroy
+
+    RideMailer.send_later(:deliver_destroy_email, @ride_name, @driver,
+    @people_to_mail)
 
     respond_to do |format|
       format.fbml { redirect_to(:controller => "byob", :action =>"index") }
     end
-  end
-
-  def get_ride_people_excluding(ride, excluded_user)
-    ride_people = [] 
-    unless ride.driver == excluded_user 
-      ride_people << ride.driver
-    end
-
-    ride.riders.each do |r| 
-      unless r == excluded_user
-        ride_people << r 
-      end
-    end
-
-    return ride_people
   end
 
   def join 
@@ -246,19 +243,7 @@ class RidesController < ApplicationController
       end
       @ride.save
       flash[:notice] = "You have joined this ride." 
-   
-      notification_message = ""
-      notification_message += fb_name(@current_user)  
-      notification_message += " joined "
-      notification_message += fb_name(@ride.driver,{:possessive => true})
-      notification_message += " ride, " 
-      notification_message += link_to(@ride.name, @ride) + "."
-
-      notification_recipients = get_ride_people_excluding(@ride, @current_user)
-      unless notification_recipients.empty?
-        RidePublisher.deliver_ride_notification(notification_recipients, 
-        notification_message)
-      end
+      RideMailer.send_later(:deliver_join_email, @ride, @current_user)
     else 
       flash[:error] = "Sorry, there are no seats left on this ride."
     end
@@ -271,25 +256,11 @@ class RidesController < ApplicationController
   def kick
     @ride = Ride.find(params[:id], :include => [:driver, :riders, :watchers])
     @rider = @ride.riders.find(params[:rider_id])
-
     @ride.riders.delete(@rider)
     @ride.seats_filled -= 1
     @ride.save
     flash[:notice] = "You have kicked a rider off this ride." 
-
-    notification_message = ""
-    notification_message += fb_name(@current_user)  
-    notification_message += " kicked "
-    notification_message += fb_name(@rider)
-    notification_message += " off " + fb_pronoun(@current_user,{:possessive =>
-    true}) + " ride, "
-    notification_message += link_to(@ride.name, @ride) + "."
-
-    notification_recipients = get_ride_people_excluding(@ride, @current_user)
-    unless notification_recipients.empty? 
-      RidePublisher.deliver_ride_notification(notification_recipients,
-      notification_message)
-    end
+    RideMailer.send_later(:deliver_kick_email,@ride, @rider)
 
     respond_to do |format|
         format.fbml { redirect_to(@ride) }
@@ -304,17 +275,7 @@ class RidesController < ApplicationController
       @ride.seats_filled -= 1
       @ride.save
       flash[:notice] = "You have left this ride." 
-
-      notification_message = ""
-      notification_message += fb_name(@current_user)  
-      notification_message += " left the ride, "
-      notification_message += link_to(@ride.name, @ride) + "."
-
-      notification_recipients = get_ride_people_excluding(@ride, @current_user)
-      unless notification_recipients.empty?
-        RidePublisher.deliver_ride_notification(notification_recipients,
-        notification_message)
-      end
+      RideMailer.send_later(:deliver_leave_email,@ride, @current_user)
     end
 
     respond_to do |format|
@@ -327,7 +288,8 @@ class RidesController < ApplicationController
     @ride.watchers << @current_user
     @ride.save
     flash[:notice] = "You are now watching this ride." 
-   
+    RideMailer.send_later(:deliver_watch_email,@ride, @current_user)
+
     respond_to do |format|
         format.fbml { redirect_to(@ride) }
     end
@@ -338,6 +300,7 @@ class RidesController < ApplicationController
     @ride.watchers.delete(@current_user)
     @ride.save
     flash[:notice] = "You have stopped watching this ride." 
+    RideMailer.send_later(:deliver_unwatch_email,@ride, @current_user)
 
     respond_to do |format|
         format.fbml { redirect_to(@ride) }

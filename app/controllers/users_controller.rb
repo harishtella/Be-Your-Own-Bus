@@ -1,5 +1,20 @@
 class UsersController < ApplicationController
 
+  def mailings_add
+    @current_user.email_revoked = false
+    @current_user.save
+    flash[:notice] = "You'll now get email updates from BYOB."
+    redirect_to :controller => 'byob'
+  end
+
+  def mailings_remove
+    @current_user.email_revoked = true
+    @current_user.save
+    flash[:notice] = "You'll no longer get e-mail updates from BYOB", 
+    "You can change this any time at the bottom of this homepage."
+    redirect_to :controller => 'byob' 
+  end
+
   def login
     @user = User.find(params[:id])  
     session[:userInfo] = @user
@@ -8,8 +23,6 @@ class UsersController < ApplicationController
       format.fbml { redirect_to :controller => 'byob' }
     end
   end
-
-
   
   # GET /users
   # GET /users.xml

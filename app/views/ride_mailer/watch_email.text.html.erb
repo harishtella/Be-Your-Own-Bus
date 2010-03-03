@@ -1,0 +1,6 @@
+
+<%= link_to @watcher.name, "http://www.facebook.com/profile.php?id=" +
+@watcher.facebook_id.to_s %> 
+started watching your ride, 
+<%= link_to @ride.name, :only_path => false, :controller => 'rides',
+:action => 'show', :id => @ride.id %>.

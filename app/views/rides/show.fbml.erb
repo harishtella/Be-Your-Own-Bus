@@ -39,14 +39,27 @@
   function disclaimer_prompt(){
     var disclaimer = new Dialog(Dialog.DIALOG_POP);
     disclaimer.setStyle({'heigth': '300px'});
-    disclaimer.onconfirm = join_ride;
+    disclaimer.onconfirm = join_ride
     disclaimer.showChoice("Please read carefully", 
       "<%= escape_javascript(RidesController.byob_disclaimer) %>",
       button_confirm = "Agree", button_cancel = "Cancel");
   }
   
   function join_ride(){
-    document.setLocation("<%= join_ride_path(@ride) %>");	
+    //submits a javascript form to join the ride 
+    rideit_link = document.getElementById('rideit_link');
+    f = document.createElement('form'); 
+
+    f.setStyle('display','none');
+    rideit_link.getParentNode().appendChild(f);
+    f.setMethod('POST');
+    f.setAction("<%= join_ride_path(@ride) %>");
+    m = document.createElement('input');
+    m.setType('hidden');
+    m.setName('_method');
+    m.setValue('put');
+    f.appendChild(m)
+    f.submit();
   }
 
   function disclaimer_prompt_using_js_string(){
@@ -79,23 +92,25 @@
     <% unless @user_is_driver %>
       <% unless @user_is_a_passenger %>
         <%= link_to_function 'Ride it', "disclaimer_prompt()", 
-        :class => "fb_button" %> 
+        :class => "fb_button", :id => "rideit_link" %> 
       <% end %>
       <% if @user_is_a_passenger %>
-        <%= link_to 'Leave Ride', leave_ride_path(@ride), :class => "fb_button" %>  
+        <%= link_to 'Leave Ride', leave_ride_path(@ride), :method => :put, :class => "fb_button" %>  
       <% end %>
       <% unless @user_is_a_watcher or @user_is_a_passenger %>
-        <%= link_to 'Watch it', watch_ride_path(@ride), :class => "fb_button" %> 
+        <%= link_to 'Watch it', watch_ride_path(@ride), :method => :put, :class => "fb_button" %> 
       <% end %>
       <% if @user_is_a_watcher %>
-        <%= link_to 'Stop Watching', unwatch_ride_path(@ride), :class => "fb_button" %> 
+        <%= link_to 'Stop Watching', unwatch_ride_path(@ride), :method => :put, :class => "fb_button" %> 
       <% end %>
     <% end %>
     <% if @user_is_driver or @user_is_a_passenger %>
       <%= link_to_function 'Post to Wall', "post_to_wall()", 
       :class => "fb_button" %>
     <% end %>
-
+    <% unless @user_is_driver %>
+      <%= link_to 'Message driver', @message_url, :class => "fb_button" %>
+    <% end %> 
     <hr/>
   </div>
 
@@ -187,7 +202,7 @@
               <% if @user_is_driver %>
                 <br/>
                 (<%= link_to 'kick', kick_ride_path(:id => @ride, :rider_id =>
-                rider.id) %>)
+                rider.id), :method => :put %>)
               <% end %>
             </div>
         </div>

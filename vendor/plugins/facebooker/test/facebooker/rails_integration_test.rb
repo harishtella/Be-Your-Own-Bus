@@ -1032,6 +1032,8 @@ class RailsHelperTest < Test::Unit::TestCase
   
   def test_fb_login_button
     assert_equal "<fb:login-button onlogin=\"somejs\"></fb:login-button>",@h.fb_login_button("somejs")
+
+    assert_equal "<fb:login-button onlogin=\"somejs\">Custom</fb:login-button>",@h.fb_login_button("somejs", :text => 'Custom')
   end
   
   def test_init_fb_connect_no_features
@@ -1076,6 +1078,10 @@ class RailsHelperTest < Test::Unit::TestCase
     assert ! @h.init_fb_connect(:js => :jquery).match(/\$\(document\).ready\(/)
   end
   
+  def test_init_fb_connect_with_options_js_mootools
+    assert @h.init_fb_connect("XFBML", :js => :mootools).match(/window.addEvent\('domready',/)
+  end
+  
   def test_init_fb_connect_with_features_and_options_js_jquery
     assert @h.init_fb_connect("XFBML", :js => :jquery).match(/XFBML.*/)
     assert @h.init_fb_connect("XFBML", :js => :jquery).match(/\jQuery\(document\).ready\(/)
@@ -1092,6 +1098,8 @@ class RailsHelperTest < Test::Unit::TestCase
   
   def test_fb_login_and_redirect
     assert_equal @h.fb_login_and_redirect("/path"),"<fb:login-button onlogin=\"window.location.href = &quot;/path&quot;;\"></fb:login-button>"
+    
+    assert_equal @h.fb_login_and_redirect("/path", :text => 'foo'),"<fb:login-button onlogin=\"window.location.href = &quot;/path&quot;;\">foo</fb:login-button>"
   end
   
   def test_fb_logout_link
@@ -1159,7 +1167,7 @@ class RailsHelperTest < Test::Unit::TestCase
     end
 
     silence_warnings do
-      assert_equal "<script src=\"https://www.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php\" type=\"text/javascript\"></script>",
+      assert_equal "<script src=\"https://ssl.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php\" type=\"text/javascript\"></script>",
         @h.fb_connect_javascript_tag
     end
   end
@@ -1174,7 +1182,7 @@ class RailsHelperTest < Test::Unit::TestCase
     end
 
     silence_warnings do
-      assert_equal "<script src=\"https://www.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US\" type=\"text/javascript\"></script>",
+      assert_equal "<script src=\"https://ssl.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US\" type=\"text/javascript\"></script>",
         @h.fb_connect_javascript_tag(:lang => "en_US")
     end
   end
@@ -1532,3 +1540,4 @@ class RailsRequestFormatTest < Test::Unit::TestCase
   end
   
 end
+

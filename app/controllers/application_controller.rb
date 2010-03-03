@@ -16,8 +16,6 @@ class ApplicationController < ActionController::Base
   @fb_base_url = "http://apps.facebook.com"
 
 
-
-  
   def set_current_user
     self.current_user = User.for(facebook_session.user.to_i)
   end

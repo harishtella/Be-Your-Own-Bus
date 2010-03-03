@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html> 
+  <head>  
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />  
+  </head> 
+  <body>
+    <div style="margin-bottom: 10px;">
+      <%= image_tag('layout/applogo_email.jpg') %>
+    </div>
+    <div style="font-size: 18px;">
+      <%= yield %>
+    </div>
+    <br>
+    <hr/> 
+    <div style="font-size: 14px;">
+      Thanks for using 
+      <%= link_to 'BYOB', :only_path => false, :controller =>'byob', :action => 'index'%>.
+      <br/>
+      Want to 
+      <%= link_to 'stop email updates', mailings_remove_url() %>? 
+    </div>
+  </body>
+</html>
