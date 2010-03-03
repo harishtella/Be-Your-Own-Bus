@@ -60,13 +60,12 @@ Rails::Initializer.run do |config|
     # the files in the environement folder
     ActionMailer::Base.smtp_settings = {  
       :address => 'mail.beyourownbus.com',  
+      :domain => 'harishtella.info',
       :port => '26',  
       :user_name => 'notifications@beyourownbus.com',
       :password => 'Youoveeye7',
       :authentication => 'login' #this may not be right
     } 
-    ActionMailer::Base.raise_delivery_errors = true 
-
 
     class String 
       def to_b
