@@ -60,7 +60,6 @@ Rails::Initializer.run do |config|
     # the files in the environement folder
     ActionMailer::Base.smtp_settings = {  
       :address => 'mail.beyourownbus.com',  
-      :domain => 'harishtella.info',
       :port => '26',  
       :user_name => 'notifications@beyourownbus.com',
       :password => 'Youoveeye7',

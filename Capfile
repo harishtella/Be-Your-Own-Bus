@@ -15,11 +15,18 @@ namespace :deploy do
 
   after "deploy:symlink" do
     #run "rm -f ~/public_html;ln -s #{deploy_to}/current/public ~/public_html"
-    run "cp ~/byob_deploy_files/environment.rb #{deploy_to}/current/config/environment.rb"
+    # dont need this anymore because restart_mongrel.sh calls mongrel in
+    # production mode 
+    #run "cp ~/byob_deploy_files/environment.rb #{deploy_to}/current/config/environment.rb"
   end
 end
 
+after "deploy:stop", "delayed_job:stop"
+after "deploy:start", "delayed_job:start"
+after "deploy:restart", "delayed_job:restart"
+
 namespace :delayed_job do
+
   def rails_env
     fetch(:rails_env, false) ? "RAILS_ENV=#{fetch(:rails_env)}" : ''
   end
