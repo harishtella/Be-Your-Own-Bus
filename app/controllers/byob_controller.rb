@@ -6,7 +6,7 @@ class ByobController < ApplicationController
     user_email_perm = params[:fb_sig_user_email_perm][2..-3]
     user_info = params[:fb_sig_user_info][2..-3].split(",")
     user_info.collect!{ |x| x.delete!("\"") }
-    @current_user.email_revoked = ((user_email_perm.eql? "1") && true) || false
+    @email_perm_prompt = ((user_email_perm.eql? "1") && true) || false
     @current_user.email = user_info[0]
     @current_user.name = user_info[1]
     @current_user.save
