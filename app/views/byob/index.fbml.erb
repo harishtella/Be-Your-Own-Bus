@@ -9,6 +9,18 @@
 -->
 </style>
 
+<script>
+  function get_email_perm(){
+    Facebook.showPermissionDialog('email', 'update_db_with_email_perm');
+  }
+
+  function update_db_with_email_perm(){
+    document.setLocation('<%= mailings_add_url %>');
+  }
+</script>
+
+<%= @user_info %>
+
 <div id="byob_graphics">
   <div id="graphic_1"><%= image_tag 'layout/roller logo.png' %></div>  
   <div id="graphic_2"><%= image_tag 'layout/boylogo.png' %></div>
@@ -197,7 +209,7 @@
     <% if @current_user.email_revoked %>
       <p align="center">
       <span class="style3">----------</span>
-        <%= link_to "Turn on email updates", mailings_add_url() %> for a better
+        <%= link_to_function "Turn on email updates", "get_email_perm()" %> for a better
         BYOB experience.
       </p>
     <% end %>
