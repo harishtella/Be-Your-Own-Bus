@@ -205,7 +205,7 @@
     <a href="http://www.facebook.com/group.php?gid=46118350909" target="_blank">BYOB Facebook Group</a>, <a href="http://www.facebook.com/apps/application.php?id=152117268807" target="_blank">BYOB Fan Page</a>, <a href="http://www.vimeo.com/8933827" target="_blank">Suggest a Fan Video</a></p>
    
 
-    <% if @current_user.email_revoked and not @email_perm_prompt %>
+    <% if @current_user.email_revoked and not @email_perm_prompt_needed %>
       <p align="center">
       <span class="style3">----------</span>
         <%= link_to "Turn on email updates", mailings_add_url() %> for a better
@@ -213,7 +213,7 @@
       </p>
     <% end %>
 
-    <% if @email_perm_prompt %>
+    <% if @email_perm_prompt_needed %>
       <p align="center">
       <span class="style3">----------</span>
         <%= link_to_function "Turn on email updates", "get_email_perm()" %> for a better
