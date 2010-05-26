@@ -2,6 +2,7 @@ require 'date'
 require 'rubygems'
 require 'active_support'
 require 'ar-extensions'
+
 include ActionView::Helpers::UrlHelper 
 include ActionView::Helpers::TagHelper
 include Facebooker::Rails::Helpers
@@ -222,9 +223,9 @@ class RidesController < ApplicationController
     @people_to_mail = @ride.watchers | @ride.riders 
     @ride.destroy
 
-    RideMailer.send_later(:deliver_destroy_email, @ride_name, @driver,
+    RideSuperMailer.destroy_email(facebook_session.user, @ride_name, @driver,
     @people_to_mail)
-
+    
     respond_to do |format|
       format.fbml { redirect_to(:controller => "byob", :action =>"index") }
     end
@@ -243,7 +244,7 @@ class RidesController < ApplicationController
       end
       @ride.save
       flash[:notice] = "You have joined this ride." 
-      RideMailer.send_later(:deliver_join_email, @ride, @current_user)
+      RideSuperMailer.join_email(facebook_session.user, @ride, @current_user) 
     else 
       flash[:error] = "Sorry, there are no seats left on this ride."
     end
