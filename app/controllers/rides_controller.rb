@@ -205,7 +205,7 @@ class RidesController < ApplicationController
     respond_to do |format|
       if @ride.update_attributes(params[:ride])
         flash[:notice] = 'Ride was successfully updated.'
-        RideMailer.send_later(:deliver_update_email, @ride)
+        #RideMailer.send_later(:deliver_update_email, @ride)
         format.fbml { redirect_to(@ride) }
       else
         @start_datetime_preset =
@@ -261,7 +261,7 @@ class RidesController < ApplicationController
     @ride.seats_filled -= 1
     @ride.save
     flash[:notice] = "You have kicked a rider off this ride." 
-    RideMailer.send_later(:deliver_kick_email,@ride, @rider)
+    #RideMailer.send_later(:deliver_kick_email,@ride, @rider)
 
     respond_to do |format|
         format.fbml { redirect_to(@ride) }
@@ -276,7 +276,7 @@ class RidesController < ApplicationController
       @ride.seats_filled -= 1
       @ride.save
       flash[:notice] = "You have left this ride." 
-      RideMailer.send_later(:deliver_leave_email,@ride, @current_user)
+      #RideMailer.send_later(:deliver_leave_email,@ride, @current_user)
     end
 
     respond_to do |format|
@@ -289,7 +289,7 @@ class RidesController < ApplicationController
     @ride.watchers << @current_user
     @ride.save
     flash[:notice] = "You are now watching this ride." 
-    RideMailer.send_later(:deliver_watch_email,@ride, @current_user)
+    #RideMailer.send_later(:deliver_watch_email,@ride, @current_user)
 
     respond_to do |format|
         format.fbml { redirect_to(@ride) }
@@ -301,7 +301,7 @@ class RidesController < ApplicationController
     @ride.watchers.delete(@current_user)
     @ride.save
     flash[:notice] = "You have stopped watching this ride." 
-    RideMailer.send_later(:deliver_unwatch_email,@ride, @current_user)
+    #RideMailer.send_later(:deliver_unwatch_email,@ride, @current_user)
 
     respond_to do |format|
         format.fbml { redirect_to(@ride) }
