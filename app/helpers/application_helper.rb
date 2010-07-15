@@ -13,6 +13,7 @@ module ApplicationHelper
       month_options += if (mnum == cur_month) then " selected " else "" end 
       month_options += "> #{mname}</option>"
     end  
+    return month_options
   end
 
 end
