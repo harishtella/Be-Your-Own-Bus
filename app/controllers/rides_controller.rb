@@ -223,8 +223,8 @@ class RidesController < ApplicationController
     @people_to_mail = @ride.watchers | @ride.riders 
     @ride.destroy
 
-    RideSuperMailer.destroy_email(facebook_session.user, @ride_name, @driver,
-    @people_to_mail)
+    #RideSuperMailer.destroy_email(facebook_session.user, @ride_name, @driver,
+    #@people_to_mail)
     
     respond_to do |format|
       format.fbml { redirect_to(:controller => "byob", :action =>"index") }
@@ -244,7 +244,7 @@ class RidesController < ApplicationController
       end
       @ride.save
       flash[:notice] = "You have joined this ride." 
-      RideSuperMailer.join_email(facebook_session.user, @ride, @current_user) 
+      #RideSuperMailer.join_email(facebook_session.user, @ride, @current_user) 
     else 
       flash[:error] = "Sorry, there are no seats left on this ride."
     end
