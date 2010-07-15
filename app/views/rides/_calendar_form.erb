@@ -13,7 +13,8 @@ end %>
   :id => "Month_" + element_name,
   :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');",
   :disabled => disabled} %>
-<%= select_tag("Month_" + element_name, month_options, month_attrib) %> 
+<%= select_tag("Month_" + element_name,
+gen_month_options(current_datetime[:month]), month_attrib) %> 
 
 <% day_options = ""
 (1..31).each do |k|
