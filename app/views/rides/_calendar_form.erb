@@ -1,14 +1,7 @@
-<% require 'generator'
-   require 'date'%>
+
 <%= hidden_field_tag(element_name, current_datetime[:fulldate], {:id => element_name}) %>
 
-<% month_names = Date::ABBR_MONTHNAMES[1,12]
-month_options = ""
 
-SyncEnumerator.new( (1..12), month_names).each do |option|
-  month_options += "<option value=\"#{option[0]}\"" + if (option[0] ==
-  current_datetime[:month]) then " selected " else "" end + "> #{option[1]}</option>"
-end %>
 <% month_attrib = {:class => "monthselect", 
   :id => "Month_" + element_name,
   :onchange => "setDateTime('#{element_name}'); setDaysValue('#{element_name}');",
