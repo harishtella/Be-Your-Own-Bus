@@ -1,5 +1,5 @@
 set :application, "byob"
-set :user, "harisht"
+set :user, "harish"
 set :domain, "harishtella.info"
 set :ssh_options, {:forward_agent => true} 
 
