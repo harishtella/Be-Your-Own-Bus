@@ -9,10 +9,10 @@
 # This should only be necessary until the final version of the new profile is released.
 
 development:
-  api_key: 2c930f0e1a5b66bce29628c5ca293a2d 
-  secret_key: 6a14b508f28b31e430420f6a34910dbe 
-  canvas_page_name: byobalpha
-  callback_url: http://web1.tunnlr.com:10731
+  api_key: 91ccefcd5e7d5201afe11818f5af5c5d 
+  secret_key: 4ec789f14d6dfe662aff4e827fc7d781 
+  canvas_page_name: beyourownbus
+  callback_url: http://harishtella.info:3000
   pretty_errors: true
   set_asset_host_to_callback_url: true
   tunnel:
@@ -26,7 +26,7 @@ test:
   api_key: 91ccefcd5e7d5201afe11818f5af5c5d 
   secret_key: 4ec789f14d6dfe662aff4e827fc7d781 
   canvas_page_name: beyourownbus
-  callback_url: http://www.harishtella.info
+  callback_url: http://harishtella.info:3000
   set_asset_host_to_callback_url: true
   tunnel:
     public_host_username: 
@@ -39,7 +39,7 @@ production:
   api_key: 91ccefcd5e7d5201afe11818f5af5c5d 
   secret_key: 4ec789f14d6dfe662aff4e827fc7d781 
   canvas_page_name: beyourownbus
-  callback_url: http://byob.harishtella.info
+  callback_url: http://harishtella.info:3000
   set_asset_host_to_callback_url: true   
   tunnel:
     public_host_username: 
