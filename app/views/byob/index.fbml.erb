@@ -196,13 +196,24 @@
   'http://delicious.com/save?jump=yes&partner=addthis&url=http%3A%2F%2Fwww.www.beyourownbus.com&title=Carpooling made easy | Carpooling uiuc to anywhere,' %>
   
   <div id="bg_bot">
-    <p align="center"> 
-    <span class="style3">----------</span>
-    BYOB Funny math's ads (find them on your 22 CUMTD buses)<a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly1.jpg" target="_blank">Promo 1</a> <a href="http://beyourownbus.com/byobfbapp/Bflyers/bfly2.jpg" target="_blank">Promo 2</a></p>
-    
-    <p align="center">
-    <span class="style3">----------</span>
-    <a href="http://www.facebook.com/group.php?gid=46118350909" target="_blank">BYOB Facebook Group</a>, <a href="http://www.facebook.com/apps/application.php?id=152117268807" target="_blank">BYOB Fan Page</a>, <a href="http://www.vimeo.com/8933827" target="_blank">Suggest a Fan Video</a></p>
+    <div id="bg_bot_inside">
+      <p> 
+      <span class="style3">----------</span>
+        BYOB Funny math's ads (find them on your 22 CUMTD buses)<a
+        href="http://beyourownbus.com/byobfbapp/Bflyers/bfly1.jpg"
+        target="_blank">Promo 1</a> <a
+        href="http://beyourownbus.com/byobfbapp/Bflyers/bfly2.jpg"
+        target="_blank">Promo 2</a></p>
+
+      <p>
+      <span class="style3">----------</span>
+      <a href="http://www.facebook.com/group.php?gid=46118350909"
+      target="_blank">BYOB Facebook Group</a>, <a
+      href="http://www.facebook.com/apps/application.php?id=152117268807"
+      target="_blank">BYOB Fan Page</a>, <a href="http://www.vimeo.com/8933827"
+      target="_blank">Suggest a Fan Video</a></p>
+    </div>
+
    
 
     <% if @current_user.email_revoked and not @email_perm_prompt_needed %>

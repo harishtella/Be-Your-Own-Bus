@@ -16,11 +16,7 @@ test:
   timeout: 5000
 
 production:
-  adapter: mysql
-  encoding: utf8
-  database: harisht_byob 
+  adapter: sqlite3
+  database: db/development.sqlite3
   pool: 5
-  username: harisht_byobser
-  password: Youoveeye7
-  socket: /tmp/mysql.sock
-  host: 127.0.0.1
+  timeout: 5000

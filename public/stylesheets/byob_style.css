@@ -67,8 +67,13 @@ div#bg_top{
 
 div#bg_bot{
   position: relative;
-  bottom: -9px;
-  left: 57px;
+  bottom: -20px;
+  left: 0;
+}
+
+div#bg_bot_inside{
+  position: relative;
+  left: 34px;
 }
 
 .rides_banner_your{
